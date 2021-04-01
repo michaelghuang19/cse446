@@ -322,11 +322,85 @@ $\begin{bmatrix} 4 \\ -3 \\ 1 \end{bmatrix}$
 
 Assume $w$ is an $n$-dimensional vector and $b$ is a scalar. A hyperplane in $\R^n$ is the set $\{x : x\in \R^n,\text{ s.t. } w^T x + b = 0\}$.
 
+\begin{verbatim}
+def get_zvalue(x, y):
+  return -x - y
+
+def plot_hyperplanes():
+  print("A.9.a")
+
+  x = np.arange(-100, 100)
+  y = np.arange(-100, 100)
+  plt.title("A.9.a")
+  plt.xlabel("x-values")
+  plt.ylabel("y-values")
+  plt.title("sine wave form")
+  plt.xlim(-10, 10)
+  plt.ylim(-10, 10)
+  plt.plot(x, 0 * x)
+  plt.plot(0 * y, y)
+  plt.plot(x, 0.5 * x - 1)
+  plt.savefig("A9a.png")
+  plt.close()
+
+  print("A.9.b")
+  fig = plt.figure()
+  ax = plt.axes(projection='3d')
+
+  # x and y axis
+  x = np.linspace(-80, 80)
+  y = np.linspace(-80, 80)
+  z = np.linspace(-80, 80)
+
+  xo = np.linspace(-100, 100)
+  yo = np.linspace(-100, 100)
+  zo = np.linspace(-100, 100)
+  
+  X, Y = np.meshgrid(x, y)
+  Z = get_zvalue(X, Y)
+  
+  ax.plot_surface(X, Y, Z, rstride=1, cstride=1,
+                cmap='viridis', edgecolor='none')
+  ax.plot3D(xo, yo * 0, zo * 0)
+  ax.plot3D(xo * 0, yo, zo * 0)
+  ax.plot3D(xo * 0, yo * 0, zo)
+  ax.set_title("A.9.b")
+  
+  ax.set_xlabel("x-values")
+  ax.set_ylabel("y-values")
+  ax.set_zlabel("z-values")
+  
+  plt.savefig("A9b.png");
+  plt.close()
+\end{verbatim}
+
 \subsection*{a.}
-($n=2$ example) Draw the hyperplane for $w=[-1,2]^T$, $b=2$? Label your axes.
+($n=2$ example) Draw the hyperplane for $w=[-1,2]^T$, $b=2$? Label your axes. \\ 
+We substitute for $w^T x + b = 0$ and plot: \\
+$w = \begin{bmatrix} -1 & 2 \\ \end{bmatrix}$ \\
+$w^T = \begin{bmatrix} -1 \\ 2 \\ \end{bmatrix}$ \\
+$\begin{bmatrix} -1 \\ 2 \\ \end{bmatrix}$ x = -2 \\
+$-x + 2y = -2$ \\
+$y = \frac{1}{2}x -1$ \\
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=150mm]{A9a.PNG}
+\end{figure}
 
 \subsection*{b.}
-($n=3$ example) Draw the hyperplane for $w=[1,1,1]^T$, $b=0$? Label your axes.
+($n=3$ example) Draw the hyperplane for $w=[1,1,1]^T$, $b=0$? Label your axes. \\ 
+We solve for $w^T x + b = 0$: \\
+$w = \begin{bmatrix} 1 & 1 & 1 \\ \end{bmatrix}$ \\
+$w^T = \begin{bmatrix} 1 \\ 1 \\ 1 \\ \end{bmatrix}$ \\
+$\begin{bmatrix} 1 \\ 1 \\ 1 \\ \end{bmatrix} x = 0$ \\ 
+$x + y + z = 0$ \\
+$z = -x - y$ \\
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=180mm]{A9b.PNG}
+\end{figure}
 
 \subsection*{c.}
 Given some $x_0 \in \R^n$, find the \emph{squared distance} to the hyperplane defined by $w^T x + b=0$.
@@ -358,16 +432,52 @@ What is $\nabla_y f(x,y)$ in terms of the summations over indices \emph{and} vec
 \section*{A.11}
 {\Large 
 
+\begin{verbatim}
+def matrix_compute():
+  a = np.array([
+    [0, 2, 4],
+    [2, 4, 2],
+    [3, 3, 1]
+  ])
+
+  b = np.array([
+    [-2],
+    [-2],
+    [-4]
+  ])
+
+  c = np.array([
+    [1],
+    [1],
+    [1]
+  ])
+  
+  # A.11 a. A^-1
+  print("A.11.a")
+  ainv = np.linalg.inv(a)
+  print(ainv)
+
+  # A.11 b. A^-1b, Ac
+  print("A.11.b")
+  ainv_b = ainv.dot(b)
+  print(ainv_b)
+  ac = a.dot(c)
+  print(ac)
+\end{verbatim}
+
 \subsection*{a.}
 
-% \begin{figure}[ht!]
-%   \centering
-%   \includegraphics[width=90mm]{pdf.PNG}
-%   \caption{pdf \label{overflow}}
-% \end{figure}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=110mm]{A11a.PNG}
+\end{figure}
 
 \subsection*{b.}
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=30mm]{A11b.PNG}
+\end{figure}
 
 }
 
