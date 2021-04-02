@@ -93,15 +93,14 @@ Since $X, Y$ are independent, then $\E[XY] = \E[X]\E[Y]$. Using the expression t
 \subsection*{a.}
 % TODO: Leibnetz Rule?
 We aim to find the PDF $h$ of the random variable $Z = X + Y$, where $X$ and $Y$ are independent random variables with PDFs given by $f$ and $g$, respectively. In addition, let $H$, $F$, and $G$ represent the CDFs of $Z$, $X$, and $Y$, respectively. \\ \\
-By definition of CDF, and since $X$ and $Y$ are independent, we can take \\ 
+By definition of CDF, we can take \\ 
 $H(z) = \P(Z \leq z) = \P(X + Y \leq z)$. \\
-$H(z) = \int_{-\infty}^{\infty} \P(X + Y \leq z \mid X = x) f(x) \,dx$ \hfill Law of Total Probability \\ 
-$H(z) = \int_{-\infty}^{\infty} \P(x + Y \leq z \mid X = x) f(x) \,dx$ \hfill Definition \\
-$H(z) = \int_{-\infty}^{\infty} \P(Y \leq z - x \mid X = x) f(x) \,dx$ \hfill Algebra \\ 
-$H(z) = \int_{-\infty}^{\infty} \P(Y \leq z - x) f(x) \,dx$ \hfill Independence of $X$ and $Y$ \\
-$H(z) = \int_{-\infty}^{\infty} G(z-x) f(x) \,dx$ \hfill Definition of CDF for $Y$ \\
-$h(z) = \frac{d}{dz}\int_{-\infty}^{\infty} G(z-x) f(x) \,dx$ \hfill Definition of PDF \\
-$h(z) = \int_{-\infty}^{\infty} g(z-x) f(x) \,dx$ \hfill Definition of PDF \\
+$H(z) = \int_{-\infty}^{\infty} \int_{-\infty}^{z-x} f(x) g(y) \,dy \,dx$ \hfill Independence of $X$ and $Y$ \\ 
+$H(z) = \int_{-\infty}^{\infty} f(x) G(z - x) \,dx$ \hfill Definition of CDF \\ 
+$\frac{d}{dz} H(z) = \frac{d}{dz} \int_{-\infty}^{\infty} f(x) G(z - x) \,dx$ \hfill Definition of PDF \\ 
+$h(z) = \int_{-\infty}^{\infty} f(x) \cdot \frac{d}{dz} G(z - x) \,dx$ \hfill Definition of PDF \\ 
+$h(z) = \int_{-\infty}^{\infty} f(x) g(z - x) \,dx$ \hfill Derivatives \\ 
+$h(z) = \int_{-\infty}^{\infty} g(z-x) f(x) \,dx$ \hfill Algebra \\
 as we sought to show.
 
 \subsection*{b.}
