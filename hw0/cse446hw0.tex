@@ -334,7 +334,6 @@ def plot_hyperplanes():
   plt.title("A.9.a")
   plt.xlabel("x-values")
   plt.ylabel("y-values")
-  plt.title("sine wave form")
   plt.xlim(-10, 10)
   plt.ylim(-10, 10)
   plt.plot(x, 0 * x)
@@ -494,28 +493,53 @@ Define $Y^{(k)} = \frac{1}{\sqrt{k}} \sum_{i=1}^k B_i$ where each $B_i$ is equal
 From your solution to problem 5, we know that $\frac{1}{\sqrt{k}} B_i$ is zero-mean and has variance $1/k$.
 
 \subsection*{a.}
-For $i=1,\dots,n$ let $Z_i \sim \mathcal{N}(0,1)$. If
-  $F(x)$ is the true CDF from which each $Z_i$ is drawn (i.e.,
-  Gaussian) and $\widehat{F}_n(x) = \frac{1}{n} \sum_{i=1}^n
-  \1\{ Z_i \leq x)$, use the answer to problem 1.5  above to choose
-  $n$ large enough such that, for all $x \in \R$, $ \sqrt{\E[
-    (\widehat{F}_n(x)-F(x))^2 ]} \leq 0.0025$, and plot
-  $\widehat{F}_n(x)$ from $-3$ to $3$. \\(Hint: use
-  \texttt{Z=numpy.random.randn(n)} to generate the random
-  variables, and \texttt{import matplotlib.pyplot as plt};\\
-  \texttt{plt.step(sorted(Z), np.arange(1,n+1)/float(n))} to
-  plot). 
+We found in A.6 that for all $x \in \R$, we have  $\displaystyle \E[ ( \widehat{F}_n(x) - F(x) )^2 ] \leq \tfrac{1}{4n}$. Since we aim to have $n$ large enough such that $ \sqrt{\E[(\widehat{F}_n(x)-F(x))^2 ]} \leq 0.0025$, we can take \\
+$\E[ ( \widehat{F}_n(x) - F(x) )^2 ] \leq \tfrac{1}{4n}$ \\
+$\sqrt{\E[ ( \widehat{F}_n(x) - F(x) )^2 ]} \leq \tfrac{1}{2\sqrt{n}}$ \\
+Solving for $\frac{1}{2\sqrt{n}} = 0.0025$: \\
+$400 = 2\sqrt{n}$ \\
+$200 = \sqrt{n}$ \\
+$n = 40,000$ \\
+
+\begin{verbatim}
+def plot_rvs(n):
+  print("A.12.a")
+  Z = np.random.randn(n)
+  plt.step(sorted(Z), np.arange(1, n+1) / float(n), label = "Gaussian")
+
+  plt.xlim(-3, 3)
+  plt.xlabel("Observations")
+  plt.ylabel("Probability")
+  plt.legend()
+  plt.title("A.12.a")
+  plt.savefig("A12a.png")
+\end{verbatim}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=130mm]{A12a.PNG}
+\end{figure}
 
 \subsection*{b.}
-For each $k \in \{1, 8, 64, 512\}$ generate $n$
-  independent copies $Y^{(k)}$ and plot their empirical CDF on
-  the same plot as part a.\\ (Hint: 
-  $\texttt{np.sum(np.sign(np.random.randn(n,
-    k))*np.sqrt(1./k), axis=1)}$ generates $n$ of the
-  $Y^{(k)}$ random variables.) \\ \\ 
+\begin{verbatim}
+def generate_copies(n):
+  print("A.12.b")
+  k_set = [1, 8, 64, 512]
 
-Be sure to always label your axes. 
-Your plot should look something like the following (Tip: checkout \texttt{seaborn} for instantly better looking plots.)
+  for k in k_set:
+    obs_set = np.sum(np.sign(np.random.randn(n, k)) * np.sqrt(1./k), axis=1)
+    plt.plot(sorted(obs_set), np.arange(1, n+1) / float(n), label = str(k))
+
+  plt.legend()
+  plt.title("A.12.b")
+  plt.savefig("A12b.png")
+  plt.close()
+\end{verbatim}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=130mm]{A12b.PNG}
+\end{figure}
 
 }
 

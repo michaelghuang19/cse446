@@ -16,7 +16,6 @@ def plot_hyperplanes():
   plt.title("A.9.a")
   plt.xlabel("x-values")
   plt.ylabel("y-values")
-  plt.title("sine wave form")
   plt.xlim(-10, 10)
   plt.ylim(-10, 10)
   plt.plot(x, 0 * x)
@@ -86,18 +85,39 @@ def matrix_compute():
   ac = a.dot(c)
   print(ac)
 
-# Use Z=numpy.random.randn(n) to generate the random variables;
-# plt.step(sorted(Z), np.arange(1,n+1)/float(n)) to plot
-def plot_rvs():
+def plot_rvs(n):
   print("A.12.a")
+  Z = np.random.randn(n)
+  plt.step(sorted(Z), np.arange(1, n+1) / float(n), label = "Gaussian")
 
+  plt.xlim(-3, 3)
+  plt.xlabel("Observations")
+  plt.ylabel("Probability")
+  plt.legend()
+  plt.title("A.12.a")
+  plt.savefig("A12a.png")
+
+def generate_copies(n):
   print("A.12.b")
+  k_set = [1, 8, 64, 512]
 
+  for k in k_set:
+    obs_set = np.sum(np.sign(np.random.randn(n, k)) * np.sqrt(1./k), axis=1)
+    plt.plot(sorted(obs_set), np.arange(1, n+1) / float(n), label = str(k))
+
+  plt.legend()
+  plt.title("A.12.b")
+  plt.savefig("A12b.png")
+  plt.close()
 
 def main():
   plot_hyperplanes()
   matrix_compute()
-  plot_rvs()
+
+  n = 40000
+
+  plot_rvs(n)
+  generate_copies(n)
 
 if __name__ == "__main__":
   main()
