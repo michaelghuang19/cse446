@@ -402,16 +402,32 @@ Given some $x_0 \in \R^n$, find the \emph{squared distance} to the hyperplane de
 For possibly non-symmetric $\mat{A}, \mat{B} \in \R^{n \times n}$ and $c \in \R$, let $f(x, y) = x^T \mat{A} x + y^T \mat{B} x + c$. Define $\nabla_z f(x,y) = \begin{bmatrix} \frac{\partial f(x,y)}{\partial z_1} & \frac{\partial f(x,y)}{\partial z_2} & \dots & \frac{\partial f(x,y)}{\partial z_n} \end{bmatrix}^T$.  
 
 \subsection*{a.}
-Explicitly write out the function $f(x, y)$ in terms of the components $A_{i,j}$ and $B_{i,j}$ using appropriate summations over the indices. \\ 
-
-We are given that $f(x, y) = x^T \mat{A} x + y^T \mat{B} x + c$. We aim to write out $f(x, y)$ in terms of $A_{i,j}$ and $B_{i,j}$ using summations over the indices. 
+We are given that $f(x, y) = x^T \mat{A} x + y^T \mat{B} x + c$. We aim to write out $f(x, y)$ in terms of $A_{i,j}$ and $B_{i,j}$ using summations over the indices. \\ \\
+$x^T A x = (\sum_{i=1}^{n} x_iA_{i, 1}) \cdot x_1 + \dots + (\sum_{i=1}^{n} x_iA_{i, n}) \cdot x_n = \sum_{j=1}^{n} \sum_{i=1}^{n} x_i A_{i,j} x_j$  \\ 
+$y^T B x = (\sum_{i=1}^{n} y_iB_{i, 1}) \cdot x_1 + \dots + (\sum_{i=1}^{n} y_iB_{i, n}) \cdot x_n = \sum_{j=1}^{n} \sum_{i=1}^{n} y_i B_{i,j} x_j$ \\
+and $c$ stays the same. \\ \\
+Putting this all together: \\
+$f(x, y) = x^T \mat{A} x + y^T \mat{B} x + c =$ \framebox[1.1\width]{\textbf{$\sum_{j=1}^{n} \sum_{i=1}^{n} x_i A_{i,j} x_j + \sum_{j=1}^{n} \sum_{i=1}^{n} y_i B_{i,j} x_j + c$}}
 
 \subsection*{b.}
-What is $\nabla_x f(x,y)$ in terms of the summations over indices \emph{and} vector notation?
+$\nabla_x f(x,y)$ in terms of vector notation: \\
+$\frac{\partial f(x,y)}{\partial x}(x^T \mat{A} x + y^T \mat{B} x + c) = x^T\mat{A}^T + x^T\mat{A} + y^T\mat{B}^T + 0 = $ \framebox[1.1\width]{\textbf{$\mat{A}^Tx + \mat{A}x + \mat{B}^Ty$}} \\ \\ 
+$\nabla_x f(x,y)$ in terms of the summations over indices: \\ 
+$\begin{bmatrix}
+\sum_{i=1}^{n} A_{i,1} x_i + \sum_{i=1}^{n} A_{1, i} x_i + \sum_{i=1}^{n} B_{i,1} y_i \\
+\dots \\
+\sum_{i=1}^{n} A_{i,n} x_i + \sum_{i=1}^{n} A_{n, i} x_i + \sum_{i=1}^{n} B_{i,n} y_i \\
+\end{bmatrix}$
 
 \subsection*{c.}
-What is $\nabla_y f(x,y)$ in terms of the summations over indices \emph{and} vector notation?
-
+$\nabla_y f(x,y)$ in terms of vector notation: \\
+$\frac{\partial f(x,y)}{\partial y}(x^T \mat{A} x + y^T \mat{B} x + c) = 0 + \mat{B}x + 0 =$ \framebox[1.1\width]{\textbf{$ \mat{B}x$}} \\ \\
+$\nabla_y f(x,y)$ in terms of the summations over indices: \\ 
+$\begin{bmatrix}
+\sum_{i=1}^{n} \mat{B}_{1,i}x_i \\
+\dots \\
+\sum_{i=1}^{n} \mat{B}_{n,i}x_i \\
+\end{bmatrix}$
 }
 
 \section*{A.11}
