@@ -304,8 +304,6 @@ $\begin{bmatrix} -2 \\ 1 \\ -1 \end{bmatrix}$
 \section*{A.9}
 {\Large 
 
-Assume $w$ is an $n$-dimensional vector and $b$ is a scalar. A hyperplane in $\R^n$ is the set $\{x : x\in \R^n,\text{ s.t. } w^T x + b = 0\}$.
-
 \begin{verbatim}
 def get_zvalue(x, y):
   return -x - y
@@ -363,7 +361,7 @@ $w = \begin{bmatrix} -1 & 2 \\ \end{bmatrix}$ \\
 $w^T = \begin{bmatrix} -1 \\ 2 \\ \end{bmatrix}$ \\
 $\begin{bmatrix} -1 \\ 2 \\ \end{bmatrix}$ x = -2 \\
 $-x + 2y = -2$ \\
-$y = \frac{1}{2}x -1$ \\ \\ \\ \\ \\ \\
+$y = \frac{1}{2}x -1$ \\ \\ \\ \\ \\ \\ \\ \\
 
 \begin{figure}[ht!]
   \centering
@@ -396,9 +394,7 @@ Since we want the squared distance, we simply square this value to find the resu
 }
 
 \section*{A.10}
-{\Large 
-
-For possibly non-symmetric $\mat{A}, \mat{B} \in \R^{n \times n}$ and $c \in \R$, let $f(x, y) = x^T \mat{A} x + y^T \mat{B} x + c$. Define $\nabla_z f(x,y) = \begin{bmatrix} \frac{\partial f(x,y)}{\partial z_1} & \frac{\partial f(x,y)}{\partial z_2} & \dots & \frac{\partial f(x,y)}{\partial z_n} \end{bmatrix}^T$.  
+{\Large  
 
 \subsection*{a.}
 We are given that $f(x, y) = x^T \mat{A} x + y^T \mat{B} x + c$. We aim to write out $f(x, y)$ in terms of $A_{i,j}$ and $B_{i,j}$ using summations over the indices. \\ \\
@@ -484,15 +480,6 @@ def matrix_compute():
 \section*{A.12}
 {\Large 
 
-Two random variables $X$ and $Y$ have equal
-  distributions if their CDFs, $F_X$ and $F_Y$, respectively, are
-  equal, i.e. for all $x$, $ |F_X(x) - F_Y(x)| = 0$. 
-The central limit theorem says that the sum of $k$ independent,
-zero-mean, variance-$1/k$ random variables converges to a (standard) Normal distribution as $k$ goes off to infinity.  
-We will study this phenomenon empirically (you will use the Python packages Numpy and Matplotlib). 
-Define $Y^{(k)} = \frac{1}{\sqrt{k}} \sum_{i=1}^k B_i$ where each $B_i$ is equal to $-1$ and $1$ with equal probability.
-From your solution to problem 5, we know that $\frac{1}{\sqrt{k}} B_i$ is zero-mean and has variance $1/k$.
-
 \subsection*{a.}
 We found in A.6 that for all $x \in \R$, we have  $\displaystyle \E[ ( \widehat{F}_n(x) - F(x) )^2 ] \leq \tfrac{1}{4n}$. Since we aim to have $n$ large enough such that $ \sqrt{\E[(\widehat{F}_n(x)-F(x))^2 ]} \leq 0.0025$, we can take \\
 $\E[ ( \widehat{F}_n(x) - F(x) )^2 ] \leq \tfrac{1}{4n}$ \\
@@ -500,7 +487,7 @@ $\sqrt{\E[ ( \widehat{F}_n(x) - F(x) )^2 ]} \leq \tfrac{1}{2\sqrt{n}}$ \\
 Solving for $\frac{1}{2\sqrt{n}} = 0.0025$: \\
 $400 = 2\sqrt{n}$ \\
 $200 = \sqrt{n}$ \\
-$n = 40,000$ \\
+$n = 40,000$ \\ \\ \\
 
 \begin{verbatim}
 def plot_rvs(n):
