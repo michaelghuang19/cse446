@@ -358,13 +358,12 @@ def plot_hyperplanes():
 \end{verbatim}
 
 \subsection*{a.}
-($n=2$ example) Draw the hyperplane for $w=[-1,2]^T$, $b=2$? Label your axes. \\ 
 We substitute for $w^T x + b = 0$ and plot: \\
 $w = \begin{bmatrix} -1 & 2 \\ \end{bmatrix}$ \\
 $w^T = \begin{bmatrix} -1 \\ 2 \\ \end{bmatrix}$ \\
 $\begin{bmatrix} -1 \\ 2 \\ \end{bmatrix}$ x = -2 \\
 $-x + 2y = -2$ \\
-$y = \frac{1}{2}x -1$ \\
+$y = \frac{1}{2}x -1$ \\ \\ \\ \\ \\ \\
 
 \begin{figure}[ht!]
   \centering
@@ -372,7 +371,6 @@ $y = \frac{1}{2}x -1$ \\
 \end{figure}
 
 \subsection*{b.}
-($n=3$ example) Draw the hyperplane for $w=[1,1,1]^T$, $b=0$? Label your axes. \\ 
 We solve for $w^T x + b = 0$: \\
 $w = \begin{bmatrix} 1 & 1 & 1 \\ \end{bmatrix}$ \\
 $w^T = \begin{bmatrix} 1 \\ 1 \\ 1 \\ \end{bmatrix}$ \\
@@ -386,13 +384,14 @@ $z = -x - y$ \\
 \end{figure}
 
 \subsection*{c.}
-Given some $x_0 \in \R^n$, find the \emph{squared distance} to the hyperplane defined by $w^T x + b=0$.
-	In other words, solve the following optimization problem:
-	\begin{align*}
-	\min_x& \|x_0 - x \|^2\\
-	\text{s.t. }&w^Tx +b = 0
-	\end{align*}
-	(Hint: if $\widetilde{x}_0$ is the minimizer of the above problem, note that $\| x_0 - \widetilde{x}_0 \| = | \frac{w^T(x_0 - \widetilde{x}_0)}{\|w\|} |$. What is $w^T \widetilde{x}_0$?)
+We are given some arbitrary point $x_0 \in \R^n$ and some hyperplane defined by $w^Tx + b = 0$, as well as some point on the hyperplane $ \widetilde{x}_0$. \\ \\
+We can measure the minimal distance from the arbitrary point to the closest point on the hyperplane using an orthogonal projection. We can calculate this using dot products as follows: \\
+$\| \text{proj}_{x_0, \widetilde{x}_0} \| = \| \frac{(x_0 - \widetilde{x}_0) \cdot w^T}{w^T \cdot w^T} \cdot w^T \| = |(x_0 - \widetilde{x}_0) \cdot w^T| \cdot \frac{\| w \|}{\| w^2 \|}  = | \frac{w^T(x_0 - \widetilde{x}_0)}{\| w \|} |$ \\
+By definition, $w^T \widetilde{x}_0 = -b$, and using what we showed, we can find that \\ 
+$\| x_0 - \widetilde{x}_0 \| = | \frac{w^T(x_0 - \widetilde{x}_0)}{\|w\|} |$ \\
+$\| x_0 - \widetilde{x}_0 \| = | \frac{w^Tx_0 - w^T\widetilde{x}_0}{\|w\|} |$ \\
+$\| x_0 - \widetilde{x}_0 \| = | \frac{w^Tx_0 - (-b)}{\|w\|} |$ \\
+Since we want the squared distance, we simply square this value to find the result to be \framebox[1.1\width]{\textbf{$| \frac{w^Tx_0 + b}{\|w\|} |^2$}} \\
 
 }
 
