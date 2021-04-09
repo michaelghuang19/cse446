@@ -51,19 +51,33 @@
 
 \subsection*{a.}
 
+Bias describes how well a model matches its original training set, while Variance describes how much a model will change when we select different data to train on. \\ \\
+The bias-variance tradeoff describes how there is an inverse relationship between bias and variance for a model; that is, we have lower model variance, bias tends to increase, but when we decrease bias, we tend to have higher variance. 
+
 \subsection*{b.}
 
-
+Typically, with greater model complexity, we have a greater range of data which means we have greater variance, but also lower bias as we typically are fitting on less of the training set. \\
+In the same way, with lower model complexity, we have less key data which means there will be a lower variance with fewer options for training data sets, but greater bias as well.
 
 \subsection*{c.}
 
+False. The bias of a model is defined on a single selection of training data, so this doesn't change with more data.
+
 \subsection*{d.}
+
+False. Typically, adding more training data should increase the variance of a model with more options of data to train on.
 
 \subsection*{e.}
 
+False. With less features used to represent the data, this means that we essentially have fewer parameters, which means that we will have more issues generalizing since it is more difficult to tell the trends in the data.
+
 \subsection*{f.}
 
+We should only use the train set to tune hyperparameters. We should only use the test set to test our model, and using it to tune hyperparameters runs a higher risk of overfitting.
+
 \subsection*{g.}
+
+False. The training error of a function on the training set usually is too optimistic when it comes to estimating the true test error, since the test error has greater variance.
 
 }
 
