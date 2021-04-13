@@ -77,7 +77,10 @@ We should only use the train set to tune hyperparameters. We should only use the
 
 \subsection*{g.}
 
-False. The training error of a function on the training set usually is too optimistic when it comes to estimating the true test error, since the test error has greater variance.
+False. The training error is evaluated on the data it trained on itself, while the true error evaluates on all the data in the dataset, so the training error will not be an accurate overestimate.
+% The training error of a function on the training set usually is too optimistic when it comes to estimating the true error.
+% The training error of a function provides an overestimate of the true error?
+% Usually, hard to tell whether is over/under right?
 
 }
 
@@ -95,16 +98,28 @@ False. The training error of a function on the training set usually is too optim
 
 \framebox[1.1\width]{\textbf{answer}}
 
+We aim to derive an expression for the maximum likelihood estimate of $\lambda$ in the context of the Poisson distribution in terms of $x_1, \dots, x_5$. \\
+We know that $\text{Poi}(x|\lambda) = e^{-\lambda}\frac{\lambda ^x}{x!}$
+
 \subsection*{b.}
+Suppose the team scores 3 goals in its 6th game, that is, $x_6 = 3$. We aim to find the maximum likelihood estimate for $\lambda$. 
 
 \subsection*{c.}
+We aim to find the numerical estimates of $\lambda$ after 5 and 6 games.
 
 }
 
 \section*{A.2}
 {\Large 
 
-
+Let $x_1, \dots, x_n$ be independent, uniformly distributed on the continuous domain [0, $\theta$] for some $\theta$. We aim to find the maximum likelihood estimate for $\theta$, that is, $\widehat{\theta}_{MLE}$. \\ 
+Because we have a selection of uniform distributions from $[0, \theta]$, we know that $f(x_i \mid \theta) = \frac{1}{\theta}$ from $0 \leq x_i \leq \theta$, and 0 otherwise. We can then therefore determine the likelihood function as follows: \\ \\
+$L(\theta) = \P(x_1, ..., x_n; \theta) = \prod_{i=1}^{n} f(x_i;\theta) = \prod_{i=1}^{n} \frac{1}{\theta} =$ \\
+$ \theta^{-n}$ for $0 \leq x_i \leq \theta$, and 0 otherwise. \\ \\
+We aim to find $\widehat{\theta}_{MLE} = \text{arg max}_{\theta}L_n(\theta)$, by definition. Since our likelihood function $\theta^{-n}$ is continuously decreasing, we need to minimize $\theta$ while still maintaining that $\theta \geq x_i$ for all possible values of $i$. This minimized $\theta$ can therefore be limited to being the largest value of all $x_i$, since by limiting our $\theta$, we can guarantee that max $x_i \leq \theta$ and maintain the necessary condition to have a nonzero likelihood function. \\ \\
+We therefore have \framebox[1.1\width]{\textbf{$\widehat{\theta}_{MLE} = \text{max }(x_i, \dots, x_n)$}}.
+% We take the derivative of the log likelihood: \\
+% $\frac{d}{d\theta} \text{ ln } L_n(\theta) = \frac{d}{d\theta}-n \text{ ln}(\theta) = \frac{-n}{\theta}$
 
 }
 
@@ -113,9 +128,16 @@ False. The training error of a function on the training set usually is too optim
 
 \subsection*{a.}
 
+We aim to show that \\
+$\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] = \epsilon(f)$ \\
+as well that specifically $\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f})] = \epsilon(\widehat{f})$
+
 \subsection*{b.}
 
+Does $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f})] = \epsilon(\widehat{f})$? Explain.
+
 \subsection*{c.}
+From the collection of functions $\F = (f_1, f_2, \dots)$ with $\widehat{f}_{\text{train}}$ minimizing training error such that $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f}_{\text{train}})] \leq \E_{\text{train,test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f}_{\text{train}})]$
 
 }
 
