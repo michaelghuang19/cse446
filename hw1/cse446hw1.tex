@@ -161,7 +161,10 @@ We therefore have \framebox[1.1\width]{\textbf{$\widehat{\theta}_{MLE} = \text{m
 
 We aim to show that \\
 $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] = \epsilon(f)$ \\
-as well that specifically $\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f})] = \epsilon(\widehat{f})$
+We know by definition of the true error that $\epsilon(f) = \E_{(x,y) \sim \mathcal{D}}[(f(x) - y)^2]$ \\
+as well that specifically $\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f})] = \epsilon(\widehat{f})$. \\ \\
+
+$\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E_{\text{train}}[\frac{1}{N_{\text{train}}} \sum\limits_{\substack{(x,y) \in S_{\text{train}}}} (f(x) - y)^2]$ \\
 
 \subsection*{b.}
 
