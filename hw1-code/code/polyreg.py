@@ -73,7 +73,6 @@ class PolynomialRegression:
                 You need to apply polynomial expansion and scaling
                 at first
         """
-        #TODO
 
         n = len(X)
         d = self.degree
@@ -113,7 +112,6 @@ class PolynomialRegression:
         Returns:
             an n-by-1 numpy array of the predictions
         """
-        # TODO
 
         n = len(X)
         d = self.degree
