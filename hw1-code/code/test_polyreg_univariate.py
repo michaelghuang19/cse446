@@ -13,7 +13,7 @@ if __name__ == "__main__":
     '''
 
     # load the data
-    filePath = "data/polydata.dat"
+    filePath = "../data/polydata.dat"
     file = open(filePath,'r')
     allData = np.loadtxt(file, delimiter=',')
 

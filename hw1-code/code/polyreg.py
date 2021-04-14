@@ -16,9 +16,13 @@ class PolynomialRegression:
         """
         Constructor
         """
-        #TODO
 
-        self.degree = degree 
+        self.degree = degree
+        self.reg_lambda = reg_lambda
+
+        self.mean_table = None
+        self.std_table = None
+        self.theta = None
 
     def polyfeatures(self, X, degree):
         """
@@ -34,7 +38,24 @@ class PolynomialRegression:
             X is an n-by-1 column numpy array
             degree is a positive integer
         """
-        #TODO
+        
+        n = X.length
+        d = degree
+
+        result = np.zeros((n, d))
+
+        for i in range(d):
+            for j in range(1, n):
+                result[i][j - 1] = X[i] ** j
+
+        return result
+
+    def standardize(self, matrix):
+        # TODO: check if this is behaving properly
+        n, d = matrix.shape
+
+        result = np.zeros((n, d))
+
 
     def fit(self, X, y):
         """
@@ -49,6 +70,9 @@ class PolynomialRegression:
                 at first
         """
         #TODO
+
+        # Note that this function will not add in the zero-th order feature (i.e., x0=1).
+        # You should add the x0 feature separately, outside of this function, before training the model
 
     def predict(self, X):
         """
