@@ -18,6 +18,8 @@ class PolynomialRegression:
         """
         #TODO
 
+        self.degree = degree 
+
     def polyfeatures(self, X, degree):
         """
         Expands the given X into an n * d array of polynomial features of
