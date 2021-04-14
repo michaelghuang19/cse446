@@ -22,7 +22,8 @@ if __name__ == "__main__":
 
     # regression with degree = d
     d = 8
-    model = PolynomialRegression(degree=d, reg_lambda=0)
+    reg_lambda = 1E-1
+    model = PolynomialRegression(degree=d, reg_lambda=reg_lambda)
     model.fit(X, y)
 
     # output predictions
@@ -37,6 +38,6 @@ if __name__ == "__main__":
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.show()
-    
+
     # show isn't working for me for some reason
-    plt.savefig("a4.png")
+    plt.savefig("a4_" + str(reg_lambda) + ".png")
