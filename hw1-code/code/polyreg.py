@@ -46,7 +46,7 @@ class PolynomialRegression:
 
         for i in range(n):
             for j in range(d):
-                result[i][j - 1] = X[i] ** (j + 1)
+                result[i][j] = X[i] ** (j + 1)
 
         return result
 
@@ -94,14 +94,14 @@ class PolynomialRegression:
         poly_matrix = self.standardize(poly_matrix)
 
         # add the x0 column of 1s
-        np.concatenate((np.ones((n, 1)), poly_matrix), axis=1)
+        poly_matrix = np.concatenate((np.ones((n, 1)), poly_matrix), axis=1)
 
         # construct reg matrix
-        reg_matrix = self.reg_lambda * np.eye(d)
+        reg_matrix = self.reg_lambda * np.eye(d + 1)
         reg_matrix[0, 0] = 0
 
         # Since 0-mean, we can do 
-        # weight = (X^T*X)^-1 X^T*Y
+        # weight = (X^T*X + r)^-1 X^T*Y
         self.theta = np.linalg.pinv(poly_matrix.T.dot(poly_matrix)
                     + reg_matrix).dot(poly_matrix.T).dot(y)
 
@@ -122,7 +122,7 @@ class PolynomialRegression:
         poly_matrix = self.standardize(poly_matrix)
 
         # add column of 1s at beginning
-        np.concatenate((np.ones((n, 1)), poly_matrix), axis=1)
+        poly_matrix = np.concatenate((np.ones((n, 1)), poly_matrix), axis=1)
 
         # return predictions
         return poly_matrix.dot(self.theta)
