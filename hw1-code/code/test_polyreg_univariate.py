@@ -37,3 +37,6 @@ if __name__ == "__main__":
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.show()
+    
+    # show isn't working for me for some reason
+    plt.savefig("a4.png")

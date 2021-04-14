@@ -96,3 +96,6 @@ if __name__ == "__main__":
     plt.subplot(2, 3, 6)
     generateLearningCurve(X, y, 8, 100)
     plt.show()
+    
+    # show isn't working for me for some reason
+    plt.savefig("a5.png")
