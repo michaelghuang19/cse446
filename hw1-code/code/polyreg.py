@@ -39,14 +39,14 @@ class PolynomialRegression:
             degree is a positive integer
         """
         
-        n = X.length
+        n = len(X)
         d = degree
 
         result = np.zeros((n, d))
 
-        for i in range(d):
-            for j in range(1, n):
-                result[i][j - 1] = X[i] ** j
+        for i in range(n):
+            for j in range(d):
+                result[i][j - 1] = X[i] ** (j + 1)
 
         return result
 
@@ -75,7 +75,7 @@ class PolynomialRegression:
         """
         #TODO
 
-        n = X.length
+        n = len(X)
         d = self.degree
 
         poly_matrix = self.polyfeatures(X, d)
@@ -85,8 +85,8 @@ class PolynomialRegression:
         self.std_list = np.zeros(d)
 
         for i in range(d):
-            cur = X[:, i]
-            cur = cur.to_list()
+            cur = poly_matrix[:, i]
+            cur = cur.tolist()
 
             self.mean_list[i] = np.mean(cur)
             self.std_list[i] = np.std(cur)
@@ -94,9 +94,16 @@ class PolynomialRegression:
         poly_matrix = self.standardize(poly_matrix)
 
         # add the x0 column of 1s
-        np.concatenate((poly_matrix, np.ones((n, 1))), axis=1)
+        np.concatenate((np.ones((n, 1)), poly_matrix), axis=1)
 
-        
+        # construct reg matrix
+        reg_matrix = self.reg_lambda * np.eye(d)
+        reg_matrix[0, 0] = 0
+
+        # Since 0-mean, we can do 
+        # weight = (X^T*X)^-1 X^T*Y
+        self.theta = np.linalg.pinv(poly_matrix.T.dot(poly_matrix)
+                    + reg_matrix).dot(poly_matrix.T).dot(y)
 
     def predict(self, X):
         """
@@ -108,14 +115,14 @@ class PolynomialRegression:
         """
         # TODO
 
-        n = X.length
+        n = len(X)
         d = self.degree
 
         poly_matrix = self.polyfeatures(X, d)
         poly_matrix = self.standardize(poly_matrix)
 
-        # add column of 1s to the right
-        np.concatenate((poly_matrix, np.ones((n, 1))), axis=1)
+        # add column of 1s at beginning
+        np.concatenate((np.ones((n, 1)), poly_matrix), axis=1)
 
         # return predictions
         return poly_matrix.dot(self.theta)
@@ -134,7 +141,7 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
         Ytrain -- Training y, n-by-1 matrix
         Xtest -- Testing X, m-by-1 matrix
         Ytest -- Testing Y, m-by-1 matrix
-        regLambda -- regularization factor
+        reg_lambda -- regularization factor
         degree -- polynomial degree
 
     Returns:
