@@ -20,8 +20,8 @@ class PolynomialRegression:
         self.degree = degree
         self.reg_lambda = reg_lambda
 
-        self.mean_table = None
-        self.std_table = None
+        self.mean_list = None
+        self.std_list = None
         self.theta = None
 
     def polyfeatures(self, X, degree):
@@ -55,6 +55,10 @@ class PolynomialRegression:
         n, d = matrix.shape
 
         result = np.zeros((n, d))
+        for i in range(d):
+            result[:, i] = (matrix[:, i] - self.mean_list[i]) / self.std_list[i]
+
+        return result
 
 
     def fit(self, X, y):
@@ -71,8 +75,28 @@ class PolynomialRegression:
         """
         #TODO
 
-        # Note that this function will not add in the zero-th order feature (i.e., x0=1).
-        # You should add the x0 feature separately, outside of this function, before training the model
+        n = X.length
+        d = self.degree
+
+        poly_matrix = self.polyfeatures(X, d)
+        
+        # get the means/stds of training data
+        self.mean_list = np.zeros(d)
+        self.std_list = np.zeros(d)
+
+        for i in range(d):
+            cur = X[:, i]
+            cur = cur.to_list()
+
+            self.mean_list[i] = np.mean(cur)
+            self.std_list[i] = np.std(cur)
+
+        poly_matrix = self.standardize(poly_matrix)
+
+        # add the x0 column of 1s
+        np.concatenate((poly_matrix, np.ones((n, 1))), axis=1)
+
+        
 
     def predict(self, X):
         """
@@ -84,11 +108,21 @@ class PolynomialRegression:
         """
         # TODO
 
+        n = X.length
+        d = self.degree
+
+        poly_matrix = self.polyfeatures(X, d)
+        poly_matrix = self.standardize(poly_matrix)
+
+        # add column of 1s to the right
+        np.concatenate((poly_matrix, np.ones((n, 1))), axis=1)
+
+        # return predictions
+        return poly_matrix.dot(self.theta)
 
 #-----------------------------------------------------------------
 #  End of Class PolynomialRegression
 #-----------------------------------------------------------------
-
 
 
 def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
