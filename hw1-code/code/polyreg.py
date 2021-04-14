@@ -129,6 +129,13 @@ class PolynomialRegression:
 #  End of Class PolynomialRegression
 #-----------------------------------------------------------------
 
+def calculate_error(n, calculated_values, actual_values):
+    result = 0
+
+    for i in range(n):
+        result += np.square(calculated_values[i] - actual_values[i])
+
+    return result / n
 
 def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
     """
@@ -153,10 +160,22 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
     """
 
     n = len(Xtrain)
+    m = len(Xtest)
 
     errorTrain = np.zeros(n)
     errorTest = np.zeros(n)
 
     #TODO -- complete rest of method; errorTrain and errorTest are already the correct shape
+
+    model = PolynomialRegression(degree, reg_lambda)
+
+    # Xtrain[0 : (i+1)]
+    # Ytrain[0: (i+1)]
+
+    for i in range(n):
+        model.fit(Xtrain[0: (i+1)], Ytrain[0: (i+1)])
+
+        errorTrain[i] = calculate_error(i + 1, model.predict(Xtrain[0: (i+1)]), Ytrain[0: (i+1)])
+        errorTest[i] = calculate_error(m, model.predict(Xtest), Ytest)
 
     return errorTrain, errorTest
