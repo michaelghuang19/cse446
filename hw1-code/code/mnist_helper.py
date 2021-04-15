@@ -25,11 +25,14 @@ def load_dataset():
   ohe_train = np.zeros((len(labels_train), 10))
   ohe_test = np.zeros((len(labels_test), 10))
 
-  for train_val in labels_train:
-    ohe_train[train_val] = 1
+  for idx, train_val in enumerate(labels_train):
+    ohe_train[idx][train_val] = 1
 
-  for test_val in labels_test:
-    ohe_test[test_val] = 1
+  for idx, test_val in enumerate(labels_test):
+    ohe_test[idx][test_val] = 1
+
+  print(labels_train[0:5])
+  print(ohe_train[0:5])
 
   return X_train, labels_train, ohe_train, X_test, labels_test, ohe_test
 
@@ -42,7 +45,7 @@ def calculate_error(calculated_values, actual_values):
     
     # convert to match boolean list
     match_summary = [calc_val == actual_values[calc_idx]
-                     for calc_val, calc_idx in enumerate(calculated_values)]
+                     for calc_idx, calc_val in enumerate(calculated_values)]
 
     return 1 - (sum(match_summary) / len(match_summary))
 
