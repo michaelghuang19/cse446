@@ -308,7 +308,63 @@ Examine the resulting effect on the function.
 \section*{A.5}
 {\Large 
 
+\begin{verbatim}
+def calculate_error(n, calculated_values, actual_values):
+  result = 0
 
+  for i in range(n):
+      result += np.square(calculated_values[i] - actual_values[i])
+
+  return result / n
+
+def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
+  """
+  Compute learning curve
+
+  Arguments:
+      Xtrain -- Training X, n-by-1 matrix
+      Ytrain -- Training y, n-by-1 matrix
+      Xtest -- Testing X, m-by-1 matrix
+      Ytest -- Testing Y, m-by-1 matrix
+      reg_lambda -- regularization factor
+      degree -- polynomial degree
+
+  Returns:
+      errorTrain -- errorTrain[i] is the training accuracy using
+      model trained by Xtrain[0:(i+1)]
+      errorTest -- errorTrain[i] is the testing accuracy using
+      model trained by Xtrain[0:(i+1)]
+
+  Note:
+      errorTrain[0:1] and errorTest[0:1] won't actually matter, since we start displaying the learning curve at n = 2 (or higher)
+  """
+
+  n = len(Xtrain)
+  m = len(Xtest)
+
+  errorTrain = np.zeros(n)
+  errorTest = np.zeros(n)
+
+  #TODO -- complete rest of method; errorTrain and errorTest are already the correct shape
+
+  model = PolynomialRegression(degree, reg_lambda)
+
+  # Xtrain[0 : (i+1)]
+  # Ytrain[0: (i+1)]
+
+  for i in range(1, n):
+      model.fit(Xtrain[0: (i+1)], Ytrain[0: (i+1)])
+
+      errorTrain[i] = calculate_error(i + 1, model.predict(Xtrain[0: (i+1)]), Ytrain[0: (i+1)])
+      errorTest[i] = calculate_error(m, model.predict(Xtest), Ytest)
+
+  return errorTrain, errorTest
+\end{verbatim}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=210mm]{../hw1-code/results/a5.png}
+\end{figure}
 
 }
 
