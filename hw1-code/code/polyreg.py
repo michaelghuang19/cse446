@@ -172,7 +172,7 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
     # Xtrain[0 : (i+1)]
     # Ytrain[0: (i+1)]
 
-    for i in range(n):
+    for i in range(1, n):
         model.fit(Xtrain[0: (i+1)], Ytrain[0: (i+1)])
 
         errorTrain[i] = calculate_error(i + 1, model.predict(Xtrain[0: (i+1)]), Ytrain[0: (i+1)])
