@@ -384,8 +384,29 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
 
 \subsection*{a.}
 
-Show that $\widehat{W} = (X^TX + \lambda I)^{-1}X^TY$. \\ 
-We start with $W = \| W^Tx^i - y^i \|$ asd $\Vert W^Tx^i - y^i \Vert$, which we can translate into something more friendly: \\ \\ 
+We aim to show that $\widehat{W} = (X^TX + \lambda I)^{-1}X^TY$. \\ 
+We start with $\widehat{W} = \text{argmin}_{W \in \R^{d \times k}} \sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2 + \lambda \| W \|_F^2$ \\
+To find $\widehat{W}$ using our original form, we take the regularized least squares object and take the gradient with respect to $W$ and set to 0: \\ \\ 
+$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2 + \lambda \| W \|_F^2$) \\
+$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2) + \nabla_W (\lambda \sum_{i=1}^{d}\sum_{j=1}^{k}W_{i,j}^2)$ \\
+% i am fucking tripping here
+$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2) + \nabla_W (\lambda I_{ij} W^2)$ \\
+$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2) + 2 \lambda I_{ij} W$ \\
+$0 = \nabla_W (\sum_{i=1}^{n} \| x^iW - y^i \|_2^2) + 2 \lambda I_{ij} W$ \\
+% think harder about this step
+$0 = \nabla_W ((XW - Y)^T(XW - Y)) + 2 \lambda I_{ij} W$ \\
+$0 = \nabla_W ((XW)^TXW - (XW)^TY - Y^TXW + Y^TY) + 2 \lambda I_{ij} W$ \\
+$0 = \nabla_W (W^TX^TXW - W^TX^TY - Y^TXW + Y^TY) + 2 \lambda I_{ij} W$ \\
+$0 = \nabla_W (W^TX^TXW - W^TX^TY - W^TX^TY^T + Y^TY) + 2 \lambda I_{ij} W$ \\
+$0 = \nabla_W (W^TX^TXW - 2W^TX^TY + Y^TY) + 2 \lambda I_{ij} W$ \\
+$0 = \nabla_W (W^TX^TXW) - 2X^TY + 2 \lambda I_{ij} W$ \\
+$0 = X^TXW + W^TX^TX - 2X^TY + 2 \lambda I_{ij} W$ \\
+$0 = X^TXW + X^TXW - 2X^TY + 2 \lambda I_{ij} W$ \\
+$0 = 2(X^TXW - X^TY + \lambda I_{ij} W)$ \\
+$0 = X^TXW - X^TY + \lambda I_{ij} W$ \\
+$X^TY = (X^TX + \lambda I_{ij}) W$ \\
+$W = (X^TX + \lambda I_{ij})^{-1}X^TY = (X^TX + \lambda I)^{-1}X^TY$ \\
+as we aimed to show.
 
 \subsection*{b.}
 
