@@ -384,13 +384,125 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
 
 \subsection*{a.}
 
-Show that $\widehat{W} = (X^TX + \lambda I)^{-1}X^TY$
+Show that $\widehat{W} = (X^TX + \lambda I)^{-1}X^TY$. \\ 
+We start with $W = \| W^Tx^i - y^i \|$ asd $\Vert W^Tx^i - y^i \Vert$, which we can translate into something more friendly: \\ \\ 
 
 \subsection*{b.}
 
-I divided up , and got errors of . The code is as follows
+I divided up my files into mnist\_classifier.py which was my main script, as well as a helper script labeled mnist\_helper.py. I ended up with training error of 0.14801666666666669, or around 14.80\%, and test error of 0.14670000000000005, or around 14.67\%. This can be re-run as desired by simply running "python3 mnist\_classifier.py". \\
+The code for mnist\_classifier.py is as follows: \\
 
 \begin{verbatim}
+# mnist_classifier.py
+
+import numpy as np
+import os
+import sys
+
+import mnist_helper as m_h
+
+from scipy import linalg
+
+# Methods
+
+"""
+Input: X as n x d, Y as 0/1 n x k, lmbda > 0 as regularization factor
+(Modify lmbda in mnist_helper constants)
+Output: W-hat predictor
+"""
+def train(X, Y, lmbda=m_h.lmbda):
+  print("train")
+
+  assert (len(X) > 0), "X row count sanity check"
+
+  # d-dimensional since we have (d x n) x (n x d) = d x d
+  inverse_term = X.T.dot(X) + (m_h.lmbda * np.eye(len(X[0])))
+
+  return linalg.solve(inverse_term, X.T.dot(Y))
+
+"""
+Input: W as d x k, X as m x d
+Output: m-length vector with ith entry equal to the maximizer
+according to each example from input X
+"""
+def predict(W, X):
+  print("predict")
+
+  return np.argmax(np.dot(X, W), axis=1)
+
+def main(run_type):
+  # labels are in list form, ohe are in ohe form
+  X_train, labels_train, ohe_train, X_test, labels_test, ohe_test = m_h.load_dataset()
+
+  W_train = train(X_train, ohe_train)
+  
+  train_predictions = predict(W_train, X_train)
+  test_predictions = predict(W_train, X_test)
+
+  train_error = m_h.calculate_error(train_predictions, labels_train)
+  test_error = m_h.calculate_error(test_predictions, labels_test)
+
+  print(train_error)
+  print(test_error)
+
+if __name__ == '__main__':
+  main(sys.argv[1:])
+
+\end{verbatim}
+The code for mnist\_helper.py is as follows: \\ 
+
+\begin{verbatim}
+# mnist_helper.py
+
+import numpy as np
+
+from mnist import MNIST
+
+# Global Variables
+
+lmbda = 10E-4
+
+n = 0
+m = 0
+
+# Helper Functions
+
+"""
+Helper function for loading in MNIST data set
+"""
+def load_dataset():
+  mndata = MNIST('../data/')
+  X_train, labels_train = map(np.array, mndata.load_training())
+  X_test, labels_test = map(np.array, mndata.load_testing())
+  X_train = X_train/255.0
+  X_test = X_test/255.0
+
+  # convert labels to one-hot encoding
+  ohe_train = np.zeros((len(labels_train), 10))
+  ohe_test = np.zeros((len(labels_test), 10))
+
+  for idx, train_val in enumerate(labels_train):
+    ohe_train[idx][train_val] = 1
+
+  for idx, test_val in enumerate(labels_test):
+    ohe_test[idx][test_val] = 1
+
+  return X_train, labels_train, ohe_train, X_test, labels_test, ohe_test
+
+"""
+Helper function for calculating the error
+"""
+def calculate_error(calculated_values, actual_values):
+    assert (len(calculated_values) == len(actual_values)
+            ), "Equal prediction list length sanity check"
+    
+    # convert to match boolean list
+    match_summary = [calc_val == actual_values[calc_idx]
+                     for calc_idx, calc_val in enumerate(calculated_values)]
+
+    return 1 - (sum(match_summary) / len(match_summary))
+
+
 \end{verbatim}
 
 }

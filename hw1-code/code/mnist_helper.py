@@ -1,3 +1,5 @@
+# mnist_helper.py
+
 import numpy as np
 
 from mnist import MNIST
@@ -30,9 +32,6 @@ def load_dataset():
 
   for idx, test_val in enumerate(labels_test):
     ohe_test[idx][test_val] = 1
-
-  print(labels_train[0:5])
-  print(ohe_train[0:5])
 
   return X_train, labels_train, ohe_train, X_test, labels_test, ohe_test
 
