@@ -178,6 +178,18 @@ From the collection of functions $\F = (f_1, f_2, \dots)$ with $\widehat{f}_{\te
 \section*{A.4}
 {\Large 
 
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=150mm]{../hw1-code/results/a4.png}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=218mm]{../hw1-code/results/a4_compilation.png}
+\end{figure}
+
+As lambda increases, we see that the curve seems to smooth out and eventually even flatten out at excessive amounts. There seems to be a good amount of regularization when the curve is relatively smooth with considerably less evidence of overfitting to the specifically selected points around values of 0.01 or 0.1.
+
 \begin{verbatim}
   class PolynomialRegression:
 
@@ -296,26 +308,19 @@ From the collection of functions $\F = (f_1, f_2, \dots)$ with $\widehat{f}_{\te
       return poly_matrix.dot(self.theta)
 \end{verbatim}
 
-As lambda increases, we see that the curve seems to smooth out and eventually even flatten out at excessive amounts. There seems to be a good amount of regularization when the curve is relatively smooth with considerably less evidence of overfitting to the specifically selected points around values of 0.01 or 0.1.
+% \newpage
 
-\newpage
-
-\begin{figure}[hb]
-    \centering
-    \includegraphics[width=150mm]{../hw1-code/results/a4.png}
-\end{figure}
-
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[width=218mm]{../hw1-code/results/a4_compilation.png}
-\end{figure}
-
-\newpage
+% \newpage
 
 }
 
 \section*{A.5}
 {\Large 
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=215mm]{../hw1-code/results/a5.png}
+\end{figure}
 
 \begin{verbatim}
 def calculate_error(n, calculated_values, actual_values):
@@ -370,12 +375,7 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
   return errorTrain, errorTest
 \end{verbatim}
 
-\begin{figure}[ht!]
-  \centering
-  \includegraphics[width=215mm]{../hw1-code/results/a5.png}
-\end{figure}
-
-\newpage
+% \newpage
 
 }
 
