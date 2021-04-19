@@ -190,8 +190,9 @@ We can therefore also see that $\E_{\text{test}}[\widehat{\epsilon}_{\text{test}
 
 \subsection*{b.}
 
-In general, $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f})] \neq \epsilon(\widehat{f})$. In essence, since the algorithm is trained on the training set, the training error is minimized, which intuitively means that the test error will not match the training error. 
+In general, $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f})] \neq \epsilon(\widehat{f})$. In essence, since the algorithm is trained on the training set, the training error is minimized, which intuitively means that the test error will not match the training error. The issue arises because $\widehat{f}$ is not fixed, which means that to calculate $\widehat{f}$, we would need to know the distribution of all $x_i, y_i$ in order to calculate expectation using linearity of expectation like we did in part a. However, we will not be able to exactly calculate the error like before since we rely on being able to calculate and take the sum of $\widehat{f}$ like a fixed function. 
 % We can show this by 
+% We know that \widehat{f} is not fixed 
 
 \subsection*{c.}
 From the collection of functions $\mathcal{F} = (f_1, f_2, \dots)$ with $\widehat{f}_{\text{train}}$ minimizing training error, we aim to show that $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f}_{\text{train}})] \leq \E_{\text{train,test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f}_{\text{train}})]$. \\ \\
