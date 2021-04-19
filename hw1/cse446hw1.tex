@@ -160,18 +160,49 @@ We therefore have \framebox[1.1\width]{\textbf{$\widehat{\theta}_{MLE} = \text{m
 \subsection*{a.}
 
 We aim to show that \\
-$\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] = \epsilon(f)$ \\
-We know by definition of the true error that $\epsilon(f) = \E_{(x,y) \sim \mathcal{D}}[(f(x) - y)^2]$ \\
-as well that specifically $\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f})] = \epsilon(\widehat{f})$. \\ \\
+$\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] = \epsilon(f)$ and  $\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f})] = \epsilon(\widehat{f})$ \\ \\
 
-$\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E_{\text{train}}[\frac{1}{N_{\text{train}}} \sum\limits_{\substack{(x,y) \in S_{\text{train}}}} (f(x) - y)^2]$ \\
+We know by definition that \\
+$\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E[\frac{1}{N_{\text{train}}} \sum\limits_{\substack{(x,y) \in S_{\text{train}}}} (f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{train}}} \cdot \E[\sum\limits_{\substack{(x,y) \in S_{\text{train}}}} (f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{train}}} \cdot \sum\limits_{\substack{(x,y) \in S_{\text{train}}}} \E[(f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{train}}} \cdot \sum\limits_{\substack{(x,y) \in S_{\text{train}}}} \E[(f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{train}}} \cdot N_{\text{train}} \cdot \E[(f(x) - y)^2]$ \\
+$= \E[(f(x) - y)^2]$ \\ \\
+In the same way, \\
+$\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] = \E[\frac{1}{N_{\text{test}}} \sum\limits_{\substack{(x,y) \in S_{\text{test}}}} (f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot \E[\sum\limits_{\substack{(x,y) \in S_{\text{test}}}} (f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot \sum\limits_{\substack{(x,y) \in S_{\text{test}}}} \E[(f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot \sum\limits_{\substack{(x,y) \in S_{\text{test}}}} \E[(f(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot N_{\text{test}} \cdot \E[(f(x) - y)^2]$ \\
+$= \E[(f(x) - y)^2]$ \\ \\
+Finally, we know by definition of the true error that $\epsilon(f) = \E_{(x,y) \sim \mathcal{D}}[(f(x) - y)^2]$. \\ 
+Putting this all together, we can see by expansion that $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] = \E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] = \epsilon(f)$. \\ \\
+To prove the second statement, we can in a similar manner see that \\
+$\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f})] = \E[\frac{1}{N_{\text{test}}} \sum\limits_{\substack{(x,y) \in S_{\text{test}}}} (\widehat{f}(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot \E[\sum\limits_{\substack{(x,y) \in S_{\text{test}}}} (\widehat{f}(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot \sum\limits_{\substack{(x,y) \in S_{\text{test}}}} \E[(\widehat{f}(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot \sum\limits_{\substack{(x,y) \in S_{\text{test}}}} \E[(\widehat{f}(x) - y)^2]$ \\
+$= \frac{1}{N_{\text{test}}} \cdot N_{\text{test}} \cdot \E[(\widehat{f}(x) - y)^2]$ \\
+$= \E[(\widehat{f}(x) - y)^2]$ \\
+And we can again see by definition that $\epsilon(\widehat{f}) = \E_{(x,y) \sim \mathcal{D}}[(\widehat{f}(x) - y)^2]$. \\ \\
+We can therefore also see that $\E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f})] = \epsilon(\widehat{f})$.
 
 \subsection*{b.}
 
-Does $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f})] = \epsilon(\widehat{f})$? Explain.
+In general, $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f})] \neq \epsilon(\widehat{f})$. In essence, since the algorithm is trained on the training set, the training error is minimized, which intuitively means that the test error will not match the training error. 
+% We can show this by 
 
 \subsection*{c.}
-From the collection of functions $\F = (f_1, f_2, \dots)$ with $\widehat{f}_{\text{train}}$ minimizing training error such that $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f}_{\text{train}})] \leq \E_{\text{train,test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f}_{\text{train}})]$
+From the collection of functions $\mathcal{F} = (f_1, f_2, \dots)$ with $\widehat{f}_{\text{train}}$ minimizing training error, we aim to show that $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f}_{\text{train}})] \leq \E_{\text{train,test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f}_{\text{train}})]$. \\ \\
+We know by definition that $\E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f}_{\text{train}})] $ \\ 
+$= \sum\limits_{\substack{f \in \mathcal{F}}} \E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(\widehat{f}_{\text{train}})] \cdot \P_{\text{train}}(\widehat{f}_{\text{train}} = f)$ \\
+$\leq \sum\limits_{\substack{f \in \mathcal{F}}} \E_{\text{train}}[\widehat{\epsilon}_{\text{train}}(f)] \cdot \P_{\text{train}}(\widehat{f}_{\text{train}} = f)$ \hfill By nature of the minimizer \\
+$= \sum\limits_{\substack{f \in \mathcal{F}}} \E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] \cdot \P_{\text{train}}(\widehat{f}_{\text{train}} = f)$ \hfill Using part a. \\
+$= \sum\limits_{\substack{f \in \mathcal{F}}} \E_{\text{test}}[\widehat{\epsilon}_{\text{test}}(f)] \cdot \E_{\text{train}}[1\{\widehat{f}_{\text{train}} = f\}]$ \hfill Using the hint \\
+$= \sum\limits_{\substack{f \in \mathcal{F}}} \E_{\text{train, test}}[\widehat{\epsilon}_{\text{test}}(f)1\{\widehat{f}_{\text{train}} = f\}]$ \hfill Using the hint \\
+$= \E_{\text{train, test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f}_{\text{train}})]$ \hfill Using the hint \\ 
+which is exactly what we sought to show.
 
 }
 
