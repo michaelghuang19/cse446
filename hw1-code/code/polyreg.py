@@ -5,7 +5,6 @@
 
 import numpy as np
 
-
 #-----------------------------------------------------------------
 #  Class PolynomialRegression
 #-----------------------------------------------------------------
@@ -78,9 +77,11 @@ class PolynomialRegression:
                 at first
         """
 
+        # get dimensions
         n = len(X)
         d = self.degree
 
+        # expand degree
         poly_matrix = self.polyfeatures(X, d)
         
         # get the means/stds of training data
@@ -94,6 +95,7 @@ class PolynomialRegression:
             self.mean_list[i] = np.mean(cur)
             self.std_list[i] = np.std(cur)
 
+        # standardize
         poly_matrix = self.standardize(poly_matrix)
 
         # add the x0 column of 1s
@@ -105,8 +107,8 @@ class PolynomialRegression:
 
         # Since 0-mean, we can do 
         # weight = (X^T*X + r)^-1 X^T*Y
-        self.theta = np.linalg.pinv(poly_matrix.T.dot(poly_matrix)
-                    + reg_matrix).dot(poly_matrix.T).dot(y)
+        self.theta = np.linalg.pinv(poly_matrix.T.dot(
+            poly_matrix) + reg_matrix).dot(poly_matrix.T).dot(y)
 
     def predict(self, X):
         """
@@ -117,10 +119,14 @@ class PolynomialRegression:
             an n-by-1 numpy array of the predictions
         """
 
+        # get dimensions
         n = len(X)
         d = self.degree
-
+        
+        # expand degree
         poly_matrix = self.polyfeatures(X, d)
+
+        # standardize
         poly_matrix = self.standardize(poly_matrix)
 
         # add column of 1s at beginning
@@ -176,7 +182,7 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
     # Xtrain[0 : (i+1)]
     # Ytrain[0: (i+1)]
 
-    for i in range(1, n):
+    for i in range(0, n):
         model.fit(Xtrain[0: (i+1)], Ytrain[0: (i+1)])
 
         errorTrain[i] = calculate_error(i + 1, model.predict(Xtrain[0: (i+1)]), Ytrain[0: (i+1)])

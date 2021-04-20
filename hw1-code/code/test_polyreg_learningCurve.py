@@ -98,4 +98,4 @@ if __name__ == "__main__":
     plt.show()
     
     # show isn't working for me for some reason
-    plt.savefig("a5.png")
+    plt.savefig("../results/a5.png")

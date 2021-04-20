@@ -47,7 +47,7 @@ if __name__ == "__main__":
         plt.show()
 
         # show isn't working for me for some reason
-        plt.savefig("a4_" + str(reg_lambda) + ".png")
+        plt.savefig("../results/a4_" + str(reg_lambda) + ".png")
 
     else:
 
@@ -58,4 +58,4 @@ if __name__ == "__main__":
             plt.subplot(2, 4, idx + 1)
             plotUnivariate(X, y, d, reg_lambda)
         
-        plt.savefig("a4_compilation.png")
+        plt.savefig("../results/a4_compilation.png")
