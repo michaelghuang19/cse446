@@ -22,7 +22,6 @@ def plotUnivariate(X, y, d, reg_lambda):
     plt.plot(X, y, 'rx')
     plt.title('PolyRegression with d = ' + str(d) + ', lambda = ' + str(reg_lambda))
     plt.plot(xpoints, ypoints, 'b-')
-    print(ypoints)
     plt.xlabel('X')
     plt.ylabel('Y')
 
