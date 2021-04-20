@@ -56,7 +56,11 @@ class PolynomialRegression:
 
         result = np.zeros((n, d))
         for i in range(d):
-            result[:, i] = (matrix[:, i] - self.mean_list[i]) / self.std_list[i]
+            std = self.std_list[i]
+            if std == 0:
+                std = 1
+                
+            result[:, i] = (matrix[:, i] - self.mean_list[i]) / std
 
         return result
 

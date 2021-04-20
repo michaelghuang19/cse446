@@ -51,7 +51,7 @@
 
 \subsection*{a.}
 
-Bias describes how well a model matches its original training set, while Variance describes how much a model will change when we select different data to train on. \\ \\
+Bias describes how far away a trained model is from the optimal predictor, while Variance describes how much a model will change when we select different data to train on, on average. \\ \\
 The bias-variance tradeoff describes how there is an inverse relationship between bias and variance for a model; that is, we have lower model variance, bias tends to increase, but when we decrease bias, we tend to have higher variance. 
 
 \subsection*{b.}
@@ -65,11 +65,11 @@ False. The bias of a model is defined on a single selection of training data, so
 
 \subsection*{d.}
 
-False. Typically, adding more training data should increase the variance of a model with more options of data to train on.
+False. Typically, adding more training data $\textbf{should}$ increase the variance of a model with more options of data to train on, however, in practice, it is possible to add extreme outlier data that can increase the variance of the model.
 
 \subsection*{e.}
 
-False. With less features used to represent the data, this means that we essentially have fewer parameters, which means that we will have more issues generalizing since it is more difficult to tell the trends in the data.
+False. With less features used to represent the data, this means that we essentially have fewer parameters, which means that we will have more issues generalizing since it is more difficult to tell the trends in the data, and higher risk of overfitting.
 
 \subsection*{f.}
 
@@ -77,7 +77,7 @@ We should only use the train set to tune hyperparameters. We should only use the
 
 \subsection*{g.}
 
-False. The training error is evaluated on the data it trained on itself, while the true error evaluates on all the data in the dataset, so the training error will not be an accurate overestimate.
+False. The training error is evaluated on the data it trained on itself, while the true error evaluates on all the data in the dataset, so the training error will not be a consistent accurate overestimate.
 % The training error of a function on the training set usually is too optimistic when it comes to estimating the true error.
 % The training error of a function provides an overestimate of the true error?
 % Usually, hard to tell whether is over/under right?
