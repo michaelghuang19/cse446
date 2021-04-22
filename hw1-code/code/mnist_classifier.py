@@ -47,8 +47,8 @@ def main(run_type):
   train_error = m_h.calculate_error(train_predictions, labels_train)
   test_error = m_h.calculate_error(test_predictions, labels_test)
 
-  print(train_error)
-  print(test_error)
+  print("train error: " + str(train_error))
+  print("test error: " + str(test_error))
 
 if __name__ == '__main__':
   main(sys.argv[1:])
