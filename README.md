@@ -8,6 +8,7 @@ Homework 1
 
 A4/A5 can be run as follows, respectively:
 >python3 code/test_polyreg_univariate.py
+
 >python3 code/test_polyreg_learningCurve.py
 
 
