@@ -7,6 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from polyreg import PolynomialRegression
 
+import sys
+import os
+
 single_plot = True
 
 def plotUnivariate(X, y, d, reg_lambda):
@@ -31,7 +34,8 @@ if __name__ == "__main__":
     '''
 
     # load the data
-    filePath = "../data/polydata.dat"
+    cur_file_dir = os.path.dirname(os.path.abspath(__file__))
+    filePath = os.path.dirname(cur_file_dir) + '/data/polydata.dat'
     file = open(filePath,'r')
     allData = np.loadtxt(file, delimiter=',')
 
@@ -47,7 +51,8 @@ if __name__ == "__main__":
         plt.show()
 
         # show isn't working for me for some reason
-        plt.savefig("../results/a4_" + str(reg_lambda) + ".png")
+        plt.savefig(os.path.dirname(cur_file_dir) +
+                    "/results/a4_" + str(reg_lambda) + ".png")
 
     else:
 
@@ -58,4 +63,4 @@ if __name__ == "__main__":
             plt.subplot(2, 4, idx + 1)
             plotUnivariate(X, y, d, reg_lambda)
         
-        plt.savefig("../results/a4_compilation.png")
+        plt.savefig(os.path.dirname(cur_file_dir) + "/results/a4_compilation.png")

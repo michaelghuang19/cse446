@@ -9,7 +9,8 @@ from sklearn import model_selection
 
 from polyreg import learningCurve
 
-
+import sys
+import os
 
 
 #----------------------------------------------------
@@ -74,7 +75,8 @@ if __name__ == "__main__":
     '''
 
     # load the data
-    filePath = "../data/polydata.dat"
+    cur_file_dir = os.path.dirname(os.path.abspath(__file__))
+    filePath = os.path.dirname(cur_file_dir) + '/data/polydata.dat'
     file = open(filePath,'r')
     allData = np.loadtxt(file, delimiter=',')
 
@@ -98,4 +100,4 @@ if __name__ == "__main__":
     plt.show()
     
     # show isn't working for me for some reason
-    plt.savefig("../results/a5.png")
+    plt.savefig(os.path.dirname(cur_file_dir) + "/results/a5.png")
