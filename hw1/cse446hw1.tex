@@ -422,28 +422,31 @@ def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
 \subsection*{a.}
 
 We aim to show that $\widehat{W} = (X^TX + \lambda I)^{-1}X^TY$. \\ 
-We start with $\widehat{W} = \text{argmin}_{W \in \R^{d \times k}} \sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2 + \lambda \| W \|_F^2$ \\
-To find $\widehat{W}$ using our original form, we take the regularized least squares object and take the gradient with respect to $W$ and set to 0: \\ \\ 
-$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2 + \lambda \| W \|_F^2$) \\
-$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2) + \nabla_W (\lambda \sum_{i=1}^{d}\sum_{j=1}^{k}W_{i,j}^2)$ \\
-% i am fucking tripping here
-$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2) + \nabla_W (\lambda I_{ij} W^2)$ \\
-$0 = \nabla_W (\sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2) + 2 \lambda I_{ij} W$ \\
-$0 = \nabla_W (\sum_{i=1}^{n} \| x^iW - y^i \|_2^2) + 2 \lambda I_{ij} W$ \\
-% think harder about this step
-$0 = \nabla_W ((XW - Y)^T(XW - Y)) + 2 \lambda I_{ij} W$ \\
-$0 = \nabla_W ((XW)^TXW - (XW)^TY - Y^TXW + Y^TY) + 2 \lambda I_{ij} W$ \\
-$0 = \nabla_W (W^TX^TXW - W^TX^TY - Y^TXW + Y^TY) + 2 \lambda I_{ij} W$ \\
-$0 = \nabla_W (W^TX^TXW - W^TX^TY - W^TX^TY^T + Y^TY) + 2 \lambda I_{ij} W$ \\
-$0 = \nabla_W (W^TX^TXW - 2W^TX^TY + Y^TY) + 2 \lambda I_{ij} W$ \\
-$0 = \nabla_W (W^TX^TXW) - 2X^TY + 2 \lambda I_{ij} W$ \\
-$0 = X^TXW + W^TX^TX - 2X^TY + 2 \lambda I_{ij} W$ \\
-$0 = X^TXW + X^TXW - 2X^TY + 2 \lambda I_{ij} W$ \\
-$0 = 2(X^TXW - X^TY + \lambda I_{ij} W)$ \\
-$0 = X^TXW - X^TY + \lambda I_{ij} W$ \\
-$X^TY = (X^TX + \lambda I_{ij}) W$ \\
-$W = (X^TX + \lambda I_{ij})^{-1}X^TY = (X^TX + \lambda I)^{-1}X^TY$ \\
-as we aimed to show.
+We start with $\widehat{W} = \text{argmin}_{W \in \R^{d \times k}} \sum_{i=1}^{n} \| W^Tx^i - y^i \|_2^2 + \lambda \| W \|_F^2$. \\
+To find $\widehat{W}$, we take the regularized least squares object and take the gradient with respect to $W$ and set to 0: \\ \\ 
+$0 = \nabla_W \sum_{i=0}^{n} (\| W^Tx^i - y^i \|_2^2 + \lambda \| W \|_F^2$) \\
+$0 = \nabla_W \sum_{j=0}^{k} [ \sum_{i=1}^{n} (e^T_j W^Tx_i - e^T_jy_i)^2 + \lambda \| We_j \|^2]$ \hfill By the Note \\
+$0 = \nabla_W \sum_{j=0}^{k} [ \sum_{i=1}^{n} (w^T_j x_i - e^T_jy_i)^2 + \lambda \| w_j \|^2]$ \hfill By the Note \\
+$0 = \nabla_W \sum_{j=0}^{k} [ \| Xw_j - Ye_j\|^2 + \lambda \| w_j \|^2]$ \hfill By the Note \\
+$0 = \nabla_W \sum_{j=0}^{k} [ \| Xw_j - Ye_j\|^2 + \lambda  w_j^T w_j]$ \\
+$0 = \nabla_W \sum_{j=0}^{k} [ (Xw_j - Ye_j)^T(Xw_j - Ye_j) + \lambda  w_j^T w_j]$ \\
+$0 = \frac{\delta }{\delta W} \sum_{j=0}^{k} [ (Xw_j - Ye_j)^T(Xw_j - Ye_j) + \lambda  w_j^T w_j]$ \\
+$0 = \frac{\delta }{\delta w_j} \sum_{j=0}^{k} [ (Xw_j - Ye_j)^T(Xw_j - Ye_j) + \lambda  w_j^T w_j]$ \\
+$0 = \frac{\delta }{\delta w_j}[(Xw_j - Ye_j)^T(Xw_j - Ye_j)] + \frac{\delta }{\delta w_j} (\lambda  w_j^T w_j)$ \\
+$0 = \frac{\delta }{\delta w_j}[(Xw_j - Ye_j)^T(Xw_j - Ye_j)] +  2\lambda w_j$ \\
+$0 = \frac{\delta }{\delta w_j}[(Xw_j)^TXw_j - (Xw_j)^TY - Y^TXw_j + Y^TY)] +  2\lambda w_j$ \\
+$0 = \frac{\delta }{\delta w_j}[w_j^TX^TXw_j - w_j^TX^TY - Y^TXw_j + Y^TY] +  2\lambda w_j$ \\
+$0 = \frac{\delta }{\delta w_j}[w_j^TX^TXw_j - w_j^TX^TY - w_j^TX^TY + Y^TY] +  2\lambda w_j$ \\
+$0 = \frac{\delta }{\delta w_j}[w_j^TX^TXw_j - 2w_j^TX^TY + Y^TY] +  2\lambda w_j$ \\
+$0 = \frac{\delta }{\delta w_j}(w_j^TX^TXw_j) - \frac{\delta }{\delta w_j}(2w_j^TX^TY) + \frac{\delta }{\delta w_j}(Y^TY) +  2\lambda w_j$ \\
+$0 = \frac{\delta }{\delta w_j}(w_j^TX^TXw_j) - 2X^TY +  2\lambda w_j$ \\
+$0 = X^TXw_j + w_j^TX^TX - 2X^TY +  2\lambda w_j$ \\
+$0 = X^TXw_j + X^TXw_j - 2X^TY +  2\lambda w_j$ \\
+$0 = 2X^TXw_j - 2X^TY +  2\lambda w_j$ \\
+$2X^TY = 2X^TXw_j +  2\lambda w_j$ \\
+$X^TY = (X^TX + \lambda I)w_j$ \\ 
+$w_j = (X^TX + \lambda I)^{-1}X^TY$ \hfill $X^TX + \lambda I$ is positive definite and thus invertible \\
+telling us that since we minimized, $\widehat{w_j} = (X^TX + \lambda I)^{-1}X^TY$. We therefore see that $\widehat{W} = (X^TX + \lambda I)^{-1}X^TY$ as we sought to show.
 
 \subsection*{b.}
 
