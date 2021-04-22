@@ -1,0 +1,13 @@
+Michael Huang // mhuang19@uw.edu
+CSE 446
+Homework 1
+
+Build instructions / code layout:
+
+For A6b, simply run 
+
+python3 mnist_classifier.py
+
+which should also regenerate the plot in the /results folder.
+
+I moved the less important helpers to mnist_helper.py for now.
