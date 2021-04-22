@@ -87,6 +87,8 @@ False. The training error is evaluated on the data it trained on itself, while t
 % The training error of a function provides an overestimate of the true error?
 % Usually, hard to tell whether is over/under right?
 
+\newpage
+
 }
 
 \section*{A.1}
@@ -142,6 +144,8 @@ and we found in part a that $\widehat{\lambda}_{\text{MLE}} = \frac{\sum_{i=1}^{
 For 6 games: \\
 $x_1, ... x_6 = [2, 4, 6, 0, 1, 3]$ \\
 and we found in part b that $\widehat{\lambda}_{\text{MLE}} = \frac{\sum_{i=1}^{6} x_i}{6} = \frac{2 + 4 + 6 + 0 + 1 + 3}{6} = $ \framebox[1.1\width]{\textbf{$\frac{8}{3}$}}
+
+\newpage
 
 }
 
@@ -209,7 +213,7 @@ $= \sum\limits_{\substack{f \in \mathcal{F}}} \E_{\text{test}}[\widehat{\epsilon
 $= \sum\limits_{\substack{f \in \mathcal{F}}} \E_{\text{train, test}}[\widehat{\epsilon}_{\text{test}}(f)1\{\widehat{f}_{\text{train}} = f\}]$ \hfill Using the hint \\
 $= \E_{\text{train, test}}[\widehat{\epsilon}_{\text{test}}(\widehat{f}_{\text{train}})]$ \hfill Using the hint \\ 
 which is exactly what we sought to show.
-
+\newpage
 }
 
 \section*{A.4}
@@ -223,9 +227,9 @@ which is exactly what we sought to show.
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=218mm]{../hw1-code/results/a4_compilation.png}
-\end{figure}
+\end{figure} 
 
-As lambda increases, we see that the curve seems to smooth out and eventually even flatten out at excessive amounts. There seems to be a good amount of regularization when the curve is relatively smooth with considerably less evidence of overfitting to the specifically selected points around values of 0.01 or 0.1.
+As lambda increases, we see that the curve seems to smooth out and eventually even flatten out at excessive amounts. There seems to be a good amount of regularization when the curve is relatively smooth with considerably less evidence of overfitting to the specifically selected points around values of 0.01 or 0.1. 
 
 \begin{verbatim}
   class PolynomialRegression:
@@ -274,8 +278,11 @@ As lambda increases, we see that the curve seems to smooth out and eventually ev
 
       result = np.zeros((n, d))
       for i in range(d):
-          result[:, i] = (matrix[:, i] - self.mean_list[i])
-          / self.std_list[i]
+          std = self.std_list[i]
+          if std == 0:
+              std = 1
+              
+          result[:, i] = (matrix[:, i] - self.mean_list[i]) / std
 
       return result
 
@@ -293,9 +300,11 @@ As lambda increases, we see that the curve seems to smooth out and eventually ev
               at first
       """
 
+      # get dimensions
       n = len(X)
       d = self.degree
 
+      # expand degree
       poly_matrix = self.polyfeatures(X, d)
       
       # get the means/stds of training data
@@ -309,6 +318,7 @@ As lambda increases, we see that the curve seems to smooth out and eventually ev
           self.mean_list[i] = np.mean(cur)
           self.std_list[i] = np.std(cur)
 
+      # standardize
       poly_matrix = self.standardize(poly_matrix)
 
       # add the x0 column of 1s
@@ -320,8 +330,8 @@ As lambda increases, we see that the curve seems to smooth out and eventually ev
 
       # Since 0-mean, we can do 
       # weight = (X^T*X + r)^-1 X^T*Y
-      self.theta = np.linalg.pinv(poly_matrix.T.dot(poly_matrix)
-                  + reg_matrix).dot(poly_matrix.T).dot(y)
+      self.theta = np.linalg.pinv(poly_matrix.T.dot(
+          poly_matrix) + reg_matrix).dot(poly_matrix.T).dot(y)
 
   def predict(self, X):
       """
@@ -332,10 +342,14 @@ As lambda increases, we see that the curve seems to smooth out and eventually ev
           an n-by-1 numpy array of the predictions
       """
 
+      # get dimensions
       n = len(X)
       d = self.degree
-
+      
+      # expand degree
       poly_matrix = self.polyfeatures(X, d)
+
+      # standardize
       poly_matrix = self.standardize(poly_matrix)
 
       # add column of 1s at beginning
@@ -344,10 +358,6 @@ As lambda increases, we see that the curve seems to smooth out and eventually ev
       # return predictions
       return poly_matrix.dot(self.theta)
 \end{verbatim}
-
-% \newpage
-
-% \newpage
 
 }
 
@@ -358,61 +368,61 @@ As lambda increases, we see that the curve seems to smooth out and eventually ev
   \centering
   \includegraphics[width=215mm]{../hw1-code/results/a5.png}
 \end{figure}
-
 \begin{verbatim}
 def calculate_error(n, calculated_values, actual_values):
-  result = 0
+    result = 0
 
-  for i in range(n):
-      result += np.square(calculated_values[i] - actual_values[i])
+    for i in range(n):
+        result += np.square(calculated_values[i] - actual_values[i])
 
-  return result / n
+    return result / n
 
 def learningCurve(Xtrain, Ytrain, Xtest, Ytest, reg_lambda, degree):
-  """
-  Compute learning curve
+    """
+    Compute learning curve
 
-  Arguments:
-      Xtrain -- Training X, n-by-1 matrix
-      Ytrain -- Training y, n-by-1 matrix
-      Xtest -- Testing X, m-by-1 matrix
-      Ytest -- Testing Y, m-by-1 matrix
-      reg_lambda -- regularization factor
-      degree -- polynomial degree
+    Arguments:
+        Xtrain -- Training X, n-by-1 matrix
+        Ytrain -- Training y, n-by-1 matrix
+        Xtest -- Testing X, m-by-1 matrix
+        Ytest -- Testing Y, m-by-1 matrix
+        reg_lambda -- regularization factor
+        degree -- polynomial degree
 
-  Returns:
-      errorTrain -- errorTrain[i] is the training accuracy using
-      model trained by Xtrain[0:(i+1)]
-      errorTest -- errorTrain[i] is the testing accuracy using
-      model trained by Xtrain[0:(i+1)]
+    Returns:
+        errorTrain -- errorTrain[i] is the training accuracy using
+        model trained by Xtrain[0:(i+1)]
+        errorTest -- errorTrain[i] is the testing accuracy using
+        model trained by Xtrain[0:(i+1)]
 
-  Note:
-      errorTrain[0:1] and errorTest[0:1] won't actually matter, since we start displaying the learning curve at n = 2 (or higher)
-  """
+    Note:
+        errorTrain[0:1] and errorTest[0:1] won't actually matter, since we start displaying the learning curve at n = 2 (or higher)
+    """
 
-  n = len(Xtrain)
-  m = len(Xtest)
+    n = len(Xtrain)
+    m = len(Xtest)
 
-  errorTrain = np.zeros(n)
-  errorTest = np.zeros(n)
+    errorTrain = np.zeros(n)
+    errorTest = np.zeros(n)
 
-  #TODO -- complete rest of method; errorTrain and errorTest are already the correct shape
+    #TODO -- complete rest of method; errorTrain and errorTest are already the correct shape
 
-  model = PolynomialRegression(degree, reg_lambda)
+    model = PolynomialRegression(degree, reg_lambda)
 
-  # Xtrain[0 : (i+1)]
-  # Ytrain[0: (i+1)]
+    # Xtrain[0 : (i+1)]
+    # Ytrain[0: (i+1)]
 
-  for i in range(1, n):
-      model.fit(Xtrain[0: (i+1)], Ytrain[0: (i+1)])
+    for i in range(0, n):
+        model.fit(Xtrain[0: (i+1)], Ytrain[0: (i+1)])
 
-      errorTrain[i] = calculate_error(i + 1, model.predict(Xtrain[0: (i+1)]), Ytrain[0: (i+1)])
-      errorTest[i] = calculate_error(m, model.predict(Xtest), Ytest)
+        errorTrain[i] = calculate_error(i + 1, model.predict(Xtrain[0: (i+1)]), Ytrain[0: (i+1)])
+        errorTest[i] = calculate_error(m, model.predict(Xtest), Ytest)
 
-  return errorTrain, errorTest
+    return errorTrain, errorTest
+
 \end{verbatim}
 
-% \newpage
+\newpage
 
 }
 
@@ -503,8 +513,8 @@ def main(run_type):
   train_error = m_h.calculate_error(train_predictions, labels_train)
   test_error = m_h.calculate_error(test_predictions, labels_test)
 
-  print(train_error)
-  print(test_error)
+  print("train error: " + str(train_error))
+  print("test error: " + str(test_error))
 
 if __name__ == '__main__':
   main(sys.argv[1:])
@@ -516,6 +526,8 @@ The code for mnist\_helper.py is as follows: \\
 # mnist_helper.py
 
 import numpy as np
+import sys
+import os
 
 from mnist import MNIST
 
@@ -532,7 +544,9 @@ m = 0
 Helper function for loading in MNIST data set
 """
 def load_dataset():
-  mndata = MNIST('../data/')
+  cur_file_dir = os.path.dirname(os.path.abspath(__file__))
+
+  mndata = MNIST(os.path.dirname(cur_file_dir) + '/data/')
   X_train, labels_train = map(np.array, mndata.load_training())
   X_test, labels_test = map(np.array, mndata.load_testing())
   X_train = X_train/255.0
