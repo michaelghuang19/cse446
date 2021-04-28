@@ -53,27 +53,43 @@
 
 \subsection*{a.}
 
-Suppose that your estimated model for predicting house prices has a large positive weight on the feature \texttt{number of bathrooms}. If we remove this feature and refit the model, will the new model have a strictly higher error than before? Why?
+Suppose that your estimated model for predicting house prices has a large positive weight on the feature \texttt{number of bathrooms}. If we remove this feature and refit the model, will the new model have a strictly higher error than before? Why? \\ \\
+
+% is this pre/post regularization
+If we removed this feature that had large positive weight and refit the model, then the new model wil not necessarily have strictly higher error than before. It is difficult to say that there is a distinct 
 
 \subsection*{b.}
 
-Compared to L2 norm penalty, explain why a L1 norm penalty is more likely to result in sparsity (a larger number of 0s) in the weight vector.
+Compared to L2 norm penalty, explain why a L1 norm penalty is more likely to result in sparsity (a larger number of 0s) in the weight vector. \\ \\ 
+
+An L1 norm penalty is more likely to result in sparsity in the weight vector since it will linearly decrease towards 0 with each step, which means that it will actually reach 0, which is not the case with the quadratic steps towards 0. L1 is therefore more likely to zero out coefficients.
 
 \subsection*{c.}
 
-In at most one sentence each, state one possible upside and one possible downside of using the following regularizer:$\left(\sum_{i}\left|w_{i}\right|^{0.5}\right)$
+In at most one sentence each, state one possible upside and one possible downside of using the following regularizer:$\left(\sum_{i}\left|w_{i}\right|^{0.5}\right)$ \\ \\
+One possible upside is that it is that features will tend to be zeroed out less often, which maintains these features' input in the model. \\ 
+One possible downside is that weights will tend to be larger for features that are less relevant, since we don't get as large gradients and changes when we perform regularization, especially when we near zero.
+% all the weights will tend to be less sparse.
 
 \subsection*{d.}
 
-True or False: If the step-size for gradient descent is too large, it may not converge.
+True or False: If the step-size for gradient descent is too large, it may not converge. \\ \\
+
+True; if the step-size for gradient descent is too large, then it may diverge. This is because with a step size that is too large, then the values may oscillate around an optimal point rather than generally converge upon it, as it would with more common algorithms.
 
 \subsection*{e.}
 
-In your own words, describe why stochastic gradient descent (SGD) works, even though only a small portion of the data is considered at each update.
+In your own words, describe why stochastic gradient descent (SGD) works, even though only a small portion of the data is considered at each update. \\ \\
+
+Stochastic gradient descent iteratively chooses random samples from training data to update parameters. By randomly approximating the distribution dataset around the chosen random sample, we can effectively guess the gradients and update the weights based on the attributes of the distribution each time rather than having to run through all the data.
 
 \subsection*{f.}
 
-In at most one sentence each, state one possible advantage of SGD over GD (gradient descent), and one possible disadvantage of SGD relative to GD.
+In at most one sentence each, state one possible advantage of SGD over GD (gradient descent), and one possible disadvantage of SGD relative to GD. \\ \\
+
+SGD might be better than GD since you don't need to run through all samples in a set of training data, and save time overall. \\ 
+% often converges much faster
+SGD might be worse than GD since the error might not be as well minimized.\\
 
 }
 
