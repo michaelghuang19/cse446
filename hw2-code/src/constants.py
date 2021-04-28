@@ -1,7 +1,7 @@
 # Applicable constants for HW2
 
 import numpy as np
-import os
+import os 
 
 # from scipy import
 
