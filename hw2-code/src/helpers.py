@@ -2,6 +2,8 @@
 
 import numpy as np
 
+import constants as c
+
 from scipy import linalg
 
 
