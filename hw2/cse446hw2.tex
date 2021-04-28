@@ -1,0 +1,240 @@
+\documentclass{article}
+\linespread{1.3}
+\usepackage[margin=50pt]{geometry}
+\usepackage{amsmath, amsthm, amssymb, amsthm, tikz, fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\newcommand{\changefont}{\fontsize{15}{15}\selectfont}
+
+\newcommand{\field}[1]{\mathbb{#1}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\E}{\mathbb{E}} 
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\R}{\field{R}} % real domain
+% \newcommand{\C}{\field{C}} % complex domain
+\newcommand{\F}{\field{F}} % functional domain
+
+\newcommand{\T}{^{\textrm T}} % transpose
+
+\def\diag{\text{diag}}
+
+%% operator in linear algebra, functional analysis
+\newcommand{\inner}[2]{#1\cdot #2}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\twonorm}[1]{\|#1\|_2^2}
+% operator in functios, maps such as M: domain1 --> domain 2
+\newcommand{\Map}[1]{\mathcal{#1}}
+\renewcommand{\theenumi}{\alph{enumi}} 
+
+\newcommand{\Perp}{\perp \! \! \! \perp}
+
+\newcommand\independent{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
+\newcommand{\vct}[1]{\boldsymbol{#1}} % vector
+\newcommand{\mat}[1]{\boldsymbol{#1}} % matrix
+\newcommand{\cst}[1]{\mathsf{#1}} % constant
+\newcommand{\ProbOpr}[1]{\mathbb{#1}}
+\newcommand{\points}[1]{\small\textcolor{magenta}{\emph{[#1 points]}} \normalsize}
+\date{{}}
+
+\fancypagestyle{firstpageheader}
+{
+  \fancyhead[R]{\changefont Michael Huang \\ CSE 446 \\ Homework 2}
+}
+
+\begin{document}
+
+\thispagestyle{firstpageheader}
+
+\section*{A.0}
+{\Large 
+
+\framebox[1.1\width]{\textbf{answer}}
+
+\subsection*{a.}
+
+Suppose that your estimated model for predicting house prices has a large positive weight on the feature \texttt{number of bathrooms}. If we remove this feature and refit the model, will the new model have a strictly higher error than before? Why? \\ \\
+
+% is this pre/post regularization
+If we removed this feature that had large positive weight and refit the model, then the new model wil not necessarily have strictly higher error than before. It is difficult to say that there is a distinct 
+
+\subsection*{b.}
+
+Compared to L2 norm penalty, explain why a L1 norm penalty is more likely to result in sparsity (a larger number of 0s) in the weight vector. \\ \\ 
+
+An L1 norm penalty is more likely to result in sparsity in the weight vector since it will linearly decrease towards 0 with each step, which means that it will actually reach 0, which is not the case with the quadratic steps towards 0. L1 is therefore more likely to zero out coefficients.
+
+\subsection*{c.}
+
+In at most one sentence each, state one possible upside and one possible downside of using the following regularizer:$\left(\sum_{i}\left|w_{i}\right|^{0.5}\right)$ \\ \\
+One possible upside is that it is that features will tend to be zeroed out less often, which maintains these features' input in the model. \\ 
+One possible downside is that weights will tend to be larger for features that are less relevant, since we don't get as large gradients and changes when we perform regularization, especially when we near zero.
+% all the weights will tend to be less sparse.
+
+\subsection*{d.}
+
+True or False: If the step-size for gradient descent is too large, it may not converge. \\ \\
+
+True; if the step-size for gradient descent is too large, then it may diverge. This is because with a step size that is too large, then the values may oscillate around an optimal point rather than generally converge upon it, as it would with more common algorithms.
+
+\subsection*{e.}
+
+In your own words, describe why stochastic gradient descent (SGD) works, even though only a small portion of the data is considered at each update. \\ \\
+
+Stochastic gradient descent iteratively chooses random samples from training data to update parameters. By randomly approximating the distribution dataset around the chosen random sample, we can effectively guess the gradients and update the weights based on the attributes of the distribution each time rather than having to run through all the data.
+
+\subsection*{f.}
+
+In at most one sentence each, state one possible advantage of SGD over GD (gradient descent), and one possible disadvantage of SGD relative to GD. \\ \\
+
+SGD might be better than GD since you don't need to run through all samples in a set of training data, and save time overall. \\ 
+% often converges much faster
+SGD might be worse than GD since the error might not be as well minimized.\\
+
+}
+
+\section*{A.1}
+{\Large
+
+A \emph{norm} $\|\cdot\|$ over $\R^n$ is defined by the properties:
+(\textit{i}) non-negativity: $\|x\|\geq 0$ for all $x \in \R^n$ with equality if and only if $x=0$,
+(\textit{ii}) absolute scalability: $\|a \, x\| = |a| \, \|x\|$ for all $a \in \R$ and $x \in \R^n$, 
+(\textit{iii}) triangle inequality: $\|x+y\| \leq \|x\| + \|y\|$ for all $x,y \in \R^n$. \\ \\
+
+Context: norms are often used in regularization to encourage specific behaviors of solutions. If we define  $\| x \|_p := \left( \sum_{i=1}^n |x_i|^{p} \right)^{1/p}$ then one can show that $\| x \|_p$ is a norm for all $p \geq 1$. The important cases of $p=2$ and $p=1$ correspond to the penalty for ridge regression and the lasso, respectively.
+
+\subsection*{a.}
+
+Show that $f(x) = \left( \sum_{i=1}^n |x_i| \right)$ is a norm. (Hint: for (\textit{iii}), begin by showing that $|a+b|\leq |a| + |b|$ for all $a,b \in \R$.) \\ \\ 
+
+We aim to prove that $f(x) = \left( \sum_{i=1}^n |x_i| \right)$ is a norm.
+
+Since we have proved that all 3 properties hold for $f(x)$, we can see that it is indeed a norm. 
+
+\subsection*{b.}
+
+Show that $g(x) = \left(\sum_{i=1}^n |x_i|^{1/2}\right)^2$ is not a norm. (Hint: it suffices to find two points in $n=2$ dimensions such that the triangle inequality does not hold.) \\ \\
+
+We aim to show that $g(x) = \left(\sum_{i=1}^n |x_i|^{1/2}\right)^2$ is not a norm. 
+
+}
+
+\section*{A.2}
+{\Large 
+
+A set $A \subseteq \R^n$ is \emph{convex} if $\lambda x + (1-\lambda) y \in A$ for all $x,y\in A$ and $\lambda \in [0,1]$.
+
+For each of the grey-shaded sets below (I-III), state whether each one is convex, or state why it is not convex using any of the points $a,b,c,d$ in your answer. 
+
+\subsection*{I}
+
+\subsection*{II}
+
+\subsection*{III}
+
+}
+
+\section*{A.3}
+{\Large 
+
+We say a function $f: \R^d \rightarrow \R$ is convex on a set $A$ if $f(\lambda x + (1-\lambda) y) \leq \lambda f(x) + (1-\lambda) f(y)$ for all $x,y\in A$ and $\lambda \in [0,1]$. For each of the functions shown below (I-III), state whether each is convex on the specified interval, or state why not with a counterexample using any of the points $a,b,c,d$ in your answer.
+
+\subsection*{a.}
+
+\subsection*{b.}
+
+\subsection*{c.}
+
+\subsection*{d.}
+
+}
+
+\section*{A.4}
+{\Large 
+
+
+
+\subsection*{a.}
+
+With your synthetic data, solve multiple Lasso problems on a regularization path, starting at $\lambda_{max}$ where no features are selected (see Equation \eqref{eqn:lasso-lambdamax}) and decreasing $\lambda$ by a constant ratio (e.g., 2) until nearly all the features are chosen. 
+    In plot 1, plot the number of non-zeros as a function of $\lambda$ on the x-axis (Tip: use \verb|plt.xscale('log')|).
+
+\subsection*{b.}
+
+For each value of $\lambda$ tried, record values for false discovery rate (FDR) (number of incorrect nonzeros in $\widehat{w}$/total number of nonzeros in $\widehat{w}$) and true positive rate (TPR)
+    (number of correct nonzeros in $\widehat{w}$/k). Note: for each $j$, $\widehat{w}_j$ is an incorrect nonzero if and only if $\widehat{w}_j \neq 0$ while $w_j = 0$.
+In plot 2, plot these values with the x-axis as FDR, and the y-axis as TPR.
+
+\subsection*{c.}
+
+Comment on the effect of $\lambda$ in these two plots in 1-2 sentences.
+
+}
+
+\section*{A.5}
+{\Large 
+
+\subsection*{a.}
+
+Read the documentation for the original
+  version of this dataset. Report 3 features included in this dataset for which historical \emph{policy} choices in the US would lead to variability in these features. As an example, the \emph{number of police} in a community
+  is often the consequence of decisions made by governing bodies, elections, and amount of tax revenue available to decisionmakers.
+
+\subsection*{b.}
+
+Before you train a model, describe 3 features in the dataset which might, if found to have nonzero weight in model, be interpreted as \emph{reasons} for higher levels of violent crime, but which might actually be a \emph{result} rather than (or in addition to being) the cause of this violence.
+
+\subsection*{c.}
+
+Plot the number of nonzero weights of each solution as a function of $\lambda$.
+
+\subsection*{d.}
+
+Plot the regularization paths (in one plot) for the coefficients for input variables \texttt{agePct12t29}, \texttt{pctWSocSec}, \texttt{pctUrban}, \texttt{agePct65up}, and \texttt{householdsize}.
+
+\subsection*{e.}
+
+On one plot, plot the squared error on the training and test data as a function of $\lambda$.
+
+\subsection*{f.}
+
+Sometimes a larger value of $\lambda$ performs nearly as well as a smaller value, but a larger value will select fewer variables and perhaps be more interpretable.  Inspect the weights $\hat{w}$ for $\lambda = 30$.  Which feature
+    had the largest (most positive) Lasso coefficient? What about the most negative? Discuss briefly.
+
+\subsection*{g.}
+
+Suppose there was a large negative weight on
+    \texttt{agePct65up} and upon seeing this result, a politician suggests policies that encourage people over the age of 65 to move to high crime areas in an effort to reduce crime. What is the (statistical) flaw in this line of reasoning? (Hint: fire trucks
+    are often seen around burning buildings, do fire trucks cause fire?)
+
+}
+
+\section*{A.6}
+{\Large 
+
+\framebox[1.1\width]{\textbf{answer}}
+
+\subsection*{a.}
+
+Derive the gradients $\nabla_w J(w,b)$, $\nabla_{b} J(w,b)$ and give your answers in terms of $\mu_i(w,b)$ (your answers should not contain exponentials).
+
+\subsection*{b.}
+
+Implement gradient descent with an initial iterate of all zeros. Try several values of step sizes to find one that appears to make convergence on the training set as fast as possible. Run until you feel you are near to convergence.
+
+\begin{enumerate}
+  \item For both the training set and the test, plot $J(w,b)$ as a function of the iteration number (and show both curves on the same plot).
+  \item For both the training set and the test, classify the points according to the rule $\text{sign}(b + x_i^T w)$ and plot the misclassification error as a function of the iteration number (and show both curves on the same plot)
+\end{enumerate}
+
+\subsection*{c.}
+
+Repeat (b) using stochastic gradient descent with a batch size of 1. Note, the expected gradient with respect to the random selection should be equal to the gradient found in part (a). Show both plots described in (b) when using batch size 1. Take careful note of how to scale the regularizer.
+
+\subsection*{d.}
+
+Repeat (b) using stochastic gradient descent with batch size of 100. That is, instead of approximating the gradient with a single example, use 100. Note, the expected gradient with respect to the random selection should be equal to the gradient found in part (a).
+
+}
+
+\end{document}
