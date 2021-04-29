@@ -109,28 +109,41 @@ Show that $f(x) = \left( \sum_{i=1}^n |x_i| \right)$ is a norm. (Hint: for (\tex
 
 We aim to prove that $f(x) = \left( \sum_{i=1}^n |x_i| \right)$ is a norm.
 
+We start with non-negativity. \\ \\ 
+
+We then look at absolute scalability. \\ \\
+
+Finally, we look at the triangle inequality. We begin by showing that $|a + b| \leq |a| + |b|$ for all $a, b \in \R$. \\ 
+
+
 Since we have proved that all 3 properties hold for $f(x)$, we can see that it is indeed a norm. 
 
 \subsection*{b.}
 
-Show that $g(x) = \left(\sum_{i=1}^n |x_i|^{1/2}\right)^2$ is not a norm. (Hint: it suffices to find two points in $n=2$ dimensions such that the triangle inequality does not hold.) \\ \\
-
-We aim to show that $g(x) = \left(\sum_{i=1}^n |x_i|^{1/2}\right)^2$ is not a norm. 
+We aim to show that $g(x) = \left(\sum_{i=1}^n |x_i|^{1/2}\right)^2$ is not a norm, which we can easily show using a counterexample. If we take two $n=2$ dimensional plants $x = (0, 3)$ and $y = (1, 4)$, we see that the triangle inequality does not hold: \\
+$\| x \| = (|1^{1/2}| + |9^{1/2}|)^2 = (0 + 3)^2 = 16$ \\ 
+$\| y \| = (|16^{1/2}| + |0^{1/2}|)^2 = (4 + 0)^2 = 16$ \\ \\
+$\|x + y\| \leq \|x\| + \|y\|$ \\ 
+$((1 + 9)^{1/2} + (16 + 0)^{1/2})^2 \leq 16 + 16$ \\ 
+$(\sqrt{10} + 4)^2 \leq 32$ \\ 
+$10 + 16 + 8\sqrt{10} \leq 32$ \\ 
+$26 + 8\sqrt{10} \leq 32$ \\ 
+$\sim 51.30 \leq 32$ \\ 
+which is false and shows that the triangle inequality does not hold, which tells us that $g(x)$ is indeed not a norm.
 
 }
 
 \section*{A.2}
 {\Large 
 
-A set $A \subseteq \R^n$ is \emph{convex} if $\lambda x + (1-\lambda) y \in A$ for all $x,y\in A$ and $\lambda \in [0,1]$.
-
-For each of the grey-shaded sets below (I-III), state whether each one is convex, or state why it is not convex using any of the points $a,b,c,d$ in your answer. 
-
 \subsection*{I}
+Not convex. We see that connecting point $b$ to $c$ results in a line outside of the grey shaded set.
 
 \subsection*{II}
+Convex. We see that any line that we draw between points stays within the shaded set.
 
 \subsection*{III}
+Not convex. We can see that connecting point $d$ to $a$ would result in a line outside of the grey shaded set.
 
 }
 
@@ -141,11 +154,19 @@ We say a function $f: \R^d \rightarrow \R$ is convex on a set $A$ if $f(\lambda 
 
 \subsection*{a.}
 
+The function is convex since
+
 \subsection*{b.}
+
+The function is convex since
 
 \subsection*{c.}
 
+The function is convex since
+
 \subsection*{d.}
+
+The function is convex since
 
 }
 
