@@ -259,11 +259,40 @@ Suppose there was a large negative weight on
 \section*{A.6}
 {\Large 
 
+Here we consider the MNIST dataset, but for binary classification. Specifically, the task is to determine whether a digit is a $2$ or $7$.
+Here, let $Y=1$ for all the ``7'' digits in the dataset, and use $Y=-1$ for ``2''.
+We will use regularized logistic regression. 
+Given a binary classification dataset $\{(x_i,y_i)\}_{i=1}^n$ for $x_i \in \R^d$ and $y_i \in \{-1,1\}$ we showed in class that the regularized negative log likelihood objective function can be written as
+\begin{align*}
+J(w,b) = \frac{1}{n} \sum_{i=1}^n \log( 1 + \exp(-y_i (b + x_i^T w))) + \lambda ||w||_2^2
+\end{align*} 
+Note that the offset term $b$ is not regularized. 
+For all experiments, use $\lambda = 10^{-1}$. 
+Let $\mu_i(w,b) = \frac{1}{1+ \exp(-y_i (b + x_i^T w))}$.
+
 \framebox[1.1\width]{\textbf{answer}}
 
 \subsection*{a.}
 
-Derive the gradients $\nabla_w J(w,b)$, $\nabla_{b} J(w,b)$ and give your answers in terms of $\mu_i(w,b)$ (your answers should not contain exponentials).
+$J(w,b) = \frac{1}{n} \sum_{i=1}^n \log( 1 + \exp(-y_i (b + x_i^T w))) + \lambda ||w||_2^2$ \\
+$\nabla_w J(w,b) = \nabla_w [\frac{1}{n} \sum_{i=1}^n \log( 1 + \exp(-y_i (b + x_i^T w))) + \lambda ||w||_2^2]$ \\ 
+$ = \nabla_w \frac{1}{n} \sum_{i=1}^n \log( 1 + \exp(-y_i (b + x_i^T w))) + \nabla_w \lambda ||w||_2^2$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n \nabla_w \log( 1 + \exp(-y_i (b + x_i^T w))) + 2 \lambda w$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n \frac{1}{1 + \exp(-y_i (b + x_i^T w))} \cdot \exp(-y_i (b + x_i^T w)) \cdot -y_i (x_i^T) + 2 \lambda w$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n \frac{-y_i x_i^T \exp(-y_i (b + x_i^T w))}{1 + \exp(-y_i (b + x_i^T w))} + 2 \lambda w$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n -y_i x_i^T \mu_i(w, b) \exp(-y_i (b + x_i^T w)) + 2 \lambda w$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n -y_i x_i^T \mu_i(w, b) (\frac{1}{\mu_i(w, b)} - 1) + 2 \lambda w$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n -y_i x_i^T \mu_i(w, b) (\frac{1}{\mu_i(w, b)} - \frac{\mu_i(w, b)}{\mu_i(w, b)}) + 2 \lambda w$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n -y_i x_i^T \mu_i(w, b) \frac{1 - \mu_i(w, b)}{\mu_i(w, b)} + 2 \lambda w$ \\ 
+\framebox[1.1\width]{\textbf{$\nabla_w J(w,b) = \frac{1}{n} \sum_{i=1}^n -y_i x_i^T (1 - \mu_i(w, b)) + 2 \lambda w$}} \\ \\
+$J(w,b) = \frac{1}{n} \sum_{i=1}^n \log( 1 + \exp(-y_i (b + x_i^T w))) + \lambda ||w||_2^2$ \\
+$\nabla_{b} J(w,b) = \nabla_{b} [\frac{1}{n} \sum_{i=1}^n \log( 1 + \exp(-y_i (b + x_i^T w))) + \lambda ||w||_2^2]$ \\
+$ = \nabla_{b} \frac{1}{n} \sum_{i=1}^n \log( 1 + \exp(-y_i (b + x_i^T w))) + \nabla_{b} \lambda ||w||_2^2$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n \nabla_{b} \log( 1 + \exp(-y_i (b + x_i^T w))) + 0$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n \frac{1}{\log( 1 + \exp(-y_i (b + x_i^T w)))} \cdot \exp(-y_i (b + x_i^T w)) \cdot -y_i(1)$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n -y_i \mu_i(w, b) \cdot \exp(-y_i (b + x_i^T w))$ \\ 
+$ = \frac{1}{n} \sum_{i=1}^n -y_i \mu_i(w, b) \frac{1 - \mu_i(w, b)}{\mu_i(w, b)}$ \\ 
+\framebox[1.1\width]{\textbf{$\nabla_{b} J(w,b) = \frac{1}{n} \sum_{i=1}^n -y_i (1 - \mu_i(w, b))$}}
 
 \subsection*{b.}
 
