@@ -12,5 +12,7 @@ import helpers as h
 def main():
   print("binary logistic regression")
 
+  h.load_mnist()
+
 if __name__ == "__main__":
   main()
