@@ -21,4 +21,4 @@ one_to_digit = { -1 : 2, +1 : 7}
 digit_to_one = { 2 : -1, 7 : +1}
 
 mnist_step_size = 10E-1
-mnist_offset = 0
+cutoff = 10E-2
