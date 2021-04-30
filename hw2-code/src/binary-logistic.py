@@ -12,7 +12,14 @@ import helpers as h
 def main():
   print("binary logistic regression")
 
-  h.load_mnist()
+  X_train, labels_train, one_train, X_test, labels_test, one_test = h.load_mnist()
+
+  
+
+def stochastic_gradient():
+  print("stochastic gradient descent")
+
+
 
 if __name__ == "__main__":
   main()

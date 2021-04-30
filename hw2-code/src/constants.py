@@ -17,3 +17,5 @@ txt_exten = '.txt'
 
 one_to_digit = { -1 : 2, +1 : 7}
 digit_to_one = { 2 : -1, 7 : +1}
+
+mnist_lambda = 10E-1
