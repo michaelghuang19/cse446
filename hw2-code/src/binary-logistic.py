@@ -7,7 +7,7 @@ import numpy as np
 import constants as c
 import helpers as h
 
-# from scipy import
+from scipy import linalg
 
 def main():
   print("binary logistic regression")
@@ -19,13 +19,35 @@ def main():
 
   assert (len(X_train) > 0 and len(X_test) > 0)
   
-  a4 = GradientDescent(c.reg_lambda, c.mnist_step_size)
-  a4.grad_desc(X_train, Y_train, c.cutoff)
-  # a4.grad_desc(X_train, labels_train)
+  # Gradient Descent
 
-# Implement gradient descent with an initial iterate of all zeros. Try several values of step sizes
-# to find one that appears to make convergence on the training set as fast as possible. Run until
-# you feel you are near to convergence.
+  gd = GradientDescent(c.reg_lambda, c.mnist_step_size)
+  gd.grad_desc(X_train, Y_train, c.cutoff)
+  
+  train_j = gd.get_j
+  test_j = gd.get_j
+
+  train_error = gd.get_error
+  test_error = gd.get_error
+
+  h.plot_function("Loss over Time", "a6_bi", "Iterations", "Loss", train_j, test_j)
+  h.plot_function("Error over Time", "a6_bii", "Iterations", "Error", train_error, test_error)
+
+  # Stochastic Gradient Descent
+  
+  sgd1 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 1)
+  sgd100 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 100)
+
+  # perform sgd
+
+  # get loss
+
+  # get error
+
+  # plot loss
+
+  # plot error
+
 class GradientDescent:
   def __init__(self, reg_lambda, step_size):
     self.lamb = reg_lambda
@@ -55,17 +77,17 @@ class GradientDescent:
     print(j_data)
     print(class_data)
 
-    # while np.max(np.abs(self.w)) > cutoff:
+    while np.max(np.abs(self.w)) > cutoff:
       # keep iterating
 
       # do we add or subtract here?
-      # self.w = self.w + self.step * grad_w
-      # self.b = self.b + self.step * grad_b
+      self.w = self.w + self.step * grad_w
+      self.b = self.b + self.step * grad_b
 
-      # j_func, grad_w, grad_b = self.get_j(X, Y)
+      j_func, grad_w, grad_b = self.get_j(X, Y)
 
-      # j_data.append(j_func)
-      # class_data.append(self.get_error(X, Y))
+      j_data.append(j_func)
+      class_data.append(self.get_error(X, Y))
 
     # then test on test data
 
@@ -95,27 +117,14 @@ class GradientDescent:
 
     return 1 - (match_count / self.n)
 
-  def plot_objective(self, train_j, test_j):
-    print("plot gradient descent error")
-
-    # c.results_path
-
-  def plot_error(self, train_error, test_error):
-    print("plot gradient descent error")
-
-
-
-
 class StochasticGradientDescent:
-  def __init__(self, reg_lambda, batch_size):
-    self.reg_lambda = reg_lambda
-    self.batch_size = batch_size
-    self.grad = None
+  def __init__(self, reg_lambda, step_size, batch_size):
+    self.lamb = reg_lambda
+    self.step = step_size
+    self.batch = batch_size
 
   def stoch_grad_desc(self, X, Y, w, b):
     print("stochastic gradient descent")
-
-
 
 if __name__ == "__main__":
   main()

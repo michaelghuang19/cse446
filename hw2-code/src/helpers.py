@@ -1,5 +1,6 @@
 # Applicable helpers for HW2
 
+import matplotlib.pyplot as plt
 import numpy as np
 
 import constants as c
@@ -44,6 +45,32 @@ def load_mnist():
 
   return X_train, labels_train, one_train, X_test, labels_test, one_test
 
+"""
+Helper function for plotting function
+"""
+def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data):
+  print("plot gradient descent error")
+
+  plt.plot(train_data)
+  plt.plot(test_data)
+
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+  plt.legend(["Training", "Testing"])
+
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()
 
 
+# """
+# Helper function for plotting error
+# """
+# def plot_error(plt_title, img_title, x_lbl, y_lbl, train_error, test_error):
+#   print("plot gradient descent error")
+  
+#   plt.legend(["Training", "Testing"])
+#   plt.xlabel
 
+#   plt.savefig(c.results_path + img_title + c.png_exten)
+#   plt.close()
