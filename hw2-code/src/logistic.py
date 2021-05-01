@@ -34,6 +34,7 @@ def grad_J(X, y, w, b, lam):
     mu = 1 / (1 + np.exp(np.multiply(-1*y, temp.T)))
 
     nabla_w = 1/n * np.dot(np.multiply(-y, X).T, 1-mu) + 2 * lam * w
+    # print(np.mean(nabla_w))
     nabla_b = 1/n * np.dot(-y.T, 1-mu)
 
     return np.vstack((nabla_w, nabla_b))
@@ -98,6 +99,8 @@ def gradient_descent(x_init, gradient_function, eta=0.1, delta=10e-4):
     grad = gradient_function(x)
     while np.max(np.abs(grad)) > delta:
         # perform a step in gradient descent
+        
+        print(str(x[0:10]) + ", " + str(x[-1]))
 
         x = x - eta * grad
         grad = gradient_function(x)
@@ -181,6 +184,7 @@ Y_train = np.where(Y_train == 7, 1, -1)
 Y_test = labels_test[(labels_test == 2) + (labels_test == 7)]
 Y_test = np.where(Y_test == 7, 1, -1)
 
+
 # =====================================================================================================================================
 
 n = X_train.shape[0]
@@ -199,7 +203,10 @@ eta = 0.1 # learning rate
 # Problem 9b part i)
 
 plt.figure(1)
-plt.plot([J_function(X=X_train, y=Y_train, w=x[:-1], b=x[-1], lam=lam) for x in all_xs_train])
+j_train = [J_function(X=X_train, y=Y_train, w=x[:-1],
+                      b=x[-1], lam=lam) for x in all_xs_train]
+# print(j_train)
+plt.plot(j_train)
 plt.plot([J_function(X=X_test, y=Y_test, w=x[:-1], b=x[-1], lam=lam) for x in all_xs_train]) # use parameters learned from training dataset
 plt.title('Function Value at each iteration')
 plt.ylabel('J(w,b)')
@@ -219,7 +226,7 @@ plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
 plt.show()
 
-
+"""
 
 # =====================================================================================================================================
 
@@ -306,3 +313,4 @@ plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
 plt.show()
 
+"""

@@ -22,6 +22,8 @@ def main():
   gd = GradientDescent(c.reg_lambda, c.mnist_step_size)
   train_j, test_j, train_error, test_error = gd.grad_desc(X_train, Y_train, X_test, Y_test, c.cutoff)
 
+  # print(train_j)
+
   h.plot_function("Loss over Time", "a6_bi", "Iterations", "Loss", train_j, test_j)
   h.plot_function("Error over Time", "a6_bii", "Iterations", "Error", train_error, test_error)
 
@@ -47,12 +49,13 @@ class GradientDescent:
     self.step = step_size
     self.w = None
     self.b = 0
+    self.d = 0
 
   def grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff):
     print("gradient descent")
     
     # 12223, 784
-    self.n, self.d = X_train.shape
+    _, self.d = X_train.shape
     self.w = np.zeros((self.d, 1))
 
     train_j_data = []
@@ -66,18 +69,10 @@ class GradientDescent:
       train_j_func, grad_w, grad_b = self.get_j(X_train, Y_train)
       test_j_func, _, _ = self.get_j(X_test, Y_test)
 
-      # do we add or subtract here?
-      print(self.w.shape)
-      print(self.b)
-      print(grad_w.shape)
-      print(grad_b.shape)
+      print(str(self.w[0:10]) + ", " + str(self.b))
 
-      print(grad_b)
-
-      self.w = self.w + (self.step * grad_w)
-      self.b = self.b + (self.step * grad_b)
-
-      print(self.w.shape)
+      self.w = self.w - (self.step * grad_w)
+      self.b = self.b - (self.step * grad_b)
 
       train_j_data.append(train_j_func[0][0])
       test_j_data.append(test_j_func[0][0])
@@ -87,37 +82,39 @@ class GradientDescent:
       if np.max(np.abs(grad_w)) < cutoff:
         break
 
-    # then test on test data
     return train_j_data, test_j_data, train_class_data, test_class_data
 
   def get_j(self, X, Y):
+    n, d = X.shape
     Y = np.expand_dims(Y, axis=1)
 
     offset = self.b + (self.w.T).dot(X.T)
-    exponent = np.multiply(-Y, offset)
+    exponent = np.multiply(-Y, offset.T)
     mu = 1 / (1 + np.exp(exponent))
 
     reg = self.lamb * (self.w.T).dot(self.w)
-    j_func = (1 / self.n) * np.sum(np.log(1 / mu)) + reg
+    j_func = (1 / n) * np.sum(np.log(1 / mu)) + reg
 
     coef = np.multiply(X, -Y)
     grad_reg = 2 * self.lamb * self.w
-    grad_w = (1 / self.n) * (coef.T).dot(1 - mu) + grad_reg
-    # THIS SUM MIGHT BE WRONG
+    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
     grad_w = grad_w.sum(axis = 1)
+    grad_w = np.expand_dims(grad_w, axis=1)
+    # print(np.mean(grad_w))
 
-    grad_b = (1 / self.n) * (-Y.T).dot(1 - mu)
-    grad_b = grad_b[0].sum(axis = 0)
+    grad_b = (1 / n) * (-Y.T).dot(1 - mu)
 
-    return j_func, grad_w, grad_b
+    return j_func, grad_w, grad_b[0][0]
 
   def get_error(self, X, Y):
+    n, d = X.shape
+
     sign = np.sign(self.b + (self.w.T).dot(X.T))
     sign = sign[0]
 
     match_count = np.sum([sign[idx] == val for idx, val in enumerate(Y.T)])
 
-    return 1 - (match_count / self.n)
+    return 1 - (match_count / n)
 
 class StochasticGradientDescent:
   def __init__(self, reg_lambda, step_size, batch_size):
