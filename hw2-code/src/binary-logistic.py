@@ -14,21 +14,13 @@ def main():
 
   # Y-values are in [-1, +1] format
   X_train, labels_train, Y_train, X_test, labels_test, Y_test = h.load_mnist()
-  print(X_train.shape)
-  print(Y_train.shape)
 
   assert (len(X_train) > 0 and len(X_test) > 0)
   
   # Gradient Descent
 
   gd = GradientDescent(c.reg_lambda, c.mnist_step_size)
-  gd.grad_desc(X_train, Y_train, c.cutoff)
-  
-  train_j = gd.get_j
-  test_j = gd.get_j
-
-  train_error = gd.get_error
-  test_error = gd.get_error
+  train_j, test_j, train_error, test_error = gd.grad_desc(X_train, Y_train, X_test, Y_test, c.cutoff)
 
   h.plot_function("Loss over Time", "a6_bi", "Iterations", "Loss", train_j, test_j)
   h.plot_function("Error over Time", "a6_bii", "Iterations", "Error", train_error, test_error)
@@ -56,63 +48,73 @@ class GradientDescent:
     self.w = None
     self.b = 0
 
-  def grad_desc(self, X, Y, cutoff):
+  def grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff):
     print("gradient descent")
     
-    self.n, self.d = X.shape
     # 12223, 784
+    self.n, self.d = X_train.shape
     self.w = np.zeros((self.d, 1))
 
-    
+    train_j_data = []
+    test_j_data = []
+    train_class_data = []
+    test_class_data = []
 
-    j_func, grad_w, grad_b = self.get_j(X, Y)
+    # emulate do-while
+    while True:
 
-    print(j_func.shape)
-    print(grad_w.shape)
-    print(grad_b.shape)
-
-    j_data = [j_func[0][0]]
-    class_data = [self.get_error(X, Y)]
-
-    print(j_data)
-    print(class_data)
-
-    while np.max(np.abs(self.w)) > cutoff:
-      # keep iterating
+      train_j_func, grad_w, grad_b = self.get_j(X_train, Y_train)
+      test_j_func, _, _ = self.get_j(X_test, Y_test)
 
       # do we add or subtract here?
-      self.w = self.w + self.step * grad_w
-      self.b = self.b + self.step * grad_b
+      print(self.w.shape)
+      print(self.b)
+      print(grad_w.shape)
+      print(grad_b.shape)
 
-      j_func, grad_w, grad_b = self.get_j(X, Y)
+      print(grad_b)
 
-      j_data.append(j_func)
-      class_data.append(self.get_error(X, Y))
+      self.w = self.w + (self.step * grad_w)
+      self.b = self.b + (self.step * grad_b)
+
+      print(self.w.shape)
+
+      train_j_data.append(train_j_func[0][0])
+      test_j_data.append(test_j_func[0][0])
+      train_class_data.append(self.get_error(X_train, Y_train))
+      test_class_data.append(self.get_error(X_test, Y_test))
+
+      if np.max(np.abs(grad_w)) < cutoff:
+        break
 
     # then test on test data
+    return train_j_data, test_j_data, train_class_data, test_class_data
 
   def get_j(self, X, Y):
+    Y = np.expand_dims(Y, axis=1)
+
     offset = self.b + (self.w.T).dot(X.T)
     exponent = np.multiply(-Y, offset)
     mu = 1 / (1 + np.exp(exponent))
 
-    j_func = (1 / self.n) * np.sum(np.log(1 / mu)) + self.lamb * (self.w.T).dot(self.w)
+    reg = self.lamb * (self.w.T).dot(self.w)
+    j_func = (1 / self.n) * np.sum(np.log(1 / mu)) + reg
 
-    coef = np.multiply(-Y, X.T)
-    grad_w = (1 / self.n) * coef.dot((1 - mu).T) + 2 * self.lamb * self.w
+    coef = np.multiply(X, -Y)
+    grad_reg = 2 * self.lamb * self.w
+    grad_w = (1 / self.n) * (coef.T).dot(1 - mu) + grad_reg
+    # THIS SUM MIGHT BE WRONG
+    grad_w = grad_w.sum(axis = 1)
 
-    grad_b = (1 / self.n) * -Y.dot((1 - mu).T)
+    grad_b = (1 / self.n) * (-Y.T).dot(1 - mu)
+    grad_b = grad_b[0].sum(axis = 0)
 
     return j_func, grad_w, grad_b
 
   def get_error(self, X, Y):
-    print("calculate gradient descent error")
-
     sign = np.sign(self.b + (self.w.T).dot(X.T))
     sign = sign[0]
 
-    print(Y)
-    print(sign)
     match_count = np.sum([sign[idx] == val for idx, val in enumerate(Y.T)])
 
     return 1 - (match_count / self.n)
