@@ -13,12 +13,12 @@ results_path = home_dir_path + '/results/'
 png_exten = '.png'
 txt_exten = '.txt'
 
-reg_lambda = 0.1
+reg_lambda = 1E-1
 
 
 
 one_to_digit = { -1 : 2, +1 : 7}
 digit_to_one = { 2 : -1, 7 : +1}
 
-mnist_step_size = 0.1
-cutoff = 0.01
+mnist_step_size = 1E-1
+cutoff = 1E-2

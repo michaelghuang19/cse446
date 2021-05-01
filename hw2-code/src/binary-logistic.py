@@ -45,7 +45,6 @@ def main():
 class GradientDescent:
   def __init__(self, reg_lambda, step_size):
     self.lamb = reg_lambda
-    self.grad = None
     self.step = step_size
     self.w = None
     self.b = 0
@@ -68,8 +67,6 @@ class GradientDescent:
 
       train_j_func, grad_w, grad_b = self.get_j(X_train, Y_train)
       test_j_func, _, _ = self.get_j(X_test, Y_test)
-
-      print(str(self.w[0:10]) + ", " + str(self.b))
 
       self.w = self.w - (self.step * grad_w)
       self.b = self.b - (self.step * grad_b)
@@ -100,7 +97,6 @@ class GradientDescent:
     grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
     grad_w = grad_w.sum(axis = 1)
     grad_w = np.expand_dims(grad_w, axis=1)
-    # print(np.mean(grad_w))
 
     grad_b = (1 / n) * (-Y.T).dot(1 - mu)
 
@@ -121,9 +117,43 @@ class StochasticGradientDescent:
     self.lamb = reg_lambda
     self.step = step_size
     self.batch = batch_size
+    self.w = None
+    self.b = 0
+    self.d = 0
 
   def stoch_grad_desc(self, X, Y, w, b):
     print("stochastic gradient descent")
+
+  def get_j(self, X, Y):
+    n, d = X.shape
+    Y = np.expand_dims(Y, axis=1)
+
+    offset = self.b + (self.w.T).dot(X.T)
+    exponent = np.multiply(-Y, offset.T)
+    mu = 1 / (1 + np.exp(exponent))
+
+    reg = self.lamb * (self.w.T).dot(self.w)
+    j_func = (1 / n) * np.sum(np.log(1 / mu)) + reg
+
+    coef = np.multiply(X, -Y)
+    grad_reg = 2 * self.lamb * self.w
+    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
+    grad_w = grad_w.sum(axis = 1)
+    grad_w = np.expand_dims(grad_w, axis=1)
+
+    grad_b = (1 / n) * (-Y.T).dot(1 - mu)
+
+    return j_func, grad_w, grad_b[0][0]
+
+  def get_error(self, X, Y):
+    n, d = X.shape
+
+    sign = np.sign(self.b + (self.w.T).dot(X.T))
+    sign = sign[0]
+
+    match_count = np.sum([sign[idx] == val for idx, val in enumerate(Y.T)])
+
+    return 1 - (match_count / n)
 
 if __name__ == "__main__":
   main()

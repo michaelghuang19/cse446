@@ -49,7 +49,7 @@ def load_mnist():
 Helper function for plotting function
 """
 def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data):
-  print("plot gradient descent error")
+  print("plot " + plt_title)
 
   plt.plot(train_data)
   plt.plot(test_data)
