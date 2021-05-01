@@ -22,3 +22,5 @@ digit_to_one = { 2 : -1, 7 : +1}
 
 mnist_step_size = 1E-1
 cutoff = 1E-2
+
+stoch_iter_count = 20

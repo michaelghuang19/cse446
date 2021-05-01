@@ -33,14 +33,23 @@ def main():
   sgd100 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 100)
 
   # perform sgd
+  single_train_j, single_test_j, single_train_error, single_test_error = sgd1.stoch_grad_desc(
+      X_train, Y_train, X_test, Y_test, c.cutoff, c.stoch_iter_count)
 
-  # get loss
+  batch_train_j, batch_test_j, batch_train_error, batch_test_error = sgd100.stoch_grad_desc(
+      X_train, Y_train, X_test, Y_test, c.cutoff, c.stoch_iter_count)
+  
+  # # plot loss
+  # h.plot_function("Loss over Time", "a6_ci", "Iterations",
+  #                 "Loss", single_train_j, single_test_j)
+  # h.plot_function("Loss over Time", "a6_di",
+  #                 "Iterations", "Loss", train_j, test_j)
 
-  # get error
-
-  # plot loss
-
-  # plot error
+  # # plot error
+  # h.plot_function("Error over Time", "a6_cii", "Iterations",
+  #                 "Error", single_train_error, single_test_error)
+  # h.plot_function("Error over Time", "a6_dii", "Iterations",
+  #                 "Error", batch_train_error, batch_test_error)
 
 class GradientDescent:
   def __init__(self, reg_lambda, step_size):
@@ -121,7 +130,8 @@ class StochasticGradientDescent:
     self.b = 0
     self.d = 0
 
-  def stoch_grad_desc(self, X, Y, w, b):
+  # since it's random, maybe try capping an iter_count
+  def stoch_grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff, iter_count):
     print("stochastic gradient descent")
 
   def get_j(self, X, Y):

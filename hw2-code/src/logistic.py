@@ -187,6 +187,8 @@ Y_test = np.where(Y_test == 7, 1, -1)
 
 # =====================================================================================================================================
 
+"""
+
 n = X_train.shape[0]
 d = X_train.shape[1] # 28 x 28 = 784
 lam = 0.1
@@ -198,7 +200,6 @@ delta = 0.01
 eta = 0.1 # learning rate
 
 (x_best_train, all_xs_train) = gradient_descent(x_init, gradient_function_train, eta, delta)
-
 
 # Problem 9b part i)
 
@@ -312,5 +313,3 @@ plt.ylabel('Error rate')
 plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
 plt.show()
-
-"""
