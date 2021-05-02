@@ -80,8 +80,9 @@ def plot_single(plt_title, img_title, x_label, y_label, data):
 """
 Helper function for getting min lasso lambda where w is all zero
 """
-def min_lamb():
-  
+def min_lamb(X, Y):
+  y_diff = Y.T - np.mean(Y)
+  return np.max(2 * np.abs(y_diff.dot(X)))
 
 # """
 # Helper function for plotting error

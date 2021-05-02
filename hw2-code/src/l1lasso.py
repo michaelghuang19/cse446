@@ -33,13 +33,15 @@ def generate_synthetic_data(n, d, k, variance, seed=123):
     w_true = np.zeros((d ,1))
     
     # j+1 is to account for zero-based indexing in python
-    for j in range(k): w_true[j] = (j+1) / k
+    for j in range(k):
+        w_true[j] = (j+1) / k
 
     np.random.seed(seed)
     X = np.random.normal(size = (n,d))
     errors = np.random.normal(scale = np.sqrt(variance), size=(n,))
 
     y = np.reshape(np.dot(w_true.T, X.T) + errors.T, (n,))
+
     return (X, y)
 
 
@@ -142,7 +144,8 @@ plt.semilogx(lam_vals, np.count_nonzero(W, axis=0), 'r-')
 plt.xlabel('Lambda')
 plt.ylabel('Nonzero Coefficients in w')
 plt.title('7a: Nonzero Coefficients versus Lambda')
-plt.show()
+plt.savefig("7a.png")
+plt.close()
 
 # Problem 7b)
 
@@ -160,7 +163,8 @@ plt.plot(FDR, TPR)
 plt.title('7b: False Discoveries and True Positives')
 plt.xlabel('FDR')
 plt.ylabel('TPR')
-plt.show()
+plt.savefig("7b.png")
+plt.close()
 
 
 # ========================================================================================
@@ -210,7 +214,8 @@ plt.semilogx(lam_vals, np.count_nonzero(W, axis=0), 'r-')
 plt.xlabel('Lambda')
 plt.ylabel('Nonzero Coefficients in w')
 plt.title('8a: Nonzero coefficients vs Lambda')
-#plt.show()
+plt.savefig("8a.png")
+plt.close()
 
 # Part b: Regularization Paths: agePct12t29, pctWSocSec, pctUrban, agePct65up, householdsize
 
@@ -236,7 +241,8 @@ plt.xlabel('Lambda')
 plt.ylabel('Coefficient Value')
 plt.title('8b: Regularization Paths')
 plt.legend(["agePct12t29", "pctWSocSec", "pctUrban", "agePct65up", "householdsize"])
-#plt.show()
+plt.savefig("8b.png")
+plt.close()
 
 # Part c: Squared Error on training/test data
 
@@ -251,7 +257,8 @@ plt.legend(["Training Error", "Testing Error"])
 plt.xlabel('Lambda')
 plt.ylabel('SSE / n')
 plt.title('8c: Squared Error as a function of Lambda')
-plt.show()
+plt.savefig("8c.png")
+plt.close()
 
 # Part d:
 

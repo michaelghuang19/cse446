@@ -14,6 +14,10 @@ def main():
 
   lasso = Lasso(c.reg_lambda)
 
+  lasso.generate_synthetic_data()
+
+  lamb = h.min_lamb(lasso.X, lasso.Y)
+
 
 
 class Lasso:
@@ -26,8 +30,21 @@ class Lasso:
 
     # while max(np.max(np.abs(grad_w)), grad_b) < cutoff:
 
-  def generate_synthetic_data(self, n, d, k, variance):
+  def generate_synthetic_data(self, n=500, d=1000, k=100, sd=1):
     print("generating synthetic data")
+
+    w = list(range(1, k + 1))
+    w.extend(np.zeros(d - len(w)))
+    w = np.expand_dims(w, axis=1)
+    w = w / k
+    
+    X = np.random.normal(size=(n, d))
+
+    offset = np.random.normal(scale=sd, size=n)
+    Y = (w.T).dot(X.T) + offset
+
+    self.X = X
+    self.Y = Y.T
 
 if __name__ == "__main__":
   main()
