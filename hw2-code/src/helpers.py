@@ -46,7 +46,7 @@ def load_mnist():
   return X_train, labels_train, one_train, X_test, labels_test, one_test
 
 """
-Helper function for plotting function
+Helper function for plotting function with training/testing distinction
 """
 def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data):
   print("plot " + plt_title)
@@ -62,6 +62,26 @@ def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data)
   plt.savefig(c.results_path + img_title + c.png_exten)
   plt.close()
 
+"""
+Helper function for plotting single function
+"""
+def plot_single(plt_title, img_title, x_label, y_label, data):
+  print("plot " + plt_title)
+
+  plt.plot(data)
+
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()
+
+"""
+Helper function for getting min lasso lambda where w is all zero
+"""
+def min_lamb():
+  
 
 # """
 # Helper function for plotting error

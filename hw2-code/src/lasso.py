@@ -14,11 +14,17 @@ def main():
 
   lasso = Lasso(c.reg_lambda)
 
+
+
 class Lasso:
   def __init__(self, reg_lambda):
     self.lamb = reg_lambda
 
-    while 
+
+  def lasso(self, cutoff):
+    print("lasso")
+
+    # while max(np.max(np.abs(grad_w)), grad_b) < cutoff:
 
   def generate_synthetic_data(self, n, d, k, variance):
     print("generating synthetic data")

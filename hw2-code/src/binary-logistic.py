@@ -63,7 +63,7 @@ class GradientDescent:
     self.b = 0
     self.d = 0
 
-  def grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff):
+  def grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff=c.cutoff):
     print("gradient descent")
     
     # 12223, 784
@@ -135,7 +135,7 @@ class StochasticGradientDescent:
     self.d = 0
 
   # since it's random, maybe try capping an iter_count
-  def stoch_grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff):
+  def stoch_grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff=c.cutoff, iter_count=c.stoch_iter_count):
     print("stochastic gradient descent")
 
     n, self.d = X_train.shape
@@ -147,9 +147,7 @@ class StochasticGradientDescent:
     test_class_data = []
 
     # emulate do-while
-    iter_count = 0
-    for i in range(100):
-      # print(iter_count)
+    for i in range(iter_count):
       indices = random.sample(range(n), self.batch)
       
       X_batch = X_train[indices]
