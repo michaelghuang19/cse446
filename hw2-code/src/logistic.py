@@ -213,6 +213,7 @@ plt.title('Function Value at each iteration')
 plt.ylabel('J(w,b)')
 plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
+plt.close()
 #plt.show()
 
 # Problem 9b part ii)
@@ -225,6 +226,7 @@ plt.title('Error rate at each iteration')
 plt.ylabel('Error rate')
 plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
+plt.close()
 plt.show()
 
 """
@@ -256,6 +258,8 @@ plt.title('SGD Function Value at each iteration (batch_size = 1)')
 plt.ylabel('J(w,b)')
 plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
+plt.savefig("9ci.png")
+plt.close()
 #plt.show()
 
 
@@ -269,7 +273,9 @@ plt.title('SGD Error rate at each iteration (batch_size = 1)')
 plt.ylabel('Error rate')
 plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
-plt.show()
+plt.savefig("9cii.png")
+plt.close()
+# plt.show()
 
 
 # =====================================================================================================================================
@@ -299,6 +305,8 @@ plt.title('SGD Function Value at each iteration (batch_size = 100)')
 plt.ylabel('J(w,b)')
 plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
+plt.savefig("9di.png")
+plt.close()
 #plt.show()
 
 
@@ -312,4 +320,6 @@ plt.title('SGD Error rate at each iteration (batch_size = 100)')
 plt.ylabel('Error rate')
 plt.xlabel('Iteration Number')
 plt.legend(['Training', 'Testing'])
-plt.show()
+plt.savefig("9dii.png")
+plt.close()
+# plt.show()

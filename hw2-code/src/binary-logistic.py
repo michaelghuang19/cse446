@@ -3,11 +3,17 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 import constants as c
 import helpers as h
 
 from scipy import linalg
+
+# Run only what you need
+run_b = True
+run_c = True
+run_d = True
 
 def main():
   print("binary logistic regression")
@@ -19,37 +25,35 @@ def main():
   
   # Gradient Descent
 
-  gd = GradientDescent(c.reg_lambda, c.mnist_step_size)
-  train_j, test_j, train_error, test_error = gd.grad_desc(X_train, Y_train, X_test, Y_test, c.cutoff)
+  if run_b:
+    gd = GradientDescent(c.reg_lambda, c.mnist_step_size)
+    train_j, test_j, train_error, test_error = gd.grad_desc(X_train, Y_train, X_test, Y_test, c.cutoff)
 
-  # print(train_j)
-
-  h.plot_function("Loss over Time", "a6_bi", "Iterations", "Loss", train_j, test_j)
-  h.plot_function("Error over Time", "a6_bii", "Iterations", "Error", train_error, test_error)
+    h.plot_function("Loss over Time", "a6_bi", "Iterations", "Loss", train_j, test_j)
+    h.plot_function("Error over Time", "a6_bii", "Iterations", "Error", train_error, test_error)
 
   # Stochastic Gradient Descent
   
-  sgd1 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 1)
-  sgd100 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 100)
+  if run_c:
+    sgd1 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 1)
+    single_train_j, single_test_j, single_train_error, single_test_error = sgd1.stoch_grad_desc(
+        X_train, Y_train, X_test, Y_test, c.cutoff)
 
-  # perform sgd
-  single_train_j, single_test_j, single_train_error, single_test_error = sgd1.stoch_grad_desc(
-      X_train, Y_train, X_test, Y_test, c.cutoff, c.stoch_iter_count)
+    h.plot_function("Loss over Time", "a6_ci", "Iterations",
+                    "Loss", single_train_j, single_test_j)
+    h.plot_function("Error over Time", "a6_cii", "Iterations",
+                    "Error", single_train_error, single_test_error)
+    
 
-  batch_train_j, batch_test_j, batch_train_error, batch_test_error = sgd100.stoch_grad_desc(
-      X_train, Y_train, X_test, Y_test, c.cutoff, c.stoch_iter_count)
-  
-  # # plot loss
-  # h.plot_function("Loss over Time", "a6_ci", "Iterations",
-  #                 "Loss", single_train_j, single_test_j)
-  # h.plot_function("Loss over Time", "a6_di",
-  #                 "Iterations", "Loss", train_j, test_j)
+  if run_d:
+    sgd100 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 100)
+    batch_train_j, batch_test_j, batch_train_error, batch_test_error = sgd100.stoch_grad_desc(
+        X_train, Y_train, X_test, Y_test, c.cutoff)
 
-  # # plot error
-  # h.plot_function("Error over Time", "a6_cii", "Iterations",
-  #                 "Error", single_train_error, single_test_error)
-  # h.plot_function("Error over Time", "a6_dii", "Iterations",
-  #                 "Error", batch_train_error, batch_test_error)
+    h.plot_function("Loss over Time", "a6_di",
+                    "Iterations", "Loss", batch_train_j, batch_test_j)
+    h.plot_function("Error over Time", "a6_dii", "Iterations",
+                    "Error", batch_train_error, batch_test_error)
 
 class GradientDescent:
   def __init__(self, reg_lambda, step_size):
@@ -131,8 +135,41 @@ class StochasticGradientDescent:
     self.d = 0
 
   # since it's random, maybe try capping an iter_count
-  def stoch_grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff, iter_count):
+  def stoch_grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff):
     print("stochastic gradient descent")
+
+    n, self.d = X_train.shape
+    self.w = np.zeros((self.d, 1))
+
+    train_j_data = []
+    test_j_data = []
+    train_class_data = []
+    test_class_data = []
+
+    # emulate do-while
+    iter_count = 0
+    for i in range(100):
+      # print(iter_count)
+      indices = random.sample(range(n), self.batch)
+      
+      X_batch = X_train[indices]
+      Y_batch = Y_train[indices]
+
+      train_j_func, grad_w, grad_b = self.get_j(X_batch, Y_batch)
+      test_j_func, _, _ = self.get_j(X_test, Y_test)
+
+      self.w = self.w - (self.step * grad_w)
+      self.b = self.b - (self.step * grad_b)
+
+      train_j_data.append(train_j_func[0][0])
+      test_j_data.append(test_j_func[0][0])
+      train_class_data.append(self.get_error(X_batch, Y_batch))
+      test_class_data.append(self.get_error(X_test, Y_test))
+
+      if np.max(np.abs(grad_w)) < cutoff:
+        break
+
+    return train_j_data, test_j_data, train_class_data, test_class_data
 
   def get_j(self, X, Y):
     n, d = X.shape
