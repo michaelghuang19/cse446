@@ -89,7 +89,7 @@ class GradientDescent:
       train_class_data.append(self.get_error(X_train, Y_train))
       test_class_data.append(self.get_error(X_test, Y_test))
 
-      if np.max(np.abs(grad_w)) < cutoff:
+      if max(np.max(np.abs(grad_w)), grad_b) < cutoff:
         break
 
     return train_j_data, test_j_data, train_class_data, test_class_data
@@ -155,7 +155,8 @@ class StochasticGradientDescent:
       X_batch = X_train[indices]
       Y_batch = Y_train[indices]
 
-      train_j_func, grad_w, grad_b = self.get_j(X_batch, Y_batch)
+      _, grad_w, grad_b = self.get_j(X_batch, Y_batch)
+      train_j_func, _, _ = self.get_j(X_train, Y_train)
       test_j_func, _, _ = self.get_j(X_test, Y_test)
 
       self.w = self.w - (self.step * grad_w)
@@ -163,10 +164,10 @@ class StochasticGradientDescent:
 
       train_j_data.append(train_j_func[0][0])
       test_j_data.append(test_j_func[0][0])
-      train_class_data.append(self.get_error(X_batch, Y_batch))
+      train_class_data.append(self.get_error(X_train, Y_train))
       test_class_data.append(self.get_error(X_test, Y_test))
 
-      if np.max(np.abs(grad_w)) < cutoff:
+      if max(np.max(np.abs(grad_w)), grad_b) < cutoff:
         break
 
     return train_j_data, test_j_data, train_class_data, test_class_data
