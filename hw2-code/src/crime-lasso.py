@@ -84,7 +84,7 @@ def main():
     # print("crime lasso lambda value: " + str(lamb))
 
     w30_train, b30_train = crime_train_lasso.coord_desc(lamb)
-    w30_test, b30_test = crime_train_lasso.coord_desc(lamb)
+    w30_test, b30_test = crime_test_lasso.coord_desc(lamb)
 
     all_variables = df_train.columns[1:]
 
@@ -95,10 +95,10 @@ def main():
 
     output = open(c.results_path + "a5e" + c.txt_exten, "w")
 
-    output.write("training weights\n")
+    output.write("nonzero training weights\n")
     output.write(str(tabulate(nz_train.items())))
     
-    output.write("\n\ntest weights\n")
+    output.write("\n\nnonzero test weights\n")
     output.write(str(tabulate(nz_test.items())))
 
     # find the min/max entries
@@ -106,13 +106,13 @@ def main():
     min_train = min(nz_train, key=nz_train.get)
     output.write(min_train + " : " + str(nz_train.get(min_train)) + "\n")
     max_train = max(nz_train, key=nz_train.get)
-    output.write(max_train + " : " + str(nz_test.get(max_train)) + "\n")
+    output.write(max_train + " : " + str(nz_train.get(max_train)) + "\n")
 
     output.write("\ntest min/max\n")
     min_test = min(nz_test, key=nz_test.get)
-    output.write(min_test + " : " + str(nz_train.get(min_test)) + "\n")
+    output.write(min_test + " : " + str(nz_test.get(min_test)) + "\n")
     max_test = max(nz_test, key=nz_test.get)
-    output.write(max_test + " : " + str(nz_train.get(max_test)) + "\n")
+    output.write(max_test + " : " + str(nz_test.get(max_test)) + "\n")
 
     output.close()
 

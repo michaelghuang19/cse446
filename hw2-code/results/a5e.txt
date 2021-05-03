@@ -1,4 +1,4 @@
-training weights
+nonzero training weights
 ---------------------  ------------
 agePct12t29            -0.0063579
 pctUrban                0.0125046
@@ -23,35 +23,20 @@ PctForeignBorn          0.000664376
 PctBornSameState       -0.000780591
 ---------------------  ------------
 
-test weights
----------------------  ------------
-agePct12t29            -0.0063579
-pctUrban                0.0125046
-medIncome               0.000617753
-pctWInvInc             -0.000866307
-PctNotHSGrad            0.00176447
-MalePctDivorce          0.00949172
-PersPerFam              0.00363268
-PctFam2Par             -0.0479927
-PctKids2Par            -0.0371028
-PctWorkMom             -0.00749318
-PctIlleg                0.0633892
-PctRecImmig10           0.00188808
-PctLargHouseFam         0.0059379
-PersPerRentOccHous      0.00110354
-PctPersDenseHous        0.0190076
-HousVacant              0.0200307
-PctHousOccup           -0.00757211
-MedOwnCostPctIncNoMtg  -0.00138742
-NumStreet               0.0146808
-PctForeignBorn          0.000664376
-PctBornSameState       -0.000780591
----------------------  ------------
+nonzero test weights
+----------------  -----------
+FemalePctDiv       0.0116801
+PctFam2Par        -0.0659422
+PctKids2Par       -0.0228941
+NumIlleg           0.00624469
+PctIlleg           0.0550029
+PctPersDenseHous   0.00526577
+----------------  -----------
 
 training min/max
 PctFam2Par : -0.04799273597230106
 PctIlleg : 0.06338915717551429
 
 test min/max
-PctFam2Par : -0.04799273597230106
-PctIlleg : 0.06338915717551429
+PctFam2Par : -0.06594215294586658
+PctIlleg : 0.05500293686818547
