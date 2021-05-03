@@ -116,7 +116,7 @@ class Lasso:
     self.X = X
     self.Y = np.squeeze(Y)
 
-  def calculate_error(self):
+  def get_sqerror(self):
     
 
     
