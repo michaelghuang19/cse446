@@ -49,11 +49,18 @@ def load_mnist():
 """
 Helper function for plotting function with training/testing distinction
 """
-def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data):
+def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data, x_data=None, log_scale=False):
   print("plot " + plt_title)
 
-  plt.plot(train_data)
-  plt.plot(test_data)
+  if x_data is None:
+    plt.plot(train_data)
+    plt.plot(test_data)
+  else:
+    plt.plot(x_data, train_data)
+    plt.plot(x_data, test_data)
+
+  if log_scale:
+    plt.xscale('log')
 
   plt.title(plt_title)
   plt.xlabel(x_label)

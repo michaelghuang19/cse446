@@ -7,8 +7,6 @@ import numpy as np
 import constants as c
 import helpers as h
 
-# from scipy import
-
 def main():
   print("binary logistic regression")
 
@@ -30,7 +28,7 @@ def main():
 
   # abritrarily stop when we hit 995/1000
   while np.count_nonzero(w) < d - 5:
-    print("lasso lambda value: " + str(lamb))
+    # print("lasso lambda value: " + str(lamb))
 
     # perform coordinate descent 
     w, _ = lasso.coord_desc(lamb)
@@ -62,6 +60,8 @@ class Lasso:
     self.Y = np.squeeze(Y)
 
   def coord_desc(self, lamb, cutoff=c.cutoff, w=None):
+    assert (self.X is not None), "We need to have some X or else our dimensions fail"
+
     n, d = self.X.shape
 
     b = 0
@@ -116,11 +116,22 @@ class Lasso:
     self.X = X
     self.Y = np.squeeze(Y)
 
-  def get_sqerror(self):
-    
+  def get_sqerror(self, w, b):
+    assert (self.X is not None), "We need to have some X or else our dimensions fail"
 
+    n, d = self.X.shape
+
+    # print(w.shape)
+    # print(self.X.shape)
+
+    # print(((w.T).dot(self.X.T)).shape)
+
+    Y_pred = (w.T).dot(self.X.T) + np.expand_dims(b, axis = 1)
     
-    return 0
+    # print(Y_pred.shape)
+    # print((np.square(Y_pred - self.Y)).shape)
+
+    return (1 / n) * np.sum(np.square(Y_pred - self.Y), axis = 1)
 
 if __name__ == "__main__":
   main()

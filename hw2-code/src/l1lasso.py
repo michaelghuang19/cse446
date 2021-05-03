@@ -247,7 +247,11 @@ plt.close()
 
 # Part c: Squared Error on training/test data
 
+print(W.shape)
+print(X_train.shape)
+print((np.dot(W.T, X_train.T)).shape)
 y_pred_train = np.dot(W.T, X_train.T) + np.expand_dims(B, axis=1)
+print(y_pred_train.shape)
 SSE_train = 1/X_train.shape[0] * np.sum(np.square(y_pred_train - y_train), axis=1)
 y_pred_test = np.dot(W.T, X_test.T) + np.expand_dims(B, axis=1)
 SSE_test = 1/X_test.shape[0] * np.sum(np.square(y_pred_test - y_test), axis=1)

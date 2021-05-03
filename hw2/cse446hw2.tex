@@ -253,13 +253,16 @@ On one plot, plot the squared error on the training and test data as a function 
 \subsection*{f.}
 
 Sometimes a larger value of $\lambda$ performs nearly as well as a smaller value, but a larger value will select fewer variables and perhaps be more interpretable.  Inspect the weights $\hat{w}$ for $\lambda = 30$.  Which feature
-    had the largest (most positive) Lasso coefficient? What about the most negative? Discuss briefly.
+    had the largest (most positive) Lasso coefficient? What about the most negative? Discuss briefly. \\ \\
+The most positive coefficient was found with the feature \\
+The most negative coefficient was found with the feature
 
 \subsection*{g.}
 
 Suppose there was a large negative weight on
     \texttt{agePct65up} and upon seeing this result, a politician suggests policies that encourage people over the age of 65 to move to high crime areas in an effort to reduce crime. What is the (statistical) flaw in this line of reasoning? (Hint: fire trucks
-    are often seen around burning buildings, do fire trucks cause fire?)
+    are often seen around burning buildings, do fire trucks cause fire?) \\ \\
+The issue with this line of reasoning is that correlation implies causation, which is not necessarily true. The fact that having greater population over the age of 65 is linked to lower crime might be true, but one may not necessarily cause the other. 
 
 }
 
