@@ -65,14 +65,17 @@ def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data)
 """
 Helper function for plotting single function
 """
-def plot_single(plt_title, img_title, x_label, y_label, data):
+def plot_single(plt_title, img_title, x_label, y_label, x_data, y_data, log_scale=False):
   print("plot " + plt_title)
 
-  plt.plot(data)
+  plt.plot(x_data, y_data)
 
   plt.title(plt_title)
   plt.xlabel(x_label)
   plt.ylabel(y_label)
+
+  if log_scale:
+    plt.xscale('log')
 
   plt.savefig(c.results_path + img_title + c.png_exten)
   plt.close()
@@ -84,14 +87,3 @@ def min_lamb(X, Y):
   y_diff = Y.T - np.mean(Y)
   return np.max(2 * np.abs(y_diff.dot(X)))
 
-# """
-# Helper function for plotting error
-# """
-# def plot_error(plt_title, img_title, x_lbl, y_lbl, train_error, test_error):
-#   print("plot gradient descent error")
-  
-#   plt.legend(["Training", "Testing"])
-#   plt.xlabel
-
-#   plt.savefig(c.results_path + img_title + c.png_exten)
-#   plt.close()

@@ -89,7 +89,6 @@ def lasso_coordinate_descent(X, y, lam, w_init = None, delta = 10e-4):
         prev_w = np.copy(w)
 
         wTXT = np.dot(w.T, X.T)
-
         b = 1/n * np.sum(y - wTXT)
 
         for k in range(d):
@@ -112,6 +111,7 @@ def lasso_coordinate_descent(X, y, lam, w_init = None, delta = 10e-4):
 
  # problem 7a)
 
+"""
 
 n = 500
 d = 1000
@@ -166,6 +166,7 @@ plt.ylabel('TPR')
 plt.savefig("7b.png")
 plt.close()
 
+"""
 
 # ========================================================================================
 # Problem 8)
