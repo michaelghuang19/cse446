@@ -15,8 +15,6 @@ txt_exten = '.txt'
 
 reg_lambda = 1E-1
 
-
-
 one_to_digit = { -1 : 2, +1 : 7}
 digit_to_one = { 2 : -1, 7 : +1}
 

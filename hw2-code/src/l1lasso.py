@@ -173,8 +173,8 @@ plt.close()
 
 
 import pandas as pd
-df_train = pd.read_table("data/crime-train.txt")
-df_test = pd.read_table("data/crime-test.txt")
+df_train = pd.read_table("../data/crime-train.txt")
+df_test = pd.read_table("../data/crime-test.txt")
 
 y_train = df_train["ViolentCrimesPerPop"].values
 X_train = df_train.drop("ViolentCrimesPerPop", axis=1).values
