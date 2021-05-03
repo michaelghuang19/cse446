@@ -33,7 +33,7 @@ def main():
     print("lasso lambda value: " + str(lamb))
 
     # perform coordinate descent 
-    w = lasso.coord_desc(lamb)
+    w, _ = lasso.coord_desc(lamb)
 
     # append lambda/nonzero data
     lamb_data.append(lamb)
@@ -57,18 +57,19 @@ def main():
                 "FDR", "TPR", fdr_data, tpr_data)
 
 class Lasso:
-  def __init__(self):
-    self.X = None
-    self.Y = None
+  def __init__(self, X=None, Y=None):
+    self.X = X
+    self.Y = Y
 
-  def coord_desc(self, lamb, cutoff=c.cutoff):
-    # 500, 1000
+  def coord_desc(self, lamb, cutoff=c.cutoff, w=None):
     n, d = self.X.shape
 
     b = 0
     a = 2 * np.sum(np.square(self.X), axis=0)
     c = np.zeros((d, 1))
-    w = np.zeros((d, 1))
+
+    if w == None:
+      w = np.zeros((d, 1))
 
     while True:
       w_diff = 0
@@ -98,7 +99,7 @@ class Lasso:
       if w_diff < cutoff:
         break
     
-    return w
+    return w, b
 
   def generate_synthetic_data(self, n=500, d=1000, k=100, sd=1):
     print("generating synthetic data")
@@ -108,7 +109,6 @@ class Lasso:
     w = np.expand_dims(w, axis=1)
     w = w / k
     
-    np.random.seed(3853)
     X = np.random.normal(size=(n, d))
     offset = np.random.normal(scale=sd, size=(n, ))
     Y = (w.T).dot(X.T) + offset

@@ -16,26 +16,61 @@ def main():
   print("binary logistic regression")
 
   df_train, df_test = h.load_crime()
-  
-  print(df_train.head())
-  print(df_train.iloc[:,1:])
-
-  # response y is the rate of violent crimes reported per capita in a community.
-
-  # 95 features
-  # 1595 training samples
-  # 399 test samples
 
   X_train = df_train.iloc[:, 1:].values
   Y_train = df_train.iloc[:, :1].values
-  
+
   X_test = df_test.iloc[:, 1:].values
   Y_test = df_test.iloc[:, :1].values
 
   input_variables = ["agePct12t29", "pctWSocSec",
                      "pctUrban", "agePct65up", "householdsize"]
 
-  crime_lasso = lasso.Lasso()
+  input_indices = [df_train.columns.get_loc(col_name) for col_name in input_variables]
+
+  lamb_data = []
+  nonzero_data = []
+
+  w_list = []
+  b_list = []
+
+  lamb = h.min_lamb(X_train, Y_train)
+
+  crime_train_lasso = lasso.Lasso(X_train, Y_train)
+  crime_test_lasso = lasso.Lasso(X_test, Y_test)
+
+  w_zero = None
+
+  while True:
+    print("crime lasso lambda value: " + str(lamb))
+
+    if w_zero == None:
+      w_zero, b = crime_train_lasso.coord_desc(lamb)
+      w = w_zero
+    else:
+      w, b = crime_train_lasso.coord_desc(lamb, w=w_zero)
+
+    w_list.append(w)
+    b_list.append(b)
+
+    lamb_data.append(lamb)
+    nz_count = np.count_nonzero()
+    nonzero_data.append(nz_count)
+
+    lamb = lamb / 2
+
+    if lamb < 0.01:
+      break
+
+  data_list = w_list[input_indices]
+  print(data_list.shape)
+
+  h.plot_single("Nonzero Coefficients over Lambda", "A5c.png",
+                "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data, True)
+  
+  h.plot_multiple("Nonzero Coefficients over Lambda", "A5d.png", "Lambda", "Weights", lamb_data, data_list, True)
+
+  # h.plot_single("Nonzero Coefficients over Lambda", "A5c.png", "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data)
 
 if __name__ == "__main__":
   main()

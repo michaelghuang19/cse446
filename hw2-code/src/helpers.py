@@ -81,6 +81,27 @@ def plot_single(plt_title, img_title, x_label, y_label, x_data, y_data, log_scal
   plt.savefig(c.results_path + img_title + c.png_exten)
   plt.close()
 
+
+"""
+Helper function for plotting multiple functions
+"""
+def plot_multiple(plt_title, img_title, x_label, y_label, x_data, data_list, legend_list, log_scale=False):
+  print("plot " + plt_title)
+
+  for data in data_list:
+    plt.plot(x_data, data)
+
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+  plt.legend(legend_list)
+
+  if log_scale:
+    plt.xscale('log')
+
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()
+
 """
 Helper function for getting min lasso lambda where w is all zero
 """
