@@ -81,7 +81,6 @@ def plot_single(plt_title, img_title, x_label, y_label, x_data, y_data, log_scal
   plt.savefig(c.results_path + img_title + c.png_exten)
   plt.close()
 
-
 """
 Helper function for plotting multiple functions
 """
@@ -109,7 +108,6 @@ def min_lamb(X, Y):
   y_diff = Y.T - np.mean(Y)
   return np.max(2 * np.abs(y_diff.dot(X)))
 
-
 """
 Helper function for loading in crime dataset
 """
@@ -118,5 +116,3 @@ def load_crime():
   df_test = pd.read_csv(c.data_path + "crime-test.txt", sep="\t")
 
   return df_train, df_test
-
-

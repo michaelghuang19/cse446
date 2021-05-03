@@ -59,7 +59,7 @@ def main():
 class Lasso:
   def __init__(self, X=None, Y=None):
     self.X = X
-    self.Y = Y
+    self.Y = np.squeeze(Y)
 
   def coord_desc(self, lamb, cutoff=c.cutoff, w=None):
     n, d = self.X.shape
@@ -68,7 +68,7 @@ class Lasso:
     a = 2 * np.sum(np.square(self.X), axis=0)
     c = np.zeros((d, 1))
 
-    if w == None:
+    if w is None:
       w = np.zeros((d, 1))
 
     while True:
@@ -83,7 +83,7 @@ class Lasso:
 
         # only include where j =/= k, so subtract that
         wx_neqk_sum = (w.T).dot(self.X.T) - np.multiply(w[k], self.X[:, k])
-        
+
         c[k] = 2 * self.X[:, k].dot(self.Y - (b + wx_neqk_sum))
 
         if c[k] < -lamb:
@@ -115,7 +115,12 @@ class Lasso:
 
     self.X = X
     self.Y = np.squeeze(Y)
+
+  def calculate_error(self):
     
+
+    
+    return 0
 
 if __name__ == "__main__":
   main()

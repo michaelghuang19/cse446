@@ -44,7 +44,7 @@ def main():
   while True:
     print("crime lasso lambda value: " + str(lamb))
 
-    if w_zero == None:
+    if w_zero is None:
       w_zero, b = crime_train_lasso.coord_desc(lamb)
       w = w_zero
     else:
@@ -54,16 +54,18 @@ def main():
     b_list.append(b)
 
     lamb_data.append(lamb)
-    nz_count = np.count_nonzero()
+    nz_count = np.count_nonzero(w)
     nonzero_data.append(nz_count)
 
     lamb = lamb / 2
 
-    if lamb < 0.01:
+    if lamb < 0.1:
       break
 
-  data_list = w_list[input_indices]
-  print(data_list.shape)
+  data_list = []
+  for index in input_indices:
+    data_list.append(w_list[i][index] for i in range(len(w_list)))
+  print(len(data_list))
 
   h.plot_single("Nonzero Coefficients over Lambda", "A5c.png",
                 "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data, True)
@@ -71,6 +73,15 @@ def main():
   h.plot_multiple("Nonzero Coefficients over Lambda", "A5d.png", "Lambda", "Weights", lamb_data, data_list, True)
 
   # h.plot_single("Nonzero Coefficients over Lambda", "A5c.png", "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data)
+
+  lamb = 30
+  if lamb == 30:
+    print("crime lasso lambda value: " + str(lamb))
+
+    w30_train, b30_train = crime_train_lasso.coord_desc(lamb)
+    w30_test, b30_test = crime_train_lasso.coord_desc(lamb)
+
+    # find the max index locations
 
 if __name__ == "__main__":
   main()
