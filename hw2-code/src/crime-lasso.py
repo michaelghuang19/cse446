@@ -65,8 +65,8 @@ def main():
 
   data_list = []
   for index in input_indices:
-    data_list.append([w_list[i][index] for i in range(len(w_list))])
-  
+    data_list.append([w_list[i][index - 1] for i in range(len(w_list))])
+
   # print(data_list)
 
   h.plot_single("Nonzero Coefficients over Lambda", "A5c.png",
