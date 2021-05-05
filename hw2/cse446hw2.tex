@@ -46,6 +46,11 @@
 
 \thispagestyle{firstpageheader}
 
+\section*{Collaborators}
+{\Large 
+Jimmy Guo, Neil Kagalwala, Andrew Wang
+}
+
 \section*{A.0}
 {\Large 
 
@@ -59,35 +64,37 @@ If we removed this feature that had large positive weight and refit the model, t
 
 Compared to L2 norm penalty, explain why a L1 norm penalty is more likely to result in sparsity (a larger number of 0s) in the weight vector. \\
 
-An L1 norm penalty is more likely to result in sparsity in the weight vector since it will linearly decrease towards 0 with each step, which means that it will actually reach 0, which is not the case with the quadratic steps towards 0. L1 is therefore more likely to zero out coefficients.
+% An L1 norm penalty is more likely to result in sparsity in the weight vector since it will linearly decrease towards 0 with each step, which means that it will actually reach 0, which is not the case with the quadratic steps towards 0. L1 is therefore more likely to zero out coefficients.
+The L1 optimum is more shaped like a diamond with points on the axes rather than the L2 optimum's smooth circle shape. The circle shape will only ever intersect with the isocountours of the LS objective only when its minimum point is exactly on the axis, while the pointy diamond shape are much more likely to intersect with the isocontours, at points other than when the minimum point is on the axis.
 
 \subsection*{c.}
 
 In at most one sentence each, state one possible upside and one possible downside of using the following regularizer:$\left(\sum_{i}\left|w_{i}\right|^{0.5}\right)$ \\
 
-One possible upside is that it is that features will tend to be zeroed out less often, which maintains these features' input in the model. \\ 
-One possible downside is that weights will tend to be larger for features that are less relevant, since we don't get as large gradients and changes when we perform regularization, especially when we near zero.
-% all the weights will tend to be less sparse.
+% One possible upside is that it is that features will tend to be zeroed out less often, which maintains these features' input in the model. \\ 
+% One possible downside is that weights will tend to be larger for features that are less relevant, since we don't get as large gradients and changes when we perform regularization, especially when we near zero.
+One possible upside is that it is that features will tend to be zeroed out more often, encouraging sparsity in our model that will make it easier to work with. \\ 
+One possible downside is with fewer nonzero weights, the model might not be as accurate since it will be simpler with less relevant parameters.
 
 \subsection*{d.}
 
 True or False: If the step-size for gradient descent is too large, it may not converge. \\
 
-True. If the step-size for gradient descent is too large, then it may diverge. This is because with a step size that is too large, then the values may oscillate around an optimal point rather than generally converge upon it, as it would with more common algorithms.
+True. If the step-size for gradient descent is too large, then it may diverge. This is because with a step size that is too large, then the values may overshoot and oscillate around an optimal point rather than generally converge upon it, as it normally would.
 
 \subsection*{e.}
 
 In your own words, describe why stochastic gradient descent (SGD) works, even though only a small portion of the data is considered at each update. \\
 
-Stochastic gradient descent iteratively chooses random samples from training data to update parameters. By randomly approximating the distribution dataset around the chosen random sample, we can effectively guess the gradients and update the weights based on the attributes of the distribution each time rather than having to run through all the data.
+% Stochastic gradient descent iteratively chooses random samples from training data to update parameters. By randomly approximating the distribution dataset around the chosen random sample, we can effectively guess the gradients and update the weights based on the attributes of the distribution each time rather than having to run through all the data.
+Stochastic gradient descent works since the gradient calculated from SGD is an unbiased estimator for the gradient from GD, which means that over time, the SGD will also converge towards the minimum.
 
 \subsection*{f.}
 
 In at most one sentence each, state one possible advantage of SGD over GD (gradient descent), and one possible disadvantage of SGD relative to GD. \\
 
-SGD might be better than GD since you don't need to run through all samples in a set of training data, and save time overall. \\ 
-% often converges much faster
-SGD might be worse than GD since the error might not be as well minimized.
+An advantage of SGD over GD since you don't need to run through all samples in a set of training data, and save time overall. \\ 
+A disadvatange of SGD relative to GD might be that the optimal point might not be found as quickly as with GD, and therefore require more iterations to get to the same minimum.
 
 }
 
@@ -524,9 +531,6 @@ if __name__ == "__main__":
 
 \subsection*{f.}
 
-Sometimes a larger value of $\lambda$ performs nearly as well as a smaller value, but a larger value will select fewer variables and perhaps be more interpretable.  Inspect the weights $\hat{w}$ for $\lambda = 30$.  Which feature
-had the largest (most positive) Lasso coefficient? What about the most negative? Discuss briefly. \\
-
 \begin{verbatim}
 nonzero training weights
 ---------------------  ------------
@@ -573,8 +577,8 @@ PctIlleg : 0.05500293686818547
 
 \end{verbatim}
 
-The most positive coefficient was found with the feature PctIlleg, which represents the percentage of kids born to never married parents. \\
-The most negative coefficient was found with the feature PctFam2Par, which represents the percentage of families with 2 parents.
+The most positive coefficient was found with the feature PctIlleg, which represents the percentage of kids born to never married parents. This an interesting finding since there is the stereotype that single parents, usually being the sole breadwinner in their family, aren't as present around children and can lead to delinquency over time. However, this might not necessarily be true and there could be other factors with the parents themselves that create this kind of positive relationship with violent crime. \\
+The most negative coefficient was found with the feature PctFam2Par, which represents the percentage of families with 2 parents. This tells us that there was a relatively strong negative link between more families with 2 parents and level of crime, which means that there was a tendency for areas with more 2-parent families to have less crime. I feel like this might be categorized as causation, but I think it could be in the opposite way; that is, 2-parent families might tend to live in areas with less crime rather than the presence of 2-parent families leading to less crime. 
 
 \subsection*{g.}
 
