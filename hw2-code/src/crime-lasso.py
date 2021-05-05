@@ -62,10 +62,10 @@ def main():
   for index in input_indices:
     data_list.append([w_list[i][index - 1] for i in range(len(w_list))])
 
-  h.plot_single("Nonzero Coefficients over Lambda", "A5c.png",
+  h.plot_single("Nonzero Coefficients over Lambda", "a5_c",
                 "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data, True)
   
-  h.plot_multiple("Nonzero Coefficients over Lambda", "A5d.png", "Lambda", "Weights", lamb_data, data_list, c.input_variables, True)
+  h.plot_multiple("Nonzero Coefficients over Lambda", "a5_d", "Lambda", "Weights", lamb_data, data_list, c.input_variables, True)
 
   train_sqerror_list = []
   test_sqerror_list = []
@@ -76,7 +76,7 @@ def main():
   train_sqerror_list = crime_train_lasso.get_sqerror(w_list, b_list)
   test_sqerror_list = crime_test_lasso.get_sqerror(w_list, b_list)
 
-  h.plot_function("Squared Error over Lambda", "A5e.png",
+  h.plot_function("Squared Error over Lambda", "a5_e",
                   "Lambda", "Squared Error", train_sqerror_list, test_sqerror_list, x_data=lamb_data, log_scale=True)
 
   lamb = 30

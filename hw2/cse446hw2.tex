@@ -206,11 +206,21 @@ The function is convex, since any connections between points would be constructe
 With your synthetic data, solve multiple Lasso problems on a regularization path, starting at $\lambda_{max}$ where no features are selected (see Equation \eqref{eqn:lasso-lambdamax}) and decreasing $\lambda$ by a constant ratio (e.g., 2) until nearly all the features are chosen. 
     In plot 1, plot the number of non-zeros as a function of $\lambda$ on the x-axis (Tip: use \verb|plt.xscale('log')|).
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a4_a.png}
+\end{figure}
+
 \subsection*{b.}
 
 For each value of $\lambda$ tried, record values for false discovery rate (FDR) (number of incorrect nonzeros in $\widehat{w}$/total number of nonzeros in $\widehat{w}$) and true positive rate (TPR)
     (number of correct nonzeros in $\widehat{w}$/k). Note: for each $j$, $\widehat{w}_j$ is an incorrect nonzero if and only if $\widehat{w}_j \neq 0$ while $w_j = 0$.
 In plot 2, plot these values with the x-axis as FDR, and the y-axis as TPR.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a4_b.png}
+\end{figure}
 
 \subsection*{c.}
 
@@ -242,13 +252,28 @@ Before you train a model, describe 3 features in the dataset which might, if fou
 
 Plot the number of nonzero weights of each solution as a function of $\lambda$.
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a5_c.png}
+\end{figure}
+
 \subsection*{d.}
 
 Plot the regularization paths (in one plot) for the coefficients for input variables \texttt{agePct12t29}, \texttt{pctWSocSec}, \texttt{pctUrban}, \texttt{agePct65up}, and \texttt{householdsize}.
 
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a5_d.png}
+\end{figure}
+
 \subsection*{e.}
 
 On one plot, plot the squared error on the training and test data as a function of $\lambda$.
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a5_e.png}
+\end{figure}
 
 \subsection*{f.}
 
@@ -318,13 +343,43 @@ Implement gradient descent with an initial iterate of all zeros. Try several val
   \item For both the training set and the test, classify the points according to the rule $\text{sign}(b + x_i^T w)$ and plot the misclassification error as a function of the iteration number (and show both curves on the same plot)
 \end{enumerate}
 
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a6_bi.png}
+\end{figure}
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a6_bii.png}
+\end{figure}
+
 \subsection*{c.}
 
 Repeat (b) using stochastic gradient descent with a batch size of 1. Note, the expected gradient with respect to the random selection should be equal to the gradient found in part (a). Show both plots described in (b) when using batch size 1. Take careful note of how to scale the regularizer.
 
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a6_ci.png}
+\end{figure}
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a6_cii.png}
+\end{figure}
+
 \subsection*{d.}
 
 Repeat (b) using stochastic gradient descent with batch size of 100. That is, instead of approximating the gradient with a single example, use 100. Note, the expected gradient with respect to the random selection should be equal to the gradient found in part (a).
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a6_di.png}
+\end{figure}
+
+\begin{figure}[hb]
+  \centering
+  \includegraphics[width=150mm]{../hw2-code/results/a6_dii.png}
+\end{figure}
 
 }
 

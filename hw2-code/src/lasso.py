@@ -48,10 +48,10 @@ def main():
     fdr_data.append(np.count_nonzero(w[k:]) / nz_count)
     tpr_data.append(np.count_nonzero(w[:k]) / k)
 
-  h.plot_single("Nonzero Coefficients over Lambda", "A4a.png",
+  h.plot_single("Nonzero Coefficients over Lambda", "a4_a",
                 "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data, True)
 
-  h.plot_single("TPR over FDR", "A4b.png",
+  h.plot_single("TPR over FDR", "a4_b",
                 "FDR", "TPR", fdr_data, tpr_data)
 
 class Lasso:
