@@ -1,5 +1,5 @@
-# A6
-# Binary logistic regression implementation
+# binary-logistic.py
+# A6: Binary logistic regression implementation
 
 import matplotlib.pyplot as plt
 import numpy as np

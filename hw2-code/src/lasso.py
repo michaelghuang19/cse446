@@ -1,5 +1,5 @@
-# A4
-# Lasso implementation
+# lasso.py
+# A4: Lasso implementation
 
 import matplotlib.pyplot as plt
 import numpy as np

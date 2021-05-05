@@ -192,6 +192,147 @@ The function is convex, since any connections between points would be constructe
 \section*{A.4}
 {\Large 
 
+\begin{verbatim}
+# lasso.py
+# A4: Lasso implementation
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import constants as c
+import helpers as h
+
+def main():
+  print("binary logistic regression")
+
+  lamb_data = []
+  nonzero_data = []
+
+  fdr_data = []
+  tpr_data = []
+
+  lasso = Lasso()
+
+  lasso.generate_synthetic_data()
+  lamb = h.min_lamb(lasso.X, lasso.Y)
+
+  n, d = lasso.X.shape
+  k = 100
+
+  w = np.zeros((d, 1))
+
+  # abritrarily stop when we hit 995/1000
+  while np.count_nonzero(w) < d - 5:
+    # print("lasso lambda value: " + str(lamb))
+
+    # perform coordinate descent 
+    w, _ = lasso.coord_desc(lamb)
+
+    # append lambda/nonzero data
+    lamb_data.append(lamb)
+    nz_count = np.count_nonzero(w)
+    nonzero_data.append(nz_count)
+
+    # update lambda
+    lamb = lamb / 2
+
+    # append fdr/tpr data
+    if k == 0 or nz_count == 0:
+      continue
+
+    fdr_data.append(np.count_nonzero(w[k:]) / nz_count)
+    tpr_data.append(np.count_nonzero(w[:k]) / k)
+
+  h.plot_single("Nonzero Coefficients over Lambda", "a4_a",
+                "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data, True)
+
+  h.plot_single("TPR over FDR", "a4_b",
+                "FDR", "TPR", fdr_data, tpr_data)
+
+class Lasso:
+  def __init__(self, X=None, Y=None):
+    self.X = X
+    self.Y = np.squeeze(Y)
+
+  def coord_desc(self, lamb, cutoff=c.cutoff, w=None):
+    assert (self.X is not None), "We need to have some X or else our dimensions fail"
+
+    n, d = self.X.shape
+
+    b = 0
+    a = 2 * np.sum(np.square(self.X), axis=0)
+    c = np.zeros((d, 1))
+
+    if w is None:
+      w = np.zeros((d, 1))
+
+    while True:
+      w_diff = 0
+
+      w = np.squeeze(w)
+      wx_sum = (w.T).dot(self.X.T)
+      b = (1 / n) * np.sum(self.Y - wx_sum)
+      
+      for k in range(d):
+        old_w = w[k]
+
+        # only include where j =/= k, so subtract that
+        wx_neqk_sum = (w.T).dot(self.X.T) - np.multiply(w[k], self.X[:, k])
+
+        c[k] = 2 * self.X[:, k].dot(self.Y - (b + wx_neqk_sum))
+
+        if c[k] < -lamb:
+          w[k] = (c[k] + lamb) / a[k]
+        elif c[k] > lamb:
+          w[k] = (c[k] - lamb) / a[k]
+        else: 
+          w[k] = 0
+
+        if np.abs(w[k] - old_w) > w_diff:
+          w_diff = np.abs(w[k] - old_w)
+
+      if w_diff < cutoff:
+        break
+    
+    return w, b
+
+  def generate_synthetic_data(self, n=500, d=1000, k=100, sd=1):
+    print("generating synthetic data")
+
+    w = list(range(1, k + 1))
+    w.extend(np.zeros(d - len(w)))
+    w = np.expand_dims(w, axis=1)
+    w = w / k
+    
+    X = np.random.normal(size=(n, d))
+    offset = np.random.normal(scale=sd, size=(n, ))
+    Y = (w.T).dot(X.T) + offset
+
+    self.X = X
+    self.Y = np.squeeze(Y)
+
+  def get_sqerror(self, w, b):
+    assert (self.X is not None), "We need to have some X or else our dimensions fail"
+
+    n, d = self.X.shape
+
+    # print(w.shape)
+    # print(self.X.shape)
+
+    # print(((w.T).dot(self.X.T)).shape)
+
+    Y_pred = (w.T).dot(self.X.T) + np.expand_dims(b, axis = 1)
+    
+    # print(Y_pred.shape)
+    # print((np.square(Y_pred - self.Y)).shape)
+
+    return (1 / n) * np.sum(np.square(Y_pred - self.Y), axis = 1)
+
+if __name__ == "__main__":
+  main()
+
+\end{verbatim}
+
 \subsection*{a.}
 
 \begin{figure}[h]
@@ -218,6 +359,131 @@ In general, having larger $\lambda$ means that we will have more zero-value weig
 
 \section*{A.5}
 {\Large 
+
+\begin{verbatim}
+# crime-lasso.py
+# A5: Application of Lasso to crime data
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from tabulate import tabulate
+
+import constants as c
+import helpers as h
+import lasso
+
+def main():
+  print("binary logistic regression")
+
+  df_train, df_test = h.load_crime()
+
+  X_train = df_train.iloc[:, 1:].values
+  Y_train = df_train.iloc[:, :1].values
+
+  X_test = df_test.iloc[:, 1:].values
+  Y_test = df_test.iloc[:, :1].values
+
+  input_indices = [df_train.columns.get_loc(col_name) for col_name in c.input_variables]
+
+  lamb_data = []
+  nonzero_data = []
+
+  w_list = []
+  b_list = []
+
+  lamb = h.min_lamb(X_train, Y_train)
+
+  crime_train_lasso = lasso.Lasso(X_train, Y_train)
+  crime_test_lasso = lasso.Lasso(X_test, Y_test)
+
+  w_zero = None
+
+  while True:
+    print("crime lasso lambda value: " + str(lamb))
+
+    if w_zero is None:
+      w_zero, b = crime_train_lasso.coord_desc(lamb)
+      w = w_zero
+    else:
+      w, b = crime_train_lasso.coord_desc(lamb, w=w_zero)
+
+    w_list.append(np.copy(w))
+    b_list.append(b)
+
+    lamb_data.append(lamb)
+    nz_count = np.count_nonzero(w)
+    nonzero_data.append(nz_count)
+
+    if lamb < c.cutoff:
+      break
+
+    lamb = lamb / 2
+
+  data_list = []
+  for index in input_indices:
+    data_list.append([w_list[i][index - 1] for i in range(len(w_list))])
+
+  h.plot_single("Nonzero Coefficients over Lambda", "a5_c",
+                "Lambda", "Nonzero Coefficients", lamb_data, nonzero_data, True)
+  
+  h.plot_multiple("Nonzero Coefficients over Lambda", "a5_d", "Lambda", "Weights", lamb_data, data_list, c.input_variables, True)
+
+  train_sqerror_list = []
+  test_sqerror_list = []
+
+  w_list = np.array(w_list).T
+  b_list = np.array(b_list)
+
+  train_sqerror_list = crime_train_lasso.get_sqerror(w_list, b_list)
+  test_sqerror_list = crime_test_lasso.get_sqerror(w_list, b_list)
+
+  h.plot_function("Squared Error over Lambda", "a5_e",
+                  "Lambda", "Squared Error", train_sqerror_list, test_sqerror_list, x_data=lamb_data, log_scale=True)
+
+  lamb = 30
+  if lamb == 30:
+    # print("crime lasso lambda value: " + str(lamb))
+
+    w30_train, b30_train = crime_train_lasso.coord_desc(lamb)
+    w30_test, b30_test = crime_test_lasso.coord_desc(lamb)
+
+    all_variables = df_train.columns[1:]
+
+    nz_train = {all_variables[i]: w30_train[i]
+                for i in range(len(w30_train)) if w30_train[i] != 0}
+    nz_test = {all_variables[i]: w30_test[i]
+               for i in range(len(w30_test)) if w30_test[i] != 0}
+
+    output = open(c.results_path + "a5e" + c.txt_exten, "w")
+
+    output.write("nonzero training weights\n")
+    output.write(str(tabulate(nz_train.items())))
+    
+    output.write("\n\nnonzero test weights\n")
+    output.write(str(tabulate(nz_test.items())))
+
+    # find the min/max entries
+    output.write("\n\ntraining min/max\n")
+    min_train = min(nz_train, key=nz_train.get)
+    output.write(min_train + " : " + str(nz_train.get(min_train)) + "\n")
+    max_train = max(nz_train, key=nz_train.get)
+    output.write(max_train + " : " + str(nz_train.get(max_train)) + "\n")
+
+    output.write("\ntest min/max\n")
+    min_test = min(nz_test, key=nz_test.get)
+    output.write(min_test + " : " + str(nz_test.get(min_test)) + "\n")
+    max_test = max(nz_test, key=nz_test.get)
+    output.write(max_test + " : " + str(nz_test.get(max_test)) + "\n")
+
+    output.close()
+
+
+if __name__ == "__main__":
+  main()
+
+\end{verbatim}
 
 \subsection*{a.}
 
@@ -382,6 +648,379 @@ $ = \frac{1}{n} \sum_{i=1}^n -y_i \mu_i(w, b) \frac{1 - \mu_i(w, b)}{\mu_i(w, b)
   \centering
   \includegraphics[width=120mm]{../hw2-code/results/a6_dii.png}
 \end{figure}
+
+\newpage
+
+\begin{verbatim}
+# binary-logistic.py
+# A6: Binary logistic regression implementation
+
+import matplotlib.pyplot as plt
+import numpy as np
+import random
+
+import constants as c
+import helpers as h
+
+from scipy import linalg
+
+# Run only what you need
+run_b = True
+run_c = True
+run_d = True
+
+def main():
+  print("binary logistic regression")
+
+  # Y-values are in [-1, +1] format
+  X_train, labels_train, Y_train, X_test, labels_test, Y_test = h.load_mnist()
+
+  assert (len(X_train) > 0 and len(X_test) > 0)
+  
+  # Gradient Descent
+
+  if run_b:
+    gd = GradientDescent(c.reg_lambda, c.mnist_step_size)
+    train_j, test_j, train_error, test_error = gd.grad_desc(X_train, Y_train, X_test, Y_test, c.cutoff)
+
+    h.plot_function("Loss over Time", "a6_bi", "Iterations", "Loss", train_j, test_j)
+    h.plot_function("Error over Time", "a6_bii", "Iterations", "Error", train_error, test_error)
+
+  # Stochastic Gradient Descent
+  
+  if run_c:
+    sgd1 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 1)
+    single_train_j, single_test_j, single_train_error, single_test_error = sgd1.stoch_grad_desc(
+        X_train, Y_train, X_test, Y_test, c.cutoff)
+
+    h.plot_function("Loss over Time", "a6_ci", "Iterations",
+                    "Loss", single_train_j, single_test_j)
+    h.plot_function("Error over Time", "a6_cii", "Iterations",
+                    "Error", single_train_error, single_test_error)
+    
+
+  if run_d:
+    sgd100 = StochasticGradientDescent(c.reg_lambda, c.mnist_step_size, 100)
+    batch_train_j, batch_test_j, batch_train_error, batch_test_error = sgd100.stoch_grad_desc(
+        X_train, Y_train, X_test, Y_test, c.cutoff)
+
+    h.plot_function("Loss over Time", "a6_di",
+                    "Iterations", "Loss", batch_train_j, batch_test_j)
+    h.plot_function("Error over Time", "a6_dii", "Iterations",
+                    "Error", batch_train_error, batch_test_error)
+
+class GradientDescent:
+  def __init__(self, reg_lambda, step_size):
+    self.lamb = reg_lambda
+    self.step = step_size
+    self.w = None
+    self.b = 0
+    self.d = 0
+
+  def grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff=c.cutoff):
+    print("gradient descent")
+    
+    # 12223, 784
+    _, self.d = X_train.shape
+    self.w = np.zeros((self.d, 1))
+
+    train_j_data = []
+    test_j_data = []
+    train_class_data = []
+    test_class_data = []
+
+    # emulate do-while
+    while True:
+
+      train_j_func, grad_w, grad_b = self.get_j(X_train, Y_train)
+      test_j_func, _, _ = self.get_j(X_test, Y_test)
+
+      self.w = self.w - (self.step * grad_w)
+      self.b = self.b - (self.step * grad_b)
+
+      train_j_data.append(train_j_func[0][0])
+      test_j_data.append(test_j_func[0][0])
+      train_class_data.append(self.get_error(X_train, Y_train))
+      test_class_data.append(self.get_error(X_test, Y_test))
+
+      if max(np.max(np.abs(grad_w)), grad_b) < cutoff:
+        break
+
+    return train_j_data, test_j_data, train_class_data, test_class_data
+
+  def get_j(self, X, Y):
+    n, d = X.shape
+    Y = np.expand_dims(Y, axis=1)
+
+    offset = self.b + (self.w.T).dot(X.T)
+    exponent = np.multiply(-Y, offset.T)
+    mu = 1 / (1 + np.exp(exponent))
+
+    reg = self.lamb * (self.w.T).dot(self.w)
+    j_func = (1 / n) * np.sum(np.log(1 / mu)) + reg
+
+    coef = np.multiply(X, -Y)
+    grad_reg = 2 * self.lamb * self.w
+    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
+    grad_w = grad_w.sum(axis = 1)
+    grad_w = np.expand_dims(grad_w, axis=1)
+
+    grad_b = (1 / n) * (-Y.T).dot(1 - mu)
+
+    return j_func, grad_w, grad_b[0][0]
+
+  def get_error(self, X, Y):
+    n, d = X.shape
+
+    sign = np.sign(self.b + (self.w.T).dot(X.T))
+    sign = sign[0]
+
+    match_count = np.sum([sign[idx] == val for idx, val in enumerate(Y.T)])
+
+    return 1 - (match_count / n)
+
+class StochasticGradientDescent:
+  def __init__(self, reg_lambda, step_size, batch_size):
+    self.lamb = reg_lambda
+    self.step = step_size
+    self.batch = batch_size
+    self.w = None
+    self.b = 0
+    self.d = 0
+
+  # since it's random, maybe try capping an iter_count
+  def stoch_grad_desc(self, X_train, Y_train, X_test, Y_test, cutoff=c.cutoff, iter_count=c.stoch_iter_count):
+    print("stochastic gradient descent")
+
+    n, self.d = X_train.shape
+    self.w = np.zeros((self.d, 1))
+
+    train_j_data = []
+    test_j_data = []
+    train_class_data = []
+    test_class_data = []
+
+    # emulate do-while
+    for i in range(iter_count):
+      indices = random.sample(range(n), self.batch)
+      
+      X_batch = X_train[indices]
+      Y_batch = Y_train[indices]
+
+      _, grad_w, grad_b = self.get_j(X_batch, Y_batch)
+      train_j_func, _, _ = self.get_j(X_train, Y_train)
+      test_j_func, _, _ = self.get_j(X_test, Y_test)
+
+      self.w = self.w - (self.step * grad_w)
+      self.b = self.b - (self.step * grad_b)
+
+      train_j_data.append(train_j_func[0][0])
+      test_j_data.append(test_j_func[0][0])
+      train_class_data.append(self.get_error(X_train, Y_train))
+      test_class_data.append(self.get_error(X_test, Y_test))
+
+      if max(np.max(np.abs(grad_w)), grad_b) < cutoff:
+        break
+
+    return train_j_data, test_j_data, train_class_data, test_class_data
+
+  def get_j(self, X, Y):
+    n, d = X.shape
+    Y = np.expand_dims(Y, axis=1)
+
+    offset = self.b + (self.w.T).dot(X.T)
+    exponent = np.multiply(-Y, offset.T)
+    mu = 1 / (1 + np.exp(exponent))
+
+    reg = self.lamb * (self.w.T).dot(self.w)
+    j_func = (1 / n) * np.sum(np.log(1 / mu)) + reg
+
+    coef = np.multiply(X, -Y)
+    grad_reg = 2 * self.lamb * self.w
+    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
+    grad_w = grad_w.sum(axis = 1)
+    grad_w = np.expand_dims(grad_w, axis=1)
+
+    grad_b = (1 / n) * (-Y.T).dot(1 - mu)
+
+    return j_func, grad_w, grad_b[0][0]
+
+  def get_error(self, X, Y):
+    n, d = X.shape
+
+    sign = np.sign(self.b + (self.w.T).dot(X.T))
+    sign = sign[0]
+
+    match_count = np.sum([sign[idx] == val for idx, val in enumerate(Y.T)])
+
+    return 1 - (match_count / n)
+
+if __name__ == "__main__":
+  main()
+
+\end{verbatim}
+
+\begin{verbatim}
+# helpers.py
+# Applicable helpers for HW2
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+import constants as c
+
+from mnist import MNIST
+from scipy import linalg
+
+"""
+Helper function for loading in MNIST data set
+"""
+def load_mnist():
+  # load data
+  mndata = MNIST(c.data_path)
+
+  X_train, labels_train = map(np.array, mndata.load_training())
+  X_test, labels_test = map(np.array, mndata.load_testing())
+  X_train = X_train/255.0
+  X_test = X_test/255.0
+
+  # count number of 2s and 7s
+  train_mask = np.logical_or(labels_train == 2, labels_train == 7)
+  test_mask = np.logical_or(labels_test == 2, labels_test == 7)
+
+  X_train = X_train[train_mask]
+  X_test = X_test[test_mask]
+
+  labels_train = labels_train[train_mask]
+  labels_test = labels_test[test_mask]
+
+  train_count = sum(labels_train == 2) + sum(labels_train == 7)
+  test_count = sum(labels_test == 2) + sum(labels_test == 7)
+
+  # convert labels to +/- 1
+  one_train = np.zeros(train_count)
+  one_test = np.zeros(test_count)
+
+  for idx, train_val in enumerate(labels_train):
+    one_train[idx] = c.digit_to_one[train_val]
+
+  for idx, test_val in enumerate(labels_test):
+    one_test[idx] = c.digit_to_one[test_val]
+
+  return X_train, labels_train, one_train, X_test, labels_test, one_test
+
+"""
+Helper function for plotting function with training/testing distinction
+"""
+def plot_function(plt_title, img_title, x_label, y_label, train_data, test_data, x_data=None, log_scale=False):
+  print("plot " + plt_title)
+
+  if x_data is None:
+    plt.plot(train_data)
+    plt.plot(test_data)
+  else:
+    plt.plot(x_data, train_data)
+    plt.plot(x_data, test_data)
+
+  if log_scale:
+    plt.xscale('log')
+
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+  plt.legend(["Training", "Testing"])
+
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()
+
+"""
+Helper function for plotting single function
+"""
+def plot_single(plt_title, img_title, x_label, y_label, x_data, y_data, log_scale=False):
+  print("plot " + plt_title)
+
+  plt.plot(x_data, y_data)
+
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+
+  if log_scale:
+    plt.xscale('log')
+
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()
+
+"""
+Helper function for plotting multiple functions
+"""
+def plot_multiple(plt_title, img_title, x_label, y_label, x_data, data_list, legend_list, log_scale=False):
+  print("plot " + plt_title)
+
+  for data in data_list:
+    plt.plot(x_data, data)
+
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+  plt.legend(legend_list)
+
+  if log_scale:
+    plt.xscale('log')
+
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()
+
+"""
+Helper function for getting min lasso lambda where w is all zero
+"""
+def min_lamb(X, Y):
+  y_diff = Y.T - np.mean(Y)
+  return np.max(2 * np.abs(y_diff.dot(X)))
+
+"""
+Helper function for loading in crime dataset
+"""
+def load_crime():
+  df_train = pd.read_csv(c.data_path + "crime-train.txt", sep="\t")
+  df_test = pd.read_csv(c.data_path + "crime-test.txt", sep="\t")
+
+  return df_train, df_test
+
+\end{verbatim}
+
+\newpage
+
+\begin{verbatim}
+# constants.py
+# Applicable constants for HW2
+
+import numpy as np
+import os
+
+home_dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+data_path = home_dir_path + '/data/'
+results_path = home_dir_path + '/results/'
+
+png_exten = '.png'
+txt_exten = '.txt'
+
+reg_lambda = 1E-1
+
+input_variables = ["agePct12t29", "pctWSocSec",
+                   "pctUrban", "agePct65up", "householdsize"]
+
+one_to_digit = { -1 : 2, +1 : 7}
+digit_to_one = { 2 : -1, 7 : +1}
+
+mnist_step_size = 1E-1
+cutoff = 1E-2
+
+stoch_iter_count = 150
+
+\end{verbatim}
 
 }
 

@@ -1,3 +1,4 @@
+# constants.py
 # Applicable constants for HW2
 
 import numpy as np

@@ -1,5 +1,5 @@
-# A5
-# Application of Lasso to crime data
+# crime-lasso.py
+# A5: Application of Lasso to crime data
 
 import matplotlib.pyplot as plt
 import numpy as np
