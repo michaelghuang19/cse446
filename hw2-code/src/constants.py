@@ -20,7 +20,7 @@ input_variables = ["agePct12t29", "pctWSocSec",
 one_to_digit = { -1 : 2, +1 : 7}
 digit_to_one = { 2 : -1, 7 : +1}
 
-mnist_step_size = 1E-1
+mnist_step_size = 1E-2
 cutoff = 1E-2
 
 stoch_iter_count = 150
