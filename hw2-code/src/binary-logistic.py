@@ -11,9 +11,9 @@ import helpers as h
 from scipy import linalg
 
 # Run only what you need
-run_b = True
+run_b = False
 run_c = True
-run_d = True
+run_d = False
 
 def main():
   print("binary logistic regression")
@@ -107,9 +107,9 @@ class GradientDescent:
 
     coef = np.multiply(X, -Y)
     grad_reg = 2 * self.lamb * self.w
-    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
+    grad_w = (1 / n) * (coef.T).dot(1 - mu)
     grad_w = grad_w.sum(axis = 1)
-    grad_w = np.expand_dims(grad_w, axis=1)
+    grad_w = np.expand_dims(grad_w, axis=1) + grad_reg
 
     grad_b = (1 / n) * (-Y.T).dot(1 - mu)
 
@@ -183,9 +183,9 @@ class StochasticGradientDescent:
 
     coef = np.multiply(X, -Y)
     grad_reg = 2 * self.lamb * self.w
-    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
-    grad_w = grad_w.sum(axis = 1)
-    grad_w = np.expand_dims(grad_w, axis=1)
+    grad_w = (1 / n) * (coef.T).dot(1 - mu)
+    grad_w = grad_w.sum(axis=1)
+    grad_w = np.expand_dims(grad_w, axis=1) + grad_reg
 
     grad_b = (1 / n) * (-Y.T).dot(1 - mu)
 
