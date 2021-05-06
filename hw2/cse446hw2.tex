@@ -56,20 +56,14 @@ Jimmy Guo, Neil Kagalwala, Andrew Wang
 
 \subsection*{a.}
 
-Suppose that your estimated model for predicting house prices has a large positive weight on the feature \texttt{number of bathrooms}. If we remove this feature and refit the model, will the new model have a strictly higher error than before? Why? \\
-
 If we removed this feature that had large positive weight and refit the model, then the new model wil not necessarily have strictly higher error than before. It could have the same or even better prediction in a case such as if there is another better predictive feature that would increase in weight once we remove the feature with a large positive weight.
 
 \subsection*{b.}
-
-Compared to L2 norm penalty, explain why a L1 norm penalty is more likely to result in sparsity (a larger number of 0s) in the weight vector. \\
 
 % An L1 norm penalty is more likely to result in sparsity in the weight vector since it will linearly decrease towards 0 with each step, which means that it will actually reach 0, which is not the case with the quadratic steps towards 0. L1 is therefore more likely to zero out coefficients.
 The L1 optimum is more shaped like a diamond with points on the axes rather than the L2 optimum's smooth circle shape. The circle shape will only ever intersect with the isocountours of the LS objective only when its minimum point is exactly on the axis, while the pointy diamond shape are much more likely to intersect with the isocontours, at points other than when the minimum point is on the axis.
 
 \subsection*{c.}
-
-In at most one sentence each, state one possible upside and one possible downside of using the following regularizer:$\left(\sum_{i}\left|w_{i}\right|^{0.5}\right)$ \\
 
 % One possible upside is that it is that features will tend to be zeroed out less often, which maintains these features' input in the model. \\ 
 % One possible downside is that weights will tend to be larger for features that are less relevant, since we don't get as large gradients and changes when we perform regularization, especially when we near zero.
@@ -78,23 +72,17 @@ One possible downside is with fewer nonzero weights, the model might not be as a
 
 \subsection*{d.}
 
-True or False: If the step-size for gradient descent is too large, it may not converge. \\
-
 True. If the step-size for gradient descent is too large, then it may diverge. This is because with a step size that is too large, then the values may overshoot and oscillate around an optimal point rather than generally converge upon it, as it normally would.
 
 \subsection*{e.}
-
-In your own words, describe why stochastic gradient descent (SGD) works, even though only a small portion of the data is considered at each update. \\
 
 % Stochastic gradient descent iteratively chooses random samples from training data to update parameters. By randomly approximating the distribution dataset around the chosen random sample, we can effectively guess the gradients and update the weights based on the attributes of the distribution each time rather than having to run through all the data.
 Stochastic gradient descent works since the gradient calculated from SGD is an unbiased estimator for the gradient from GD, which means that over time, the SGD will also converge towards the minimum.
 
 \subsection*{f.}
 
-In at most one sentence each, state one possible advantage of SGD over GD (gradient descent), and one possible disadvantage of SGD relative to GD. \\
-
-An advantage of SGD over GD since you don't need to run through all samples in a set of training data, and save time overall. \\ 
-A disadvatange of SGD relative to GD might be that the optimal point might not be found as quickly as with GD, and therefore require more iterations to get to the same minimum.
+An advantage of SGD over GD since you don't need to run through all samples in a set of training data, and save compute time overall. \\ 
+A disadvantange of SGD relative to GD might be that the optimal point might not be found as quickly as with GD, and therefore require more iterations to get to the same minimum.
 
 }
 
@@ -156,6 +144,8 @@ $10 + 16 + 8\sqrt{10} \leq 32$ \\
 $26 + 8\sqrt{10} \leq 32$ \\ 
 $\sim 51.30 \leq 32$ \\ 
 which is false and shows that the triangle inequality does not hold, which tells us that $g(x)$ is indeed not a norm.
+
+\newpage
 
 }
 
@@ -767,9 +757,9 @@ class GradientDescent:
 
     coef = np.multiply(X, -Y)
     grad_reg = 2 * self.lamb * self.w
-    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
+    grad_w = (1 / n) * (coef.T).dot(1 - mu)
     grad_w = grad_w.sum(axis = 1)
-    grad_w = np.expand_dims(grad_w, axis=1)
+    grad_w = np.expand_dims(grad_w, axis=1) + grad_reg
 
     grad_b = (1 / n) * (-Y.T).dot(1 - mu)
 
@@ -843,9 +833,9 @@ class StochasticGradientDescent:
 
     coef = np.multiply(X, -Y)
     grad_reg = 2 * self.lamb * self.w
-    grad_w = (1 / n) * (coef.T).dot(1 - mu) + grad_reg
+    grad_w = (1 / n) * (coef.T).dot(1 - mu)
     grad_w = grad_w.sum(axis = 1)
-    grad_w = np.expand_dims(grad_w, axis=1)
+    grad_w = np.expand_dims(grad_w, axis=1) + grad_reg
 
     grad_b = (1 / n) * (-Y.T).dot(1 - mu)
 
@@ -1021,7 +1011,7 @@ input_variables = ["agePct12t29", "pctWSocSec",
 one_to_digit = { -1 : 2, +1 : 7}
 digit_to_one = { 2 : -1, 7 : +1}
 
-mnist_step_size = 1E-1
+mnist_step_size = 1E-2
 cutoff = 1E-2
 
 stoch_iter_count = 150

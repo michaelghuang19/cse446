@@ -11,8 +11,8 @@ import helpers as h
 from scipy import linalg
 
 # Run only what you need
-run_b = False
-run_c = True
+run_b = True
+run_c = False
 run_d = False
 
 def main():
