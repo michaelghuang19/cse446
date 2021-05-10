@@ -76,6 +76,8 @@ True or False: Given a neural network, the time complexity of the backward pass 
 \section*{A.2}
 {\Large
 
+\framebox[1.1\width]{\textbf{answer}}
+
 Suppose that our inputs $x$ are one-dimensional and that our feature map is infinite-dimensional: 
 $\phi( x) $ is a vector whose $i$th component is \\
 \[
@@ -93,6 +95,8 @@ Hint: Use the Taylor expansion of $z \mapsto e^z$.
 
 \section*{A.3}
 {\Large 
+
+\framebox[1.1\width]{\textbf{answer}}
 
 This problem will get you familiar with kernel ridge regression using the polynomial and RBF kernels.
 First, let's generate some data. Let $n=30$ and $f_*(x) = 4 \sin(\pi x)\cos(6\pi x^2)$. For $i=1,\dots,n$ let each $x_i$ be drawn uniformly at random from $[0,1]$, and let $y_i = f_*(x_i) + \epsilon_i$ where $\epsilon_i \sim \mathcal{N}(0,1)$.
@@ -159,6 +163,8 @@ For this problem, use the $\widehat{f}_{\rm poly}(x)$ and $\widehat{f}_{\rm rbf}
 \section*{A.4}
 {\Large 
 
+\framebox[1.1\width]{\textbf{answer}}
+
 \subsection*{a.}
 
 Let $W_0 \in \mathbb{R}^{h \times d}$, $b_0 \in \mathbb{R}^h$, $W_1 \in \mathbb{R}^{k \times h}$, $b_1 \in \mathbb{R}^k$ and $\sigma(z)\colon \mathbb{R} \to \mathbb{R}$
@@ -196,6 +202,8 @@ an intuition for why or why not.
 \section*{A.5}
 {\Large 
 
+\framebox[1.1\width]{\textbf{answer}}
+
 So far we have trained very small neural networks from scratch. As mentioned in the previous problem, modern neural networks are much larger and more difficult to train and validate. In practice, it is rare to train such large networks from scratch. This is because it is difficult to obtain both the massive datasets and the computational resources required to train such networks. \\
  
  Instead of training a network from scratch, in this problem, we will use a network that has already been trained on a very large dataset (ImageNet) and adjust it for the task at hand. This process of adapting weights in a model trained for another task is known as \textit{transfer learning}.
@@ -225,6 +233,8 @@ So far we have trained very small neural networks from scratch. As mentioned in 
 
 \section*{A.6}
 {\Large 
+
+\framebox[1.1\width]{\textbf{answer}}
 
 \subsection*{a.}
 
