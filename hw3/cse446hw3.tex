@@ -53,23 +53,34 @@
 
 \subsection*{a.}
 
-Say you trained an SVM classifier with an RBF kernel ($K(u, v) = \exp\left(-\frac{\norm{u-v}^2_2}{2\sigma^2}\right)$). It seems to underfit the training set: should you increase or decrease $\sigma$?
+Say you trained an SVM classifier with an RBF kernel ($K(u, v) = \exp\left(-\frac{\norm{u-v}^2_2}{2\sigma^2}\right)$). It seems to underfit the training set: should you increase or decrease $\sigma$? \\
+
+If the RBF kernel underfits the training set, we should decrease the bandwidth $\sigma$. Underfitting indicates a smoother fit and lower variance, so we want to decrease $\sigma$ so that we can decrease fit the training points a bit better.
 
 \subsection*{b.}
 
-True or False:   Training deep neural networks requires minimizing a non-convex loss function, and therefore gradient descent might not reach the globally-optimal solution.
+True or False: Training deep neural networks requires minimizing a non-convex loss function, and therefore gradient descent might not reach the globally-optimal solution. \\
+
+False. Gradient descent (with backpropagation) should always reach the globally-optimal solution. 
 
 \subsection*{c.}
 
-True or False: It is a good practice to initialize all weights to zero when training a deep neural network.
+True or False: It is a good practice to initialize all weights to zero when training a deep neural network. \\
+
+False. When training a deep neural network, we should initialize weights to random values, and all biases to 0.
 
 \subsection*{d.}
 
-True or False:   We use non-linear activation functions in a neural network’s hidden layers so that the network learns non-linear decision boundaries.
+True or False: We use non-linear activation functions in a neural network’s hidden layers so that the network learns non-linear decision boundaries. \\
+
+True. We try to use non-linear activation functions in order to introduce non-linearity into the network. 
+% If we only had linear activation functions, then the model would essentially be always one layer deep because of the way that linear functions naturally sum together.
 
 \subsection*{e.}
 
-True or False: Given a neural network, the time complexity of the backward pass step in the backpropagation algorithm can be prohibitively larger compared to the relatively low time complexity of the forward pass step.
+True or False: Given a neural network, the time complexity of the backward pass step in the backpropagation algorithm can be prohibitively larger compared to the relatively low time complexity of the forward pass step. \\
+
+False. The time complexity of the backward pass step and the forward pass step are the same. 
 
 }
 
