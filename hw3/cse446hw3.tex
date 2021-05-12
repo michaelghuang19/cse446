@@ -104,7 +104,26 @@ Show that $K(x, x') = e^{-\frac{(x-x')^2}{2}}$ is a kernel function for this fea
     \phi (x) \cdot \phi (x') = e^{-\frac{(x-x')^2}{2}}\ .
 \]
 Hint: Use the Taylor expansion of $z \mapsto e^z$.
-(This is the one dimensional version of the Gaussian  (RBF) kernel).\\
+(This is the one dimensional version of the Gaussian  (RBF) kernel). \\ \\
+
+We aim to show that $K(x, x') = e^{-\frac{(x-x')^2}{2}}$ is a kernel function for the defined feature map, or that $\phi (x) \cdot \phi (x') = e^{-\frac{(x-x')^2}{2}}$. \\ \\
+We are given that the $i$th component of the vector $\phi(x)$ is defined as $\frac{1}{\sqrt{i!}} e^{-x^2/2} x^i$, and we can naturally express $\phi(x')$ as  $\frac{1}{\sqrt{i!}} e^{-(x')^2 / 2} (x')^i$.
+% $= \sqrt{\frac{e^{-x^2}}{i}} x^i$
+\\
+In multiplying $\phi(x) \cdot \phi(x')$, we have that we are essentially multiplying the elements of each column against each other, that is, $\phi(x) \cdot \phi(x')$ \\
+$= \sum_{i=0}^{n} \text{element}_i \text{ of } \phi(x) \cdot \text{element}_i \text{ of } \phi(x')$ \\
+$= \sum_{i=0}^{n} \frac{1}{\sqrt{i!}} e^{-x^2/2} x^i \cdot \frac{1}{\sqrt{i!}} e^{-(x')^2 / 2} (x')^i$ \\
+$= \sum_{i=0}^{n} \frac{1}{i!} e^{-x^2/2} x^i \cdot e^{-(x')^2 / 2} (x')^i$ \\
+$= \sum_{i=0}^{n} \frac{1}{i!} e^{-x^2/2 - (x')^2 / 2} x^i (x')^i$ \\
+$= e^{-x^2/2 - (x')^2 / 2} \cdot \sum_{i=0}^{n} \frac{1}{i!} (xx')^i$ \\
+% maybe change the n to \infty
+We know that the Taylor series expansion of $z \mapsto e^z$ is $\sum_{i=0}^{\infty} \frac{z^i}{i!}$ to simplify the second term of the product, as we know that $\phi(x)$ is a vector of infinite length: \\
+$= e^{-x^2/2 - (x')^2 / 2} \cdot e^{(xx')}$ \\
+$= e^{-x^2/2 - (x')^2 / 2 + (xx')} $ \\
+$= e^{\frac{-x^2 - (x')^2 + 2xx'}{2}} $ \\
+$= e^{\frac{-(x^2 + (x')^2 - 2xx')}{2}} $ \\
+$= e^{\frac{-(x - x')^2)}{2}} $ \\
+which is exactly what we sought to show.
 
 }
 
