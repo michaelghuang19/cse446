@@ -36,8 +36,8 @@ class Kernel:
       print("setting best hyperparameter, lambda")
       self.loo_cv()
 
-    print(self.hp)
-    print(self.lamb)
+    print("hyperparam: " + str(self.hp))
+    print("lambda: " + str(self.lamb))
 
   def loo_cv(self):
     n = len(self.X)
@@ -66,9 +66,7 @@ class Kernel:
     min_i = min_idx[0][0]
     min_j = min_idx[0][1]
 
-    print(error_matrix)
-    print(error_matrix[min_i][min_j])
-    #  == np.amin(error_matrix)
+    assert (error_matrix[min_i][min_j] == np.amin(error_matrix)), "Sanity check min error is accurate"
 
     self.hp = c.hp_list[min_i]
     self.lamb = c.lamb_list[min_j]
@@ -78,14 +76,12 @@ class Kernel:
     # since we leave one out
     n = n - 1
 
-    # kmat = self.kf(X_train, Y_train, hp)
-    kmat = np.fromfunction(lambda i, j: self.kf(X_train[i], Y_train[j], hp), shape=(n, n), dtype=int)
-    # print(kmat)
+    kmat = np.fromfunction(lambda i, j: self.kf(X_train[i], X_train[j], hp), shape=(n, n), dtype=int)
 
     # use optimizer, train
     alpha_opt = np.linalg.solve(kmat + lamb * np.eye(n), Y_train)
 
-    def f_opt(z): return alpha_opt.dot(self.kf(X_train, z, hp))
+    def f_opt(x): return alpha_opt.dot(self.kf(X_train, x, hp))
 
     return f_opt
 

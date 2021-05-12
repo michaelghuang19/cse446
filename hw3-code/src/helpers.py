@@ -17,8 +17,6 @@ def generate_data(n=30, d=30, k=100, sd=1):
   error = np.random.normal(0, 1, (n, ))
   Y = f_star(X) + error
 
-  print(Y)
-
   return X, Y
 
 def plot_multiple(title, og_points, data_list, label_list):
