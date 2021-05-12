@@ -56,12 +56,14 @@
 Say you trained an SVM classifier with an RBF kernel ($K(u, v) = \exp\left(-\frac{\norm{u-v}^2_2}{2\sigma^2}\right)$). It seems to underfit the training set: should you increase or decrease $\sigma$? \\
 
 If the RBF kernel underfits the training set, we should decrease the bandwidth $\sigma$. Underfitting indicates a smoother fit and lower variance, so we want to decrease $\sigma$ so that we can decrease fit the training points a bit better.
+% more narrow bumps and fits data more tightly
 
 \subsection*{b.}
 
 True or False: Training deep neural networks requires minimizing a non-convex loss function, and therefore gradient descent might not reach the globally-optimal solution. \\
 
-False. Gradient descent (with backpropagation) should always reach the globally-optimal solution. 
+True. With a non-convex loss function, gradient descent is not guaranteed to go all the way towards the global minimum.
+% Could increase?
 
 \subsection*{c.}
 
@@ -81,6 +83,7 @@ True. We try to use non-linear activation functions in order to introduce non-li
 True or False: Given a neural network, the time complexity of the backward pass step in the backpropagation algorithm can be prohibitively larger compared to the relatively low time complexity of the forward pass step. \\
 
 False. The time complexity of the backward pass step and the forward pass step are the same. 
+% The derivative of the forward pass can be calculated with the same complexity of the backward pass.
 
 }
 
