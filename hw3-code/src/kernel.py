@@ -9,19 +9,33 @@ import helpers as h
 def main():
   print("hello world")
 
-  X, Y = h.generate_data()
+  X, Y, true_f = h.generate_data()
   # shapes: (30, )
 
-  # np.expand_dims(Y, axis=1)
+  """
+  part (a)
+  """
   
-  # kinda messy in terms of individual elements vs matrices
+  # individual elements over entire matrix
   kf_poly = lambda x, z, d: (1 + x * z) ** d
   kf_rbf = lambda x, z, gamma: np.exp(-gamma * ((x - z) ** 2))
-  # kf_poly = lambda x, z, d: (1 + (x.T).dot(z)) ** d
-  # kf_rbf = lambda x, z, gamma: np.exp(-gamma * (np.linalg.norm(x - z, 2) ** 2))
 
   k_poly = Kernel(X, Y, kf_poly)
   k_rbf = Kernel(X, Y, kf_rbf)
+
+  """
+  part (b)
+  """
+
+  true_data = [true_f(x_val) for x_val in c.x_list]
+  poly_pred_data = k_poly.get_fhat_data()
+  rbf_pred_data = k_rbf.get_fhat_data()
+
+  poly_list = [true_data, poly_pred_data]
+  rbf_list = [true_data, rbf_pred_data]
+
+  h.plot_multiple("poly", "a5bi", X, Y, poly_list, c.pred_labels, c.a5b_ylimits)
+  h.plot_multiple("rbf", "a5bii", X, Y, rbf_list, c.pred_labels, c.a5b_ylimits)
 
 class Kernel:
   def __init__(self, X, Y, kernel_func=None, hyperparameter=None, lambda_reg=None):
@@ -38,6 +52,11 @@ class Kernel:
 
     print("hyperparam: " + str(self.hp))
     print("lambda: " + str(self.lamb))
+
+  def get_fhat_data(self):
+    pred_f = self.kernel_rr(self.X, self.Y, self.hp, self.lamb)
+
+    return [pred_f(x_val) for x_val in c.x_list]
 
   def loo_cv(self):
     n = len(self.X)
@@ -72,18 +91,16 @@ class Kernel:
     self.lamb = c.lamb_list[min_j]
   
   def kernel_rr(self, X_train, Y_train, hp, lamb):
-    n = len(self.X)
-    # since we leave one out
-    n = n - 1
+    n = len(X_train)
 
     kmat = np.fromfunction(lambda i, j: self.kf(X_train[i], X_train[j], hp), shape=(n, n), dtype=int)
 
     # use optimizer, train
     alpha_opt = np.linalg.solve(kmat + lamb * np.eye(n), Y_train)
 
-    def f_opt(x): return alpha_opt.dot(self.kf(X_train, x, hp))
+    pred_f = lambda x: alpha_opt.dot(self.kf(X_train, x, hp))
 
-    return f_opt
+    return pred_f
 
 if __name__ == "__main__":
   main()
