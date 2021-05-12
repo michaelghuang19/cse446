@@ -16,7 +16,7 @@ def main():
   
   # kinda messy in terms of individual elements vs matrices
   kf_poly = lambda x, z, d: (1 + x * z) ** d
-  kf_rbf = lambda x, z, gamma: np.exp(-gamma * (x - z ** 2))
+  kf_rbf = lambda x, z, gamma: np.exp(-gamma * ((x - z) ** 2))
   # kf_poly = lambda x, z, d: (1 + (x.T).dot(z)) ** d
   # kf_rbf = lambda x, z, gamma: np.exp(-gamma * (np.linalg.norm(x - z, 2) ** 2))
 
@@ -36,28 +36,30 @@ class Kernel:
       print("setting best hyperparameter, lambda")
       self.loo_cv()
 
-      print(self.hp)
-      print(self.lamb)
+    print(self.hp)
+    print(self.lamb)
 
   def loo_cv(self):
     n = len(self.X)
 
     error_matrix = np.zeros((len(c.hp_list), len(c.lamb_list)))
 
-    # literally try every combo and keep track
+    # try every combo and keep track of errors
     for i, hp in enumerate(c.hp_list):
       for j, lamb in enumerate(c.lamb_list):
         for k in range(n):
           X_val = self.X[k]
           Y_val = self.Y[k]
           
-          # remove the loo val
+          # train without the loo val
           X_train = np.concatenate((self.X[:k], self.X[k + 1:]))
           Y_train = np.concatenate((self.Y[:k], self.Y[k + 1:]))
 
           f_opt = self.kernel_rr(X_train, Y_train, hp, lamb)
 
-          error_matrix[i][j] += ((Y_val - f_opt(X_val)) ** 2)
+          error_matrix[i][j] += (np.abs(f_opt(X_val) - Y_val) ** 2)
+        
+        error_matrix[i][j] /= n
 
     # find minimum index loc
     min_idx = np.argwhere(error_matrix == np.amin(error_matrix))
@@ -76,13 +78,14 @@ class Kernel:
     # since we leave one out
     n = n - 1
 
-    # kmat = condensed_kf(X_train, Y_train)
+    # kmat = self.kf(X_train, Y_train, hp)
     kmat = np.fromfunction(lambda i, j: self.kf(X_train[i], Y_train[j], hp), shape=(n, n), dtype=int)
+    # print(kmat)
 
     # use optimizer, train
     alpha_opt = np.linalg.solve(kmat + lamb * np.eye(n), Y_train)
 
-    f_opt = lambda x: np.sum(alpha_opt.dot(self.kf(x, X_train, hp)))
+    def f_opt(z): return alpha_opt.dot(self.kf(X_train, z, hp))
 
     return f_opt
 
