@@ -9,8 +9,7 @@ import constants as c
 def generate_data(n=30, d=30, k=100, sd=1):
   print("generating data")
 
-  # capital X?
-  f_star = lambda x: 4 * np.sin(np.pi * x) * np.cos(6 * np.pi * x ** 2)
+  f_star = lambda X: 4 * np.sin(np.pi * X) * np.cos(6 * np.pi * X ** 2)
 
   X = np.random.uniform(0, 1, (n, ))
   error = np.random.normal(0, 1, (n, ))
