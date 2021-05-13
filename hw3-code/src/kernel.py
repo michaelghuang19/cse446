@@ -7,11 +7,8 @@ import constants as c
 import helpers as h
 
 to_run = {
-  "a" : False,
-  "b" : False, 
-  "c" : False,
-  "d" : True,
-  "e" : True,
+  "abc" : False,
+  "de" : True,
 }
 
 def main():
@@ -22,19 +19,18 @@ def main():
   kf_poly = lambda x, z, d: (1 + x * z) ** d
   kf_rbf = lambda x, z, gamma: np.exp(-gamma * ((x - z) ** 2))
 
-  """
-  part (a)
-  """
+  if to_run["abc"]:
+    """
+    part (a)
+    """
 
-  if to_run["a"]:
     k_poly = Kernel(X, Y, kf_poly)
     k_rbf = Kernel(X, Y, kf_rbf)
 
-  """
-  part (b)
-  """
+    """
+    part (b)
+    """
 
-  if to_run["b"]:
     true_data = [true_f(x_val) for x_val in c.x_list]
     poly_pred_data = k_poly.get_fhat_data(X, Y)
     rbf_pred_data = k_rbf.get_fhat_data(X, Y)
@@ -42,58 +38,90 @@ def main():
     poly_list = [true_data, poly_pred_data]
     rbf_list = [true_data, rbf_pred_data]
 
-    h.plot_multiple("poly", "a5_bi", X, Y, poly_list, c.pred_labels, c.a5b_ylimits)
-    h.plot_multiple("rbf", "a5_bii", X, Y, rbf_list, c.pred_labels, c.a5b_ylimits)
+    h.plot_multiple("poly", "a3_bi", X, Y, poly_list, c.pred_labels, c.a3b_ylimits)
+    h.plot_multiple("rbf", "a3_bii", X, Y, rbf_list, c.pred_labels, c.a3b_ylimits)
 
-  """
-  part (c)
-  """
+    """
+    part (c)
+    """
 
-  if to_run["c"]:
-    poly_5, poly_95 = k_poly.bootstrap(300)
-    rbf_5, rbf_95 = k_rbf.bootstrap(300)
+    poly_5, poly_95 = k_poly.bootstrap(c.B)
+    rbf_5, rbf_95 = k_rbf.bootstrap(c.B)
 
     poly_list = [true_data, poly_pred_data, poly_5, poly_95]
     rbf_list = [true_data, rbf_pred_data, rbf_5, rbf_95]
 
-    h.plot_multiple("poly", "a5_ci", X, Y, poly_list, c.pct_labels, c.a5b_ylimits)
-    h.plot_multiple("rbf", "a5_cii", X, Y, rbf_list, c.pct_labels, c.a5b_ylimits)
+    h.plot_multiple("poly", "a3_ci", X, Y, poly_list, c.pct_labels, c.a3b_ylimits)
+    h.plot_multiple("rbf", "a3_cii", X, Y, rbf_list, c.pct_labels, c.a3b_ylimits)
 
-  """
-  part (d)
-  """
+  if to_run["de"]:
 
-  # repeated a
-  X, Y, true_f = h.generate_data(300)
+    """
+    part (d)
+    """
 
-  k_poly = Kernel(X, Y, kf_poly, kfold=True)
-  k_rbf = Kernel(X, Y, kf_rbf, kfold=True)
+    # repeated a
+    X, Y, true_f = h.generate_data(300)
 
-  # # repeated b
-  # poly_pred_data = k_poly.get_fhat_data(X, Y)
-  # rbf_pred_data = k_rbf.get_fhat_data(X, Y)
+    k_poly = Kernel(X, Y, kf_poly, kfold=True)
+    k_rbf = Kernel(X, Y, kf_rbf, kfold=True)
 
-  # poly_list = [true_data, poly_pred_data]
-  # rbf_list = [true_data, rbf_pred_data]
+    # repeated b
+    true_data = [true_f(x_val) for x_val in c.x_list]
+    poly_pred_data = k_poly.get_fhat_data(X, Y)
+    rbf_pred_data = k_rbf.get_fhat_data(X, Y)
 
-  # h.plot_multiple("poly", "a5_d.bi", X, Y, poly_list, c.pred_labels, c.a5b_ylimits)
-  # h.plot_multiple("rbf", "a5_d.bii", X, Y, rbf_list, c.pred_labels, c.a5b_ylimits)
+    poly_list = [true_data, poly_pred_data]
+    rbf_list = [true_data, rbf_pred_data]
 
-  # # repeated c
-  # poly_5, poly_95 = k_poly.bootstrap(300)
-  # rbf_5, rbf_95 = k_rbf.bootstrap(300)
+    h.plot_multiple("poly", "a3_d.bi", X, Y, poly_list, c.pred_labels, c.a3b_ylimits)
+    h.plot_multiple("rbf", "a3_d.bii", X, Y, rbf_list, c.pred_labels, c.a3b_ylimits)
 
-  # poly_list = [true_data, poly_pred_data, poly_5, poly_95]
-  # rbf_list = [true_data, rbf_pred_data, rbf_5, rbf_95]
+    # repeated c
+    poly_5, poly_95 = k_poly.bootstrap(c.B)
+    rbf_5, rbf_95 = k_rbf.bootstrap(c.B)
 
-  # h.plot_multiple("poly", "a5_d.ci", X, Y, poly_list, c.pct_labels, c.a5b_ylimits)
-  # h.plot_multiple("rbf", "a5_d.cii", X, Y, rbf_list, c.pct_labels, c.a5b_ylimits)
+    poly_list = [true_data, poly_pred_data, poly_5, poly_95]
+    rbf_list = [true_data, rbf_pred_data, rbf_5, rbf_95]
 
-  """
-  part (e)
-  """
+    h.plot_multiple("poly", "a3_d.ci", X, Y, poly_list, c.pct_labels, c.a3b_ylimits)
+    h.plot_multiple("rbf", "a3_d.cii", X, Y, rbf_list, c.pct_labels, c.a3b_ylimits)
 
-  # confidence interval shit
+    """
+    part (e)
+    """
+
+    X, Y, true_f = h.generate_data(c.m)
+
+    poly_pred = k_poly.kernel_rr(X, Y, k_poly.hp, k_poly.lamb)
+    rbf_pred = k_rbf.kernel_rr(X, Y, k_rbf.hp, k_rbf.lamb)
+
+    bs_5, bs_95 = get_bootstrap_values(X, Y, poly_pred, rbf_pred)
+
+    print(bs_5)
+    print(bs_95)
+
+def get_bootstrap_values(X, Y, poly_pred, rbf_pred, m=c.m, B=c.B):
+  
+  diff_list = np.zeros(B)
+
+  for i in range(B):
+    
+    index_samples = np.random.choice(m, m)
+
+    x_b = X[index_samples]
+    y_b = Y[index_samples]
+
+    poly_diff = (np.abs(y_b - [poly_pred(x) for x in x_b]) ** 2)
+    rbf_diff = (np.abs(y_b - [rbf_pred(x) for x in x_b]) ** 2)
+
+    diff_list[i] = (1 / m) * np.sum(poly_diff - rbf_diff)
+
+
+  bs_5 = np.percentile(diff_list, 5, axis=0)
+  bs_95 = np.percentile(diff_list, 95, axis=0)
+
+  return bs_5, bs_95
 
 class Kernel:
   def __init__(self, X, Y, kernel_func=None, hyperparameter=None, lambda_reg=None, kfold=False):
