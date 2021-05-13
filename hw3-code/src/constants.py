@@ -19,5 +19,5 @@ pct_labels = ['Data', 'True', 'Predict', '5%', '95%']
 x_list = list(np.linspace(0, 1, 100))
 
 a5b_ylimits = [-5, 5]
-
+num_fold = 10
 

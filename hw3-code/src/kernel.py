@@ -6,62 +6,94 @@ import numpy as np
 import constants as c
 import helpers as h
 
+to_run = {
+  "a" : False,
+  "b" : False, 
+  "c" : False,
+  "d" : True,
+  "e" : True,
+}
+
 def main():
 
   X, Y, true_f = h.generate_data(30)
 
-  """
-  part (a)
-  """
-  
   # individual elements over entire matrix
   kf_poly = lambda x, z, d: (1 + x * z) ** d
   kf_rbf = lambda x, z, gamma: np.exp(-gamma * ((x - z) ** 2))
 
-  k_poly = Kernel(X, Y, kf_poly)
-  k_rbf = Kernel(X, Y, kf_rbf)
+  """
+  part (a)
+  """
+
+  if to_run["a"]:
+    k_poly = Kernel(X, Y, kf_poly)
+    k_rbf = Kernel(X, Y, kf_rbf)
 
   """
   part (b)
   """
 
-  true_data = [true_f(x_val) for x_val in c.x_list]
-  poly_pred_data = k_poly.get_fhat_data(X, Y)
-  rbf_pred_data = k_rbf.get_fhat_data(X, Y)
+  if to_run["b"]:
+    true_data = [true_f(x_val) for x_val in c.x_list]
+    poly_pred_data = k_poly.get_fhat_data(X, Y)
+    rbf_pred_data = k_rbf.get_fhat_data(X, Y)
 
-  poly_list = [true_data, poly_pred_data]
-  rbf_list = [true_data, rbf_pred_data]
+    poly_list = [true_data, poly_pred_data]
+    rbf_list = [true_data, rbf_pred_data]
 
-  h.plot_multiple("poly", "a5bi", X, Y, poly_list, c.pred_labels, c.a5b_ylimits)
-  h.plot_multiple("rbf", "a5bii", X, Y, rbf_list, c.pred_labels, c.a5b_ylimits)
+    h.plot_multiple("poly", "a5_bi", X, Y, poly_list, c.pred_labels, c.a5b_ylimits)
+    h.plot_multiple("rbf", "a5_bii", X, Y, rbf_list, c.pred_labels, c.a5b_ylimits)
 
   """
   part (c)
   """
 
-  poly_5, poly_95 = k_poly.bootstrap(300)
-  rbf_5, rbf_95 = k_rbf.bootstrap(300)
+  if to_run["c"]:
+    poly_5, poly_95 = k_poly.bootstrap(300)
+    rbf_5, rbf_95 = k_rbf.bootstrap(300)
 
-  poly_list = [true_data, poly_pred_data, poly_5, poly_95]
-  rbf_list = [true_data, rbf_pred_data, rbf_5, rbf_95]
+    poly_list = [true_data, poly_pred_data, poly_5, poly_95]
+    rbf_list = [true_data, rbf_pred_data, rbf_5, rbf_95]
 
-  h.plot_multiple("poly", "a5ci", X, Y, poly_list, c.pct_labels, c.a5b_ylimits)
-  h.plot_multiple("rbf", "a5cii", X, Y, rbf_list, c.pct_labels, c.a5b_ylimits)
+    h.plot_multiple("poly", "a5_ci", X, Y, poly_list, c.pct_labels, c.a5b_ylimits)
+    h.plot_multiple("rbf", "a5_cii", X, Y, rbf_list, c.pct_labels, c.a5b_ylimits)
 
   """
   part (d)
   """
 
+  # repeated a
   X, Y, true_f = h.generate_data(300)
 
   k_poly = Kernel(X, Y, kf_poly, kfold=True)
   k_rbf = Kernel(X, Y, kf_rbf, kfold=True)
 
-  
+  # # repeated b
+  # poly_pred_data = k_poly.get_fhat_data(X, Y)
+  # rbf_pred_data = k_rbf.get_fhat_data(X, Y)
+
+  # poly_list = [true_data, poly_pred_data]
+  # rbf_list = [true_data, rbf_pred_data]
+
+  # h.plot_multiple("poly", "a5_d.bi", X, Y, poly_list, c.pred_labels, c.a5b_ylimits)
+  # h.plot_multiple("rbf", "a5_d.bii", X, Y, rbf_list, c.pred_labels, c.a5b_ylimits)
+
+  # # repeated c
+  # poly_5, poly_95 = k_poly.bootstrap(300)
+  # rbf_5, rbf_95 = k_rbf.bootstrap(300)
+
+  # poly_list = [true_data, poly_pred_data, poly_5, poly_95]
+  # rbf_list = [true_data, rbf_pred_data, rbf_5, rbf_95]
+
+  # h.plot_multiple("poly", "a5_d.ci", X, Y, poly_list, c.pct_labels, c.a5b_ylimits)
+  # h.plot_multiple("rbf", "a5_d.cii", X, Y, rbf_list, c.pct_labels, c.a5b_ylimits)
 
   """
   part (e)
   """
+
+  # confidence interval shit
 
 class Kernel:
   def __init__(self, X, Y, kernel_func=None, hyperparameter=None, lambda_reg=None, kfold=False):
@@ -76,7 +108,7 @@ class Kernel:
       print("setting best hyperparameter, lambda")
 
       if kfold:
-        self.tenfold_cv()
+        self.kfold_cv()
       else:
         self.loo_cv()
       
@@ -121,8 +153,42 @@ class Kernel:
     self.hp = c.hp_list[min_i]
     self.lamb = c.lamb_list[min_j]
   
-  def tenfold_cv(self):
+  # TODO: refactor this into one module
+  def kfold_cv(self):
     n = len(self.X)
+
+    error_matrix = np.zeros((len(c.hp_list), len(c.lamb_list)))
+
+    # try every combo and keep track of errors
+    for i, hp in enumerate(c.hp_list):
+      for j, lamb in enumerate(c.lamb_list):
+        for k in range(c.num_fold):
+          fold_start = k * int(n / 10)
+          fold_end =  (k + 1) * int(n / 10)
+
+          X_val = self.X[fold_start:fold_end]
+          Y_val = self.Y[fold_start:fold_end]
+
+          # train without the loo val
+          X_train = np.concatenate((self.X[:fold_start], self.X[fold_end:]))
+          Y_train = np.concatenate((self.Y[:fold_start], self.Y[fold_end:]))
+
+          f_opt = self.kernel_rr(X_train, Y_train, hp, lamb)
+
+          error_matrix[i][j] += np.sum(([f_opt(x) for x in X_val] - Y_val) ** 2)
+
+        error_matrix[i][j] /= len(X_val)
+
+    # find minimum index loc
+    min_idx = np.argwhere(error_matrix == np.amin(error_matrix))
+    min_i = min_idx[0][0]
+    min_j = min_idx[0][1]
+
+    assert (error_matrix[min_i][min_j] == np.amin(
+        error_matrix)), "Sanity check min error is accurate"
+
+    self.hp = c.hp_list[min_i]
+    self.lamb = c.lamb_list[min_j]
 
   def kernel_rr(self, X_train, Y_train, hp, lamb):
     n = len(X_train)
@@ -147,14 +213,10 @@ class Kernel:
     for i in range(B):
       index_samples = np.random.choice(n, n)
 
-      print(index_samples)
-
       x_b = self.X[index_samples]
       y_b = self.Y[index_samples]
 
       fhat_list[i] = np.copy(self.get_fhat_data(x_b, y_b))
-    
-    print(fhat_list)
 
     bot_5 = np.percentile(fhat_list, 5, axis=0)
     top_5 = np.percentile(fhat_list, 95, axis=0)
