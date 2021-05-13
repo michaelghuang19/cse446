@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 import constants as c
 
-def generate_data(n=30, d=30, k=100, sd=1):
+def generate_data(n):
   print("generating data")
 
   f_star = lambda x: 4 * np.sin(np.pi * x) * np.cos(6 * np.pi * x ** 2)

@@ -7,10 +7,8 @@ import constants as c
 import helpers as h
 
 def main():
-  print("hello world")
 
-  X, Y, true_f = h.generate_data()
-  # shapes: (30, )
+  X, Y, true_f = h.generate_data(30)
 
   """
   part (a)
@@ -37,8 +35,36 @@ def main():
   h.plot_multiple("poly", "a5bi", X, Y, poly_list, c.pred_labels, c.a5b_ylimits)
   h.plot_multiple("rbf", "a5bii", X, Y, rbf_list, c.pred_labels, c.a5b_ylimits)
 
+  """
+  part (c)
+  """
+
+  poly_5, poly_95 = k_poly.bootstrap(300)
+  rbf_5, rbf_95 = k_rbf.bootstrap(300)
+
+  poly_list = [true_data, poly_pred_data, poly_5, poly_95]
+  rbf_list = [true_data, rbf_pred_data, rbf_5, rbf_95]
+
+  h.plot_multiple("poly", "a5ci", X, Y, poly_list, c.pct_labels, c.a5b_ylimits)
+  h.plot_multiple("rbf", "a5cii", X, Y, rbf_list, c.pct_labels, c.a5b_ylimits)
+
+  """
+  part (d)
+  """
+
+  X, Y, true_f = h.generate_data(300)
+
+  k_poly = Kernel(X, Y, kf_poly, kfold=True)
+  k_rbf = Kernel(X, Y, kf_rbf, kfold=True)
+
+  
+
+  """
+  part (e)
+  """
+
 class Kernel:
-  def __init__(self, X, Y, kernel_func=None, hyperparameter=None, lambda_reg=None):
+  def __init__(self, X, Y, kernel_func=None, hyperparameter=None, lambda_reg=None, kfold=False):
     self.X = X
     self.Y = Y
     self.kf = kernel_func
@@ -48,7 +74,12 @@ class Kernel:
 
     if self.hp is None and self.lamb is None:
       print("setting best hyperparameter, lambda")
-      self.loo_cv()
+
+      if kfold:
+        self.tenfold_cv()
+      else:
+        self.loo_cv()
+      
 
     print("hyperparam: " + str(self.hp))
     print("lambda: " + str(self.lamb))
@@ -90,6 +121,9 @@ class Kernel:
     self.hp = c.hp_list[min_i]
     self.lamb = c.lamb_list[min_j]
   
+  def tenfold_cv(self):
+    n = len(self.X)
+
   def kernel_rr(self, X_train, Y_train, hp, lamb):
     n = len(X_train)
 
@@ -101,6 +135,27 @@ class Kernel:
     pred_f = lambda x: alpha_opt.dot(self.kf(X_train, x, hp))
 
     return pred_f
+
+  def bootstrap(self, iterations):
+    n = len(self.X)
+
+    B = iterations
+    num_x = len(c.x_list)
+
+    fhat_list = np.zeros((B, num_x))
+
+    for i in range(B):
+      index_samples = np.random.choice(n, n)
+
+      x_b = self.X[index_samples]
+      y_b = self.Y[index_samples]
+
+      fhat_list[i] = self.get_fhat_data()
+    
+    bot_5 = np.percentile(fhat_list, 5, axis=0)
+    top_5 = np.percentile(fhat_list, 95, axis=0)
+
+    return bot_5, top_5
 
 if __name__ == "__main__":
   main()
