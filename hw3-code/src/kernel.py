@@ -26,8 +26,8 @@ def main():
   """
 
   true_data = [true_f(x_val) for x_val in c.x_list]
-  poly_pred_data = k_poly.get_fhat_data()
-  rbf_pred_data = k_rbf.get_fhat_data()
+  poly_pred_data = k_poly.get_fhat_data(X, Y)
+  rbf_pred_data = k_rbf.get_fhat_data(X, Y)
 
   poly_list = [true_data, poly_pred_data]
   rbf_list = [true_data, rbf_pred_data]
@@ -84,8 +84,8 @@ class Kernel:
     print("hyperparam: " + str(self.hp))
     print("lambda: " + str(self.lamb))
 
-  def get_fhat_data(self):
-    pred_f = self.kernel_rr(self.X, self.Y, self.hp, self.lamb)
+  def get_fhat_data(self, x, y):
+    pred_f = self.kernel_rr(x, y, self.hp, self.lamb)
 
     return [pred_f(x_val) for x_val in c.x_list]
 
@@ -147,11 +147,15 @@ class Kernel:
     for i in range(B):
       index_samples = np.random.choice(n, n)
 
+      print(index_samples)
+
       x_b = self.X[index_samples]
       y_b = self.Y[index_samples]
 
-      fhat_list[i] = self.get_fhat_data()
+      fhat_list[i] = np.copy(self.get_fhat_data(x_b, y_b))
     
+    print(fhat_list)
+
     bot_5 = np.percentile(fhat_list, 5, axis=0)
     top_5 = np.percentile(fhat_list, 95, axis=0)
 
