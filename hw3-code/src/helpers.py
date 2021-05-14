@@ -11,8 +11,6 @@ def generate_data(n):
 
   f_star = lambda x: 4 * np.sin(np.pi * x) * np.cos(6 * np.pi * x ** 2)
 
-  np.random.seed(1234)
-
   X = np.random.uniform(0, 1, (n, ))
   error = np.random.normal(0, 1, (n, ))
   Y = f_star(X) + error
