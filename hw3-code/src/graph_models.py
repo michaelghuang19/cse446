@@ -21,6 +21,12 @@ Arbitrarily section different datasets
 def graph():
   if graph_a:
     print("graphing a")
+    
+    "training"
+    "validation"
+
+    "training best hyperparameters"
+    "validation best hyperparameters"
 
   if graph_b:
     print("graphing b")
