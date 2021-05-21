@@ -1,9 +1,9 @@
-tensor(0.7960, device='cuda:0', dtype=torch.float64) 
-0.8062 
-0.5628582025527954
-	A5a real
+A5a
+Highest validation accuracy = tensor(0.7960, device='cuda:0', dtype=torch.float64) 
+Test accuracy = 0.8062 
+Test loss = 0.5628582025527954
 
-tensor(0.7742, device='cuda:0', dtype=torch.float64) 
-0.7634 
-0.7033713958740234
-	A5b real
+A5b
+Highest validation accuracy = tensor(0.7742, device='cuda:0', dtype=torch.float64) 
+Test accuracy = 0.7634 
+Test loss = 0.7033713958740234
