@@ -1,0 +1,7 @@
+tensor(0.9703)
+tensor(0.0008, grad_fn=<DivBackward0>)
+	A4a
+	
+tensor(0.9692)
+tensor(0.0010, grad_fn=<DivBackward0>)
+	A4b
