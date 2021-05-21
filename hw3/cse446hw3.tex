@@ -212,9 +212,16 @@ Use $h_0 = h_1 = 32$ and perform the same steps as in part a.
 
 \subsection*{c.}
 
-Compute the total number of parameters of each network and report them. Then compare the number of parameters as well as the test
-accuracies the networks achieved. Is one of the approaches (wide, shallow vs. narrow, deeper) better than the other? Give
+Compute the total number of parameters of each network and report them. Then compare the number of parameters as well as the test accuracies the networks achieved. Is one of the approaches (wide, shallow vs. narrow, deeper) better than the other? Give
 an intuition for why or why not.
+
+\textbf{Wide + shallow} \\ \\
+Number of parameters: $784 \cdot 64 + 64 \cdot 1 + 64 \cdot 10 + 10 \cdot 1 = 50176 + 64 + 640 + 10 = 50890$  \\
+Test accuracy: \\ \\
+\textbf{Narrow + deeper} \\ \\
+Number of parameters: $784 \cdot 32 + 32 \cdot 1 + 32 \cdot 32 + 32 + 32 \cdot 10 + 10 = 25088 + 32 + 1024 + 32 + 320 + 10 = 26506$  \\
+Test accuracy: \\ \\
+Narrow and deeper should be better. Generalizing vs memorizing.
 
 }
 
