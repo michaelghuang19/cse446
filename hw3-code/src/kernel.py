@@ -8,7 +8,7 @@ import helpers as h
 
 to_run = {
   "abc" : True,
-  "de" : False,
+  "de" : True,
 }
 
 def main():

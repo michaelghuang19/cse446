@@ -1,5 +1,5 @@
-# constants.py
-# Applicable constants for HW3
+# helpers.py
+# Applicable helpers for HW3
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,3 +38,18 @@ def plot_multiple(title, file_name, x, y, data_list, label_list, ylimits=None):
 
   plt.savefig(c.results_path + file_name + c.png_exten)
   plt.close()
+
+def plot_acc(dataset, legends, filename, set_type, epochs=12):
+  
+  epoch_list = list(range(1, epochs + 1))
+  
+  for item in dataset:
+    plt.plot(epoch_list, item)
+
+  plt.title(set_type + " accuracy over time")
+  plt.xlabel("epochs")
+  plt.ylabel("accuracy")
+  
+  plt.legend(legends)
+
+  plt.savefig(filename)

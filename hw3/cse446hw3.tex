@@ -1,7 +1,7 @@
 \documentclass{article}
 \linespread{1.3}
 \usepackage[margin=50pt]{geometry}
-\usepackage{amsmath, amsthm, amssymb, amsthm, tikz, fancyhdr}
+\usepackage{amsmath, amsthm, amssymb, amsthm, tikz, fancyhdr, graphicx, subfig}
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}
 \newcommand{\changefont}{\fontsize{15}{15}\selectfont}
@@ -65,24 +65,15 @@ True. With a non-convex loss function, gradient descent is not guaranteed to go 
 
 \subsection*{c.}
 
-True or False: It is a good practice to initialize all weights to zero when training a deep neural network. \\
-
-False. When training a deep neural network, we should initialize weights to random values, and all biases to 0.
+False. When training a deep neural network, we should initialize weights to random values. One reason for this is that with any equal weight initialization, all nodes will have the same gradient, so the nodes will end up all following the same pattern and an ineffective model overall.
 
 \subsection*{d.}
 
-True or False: We use non-linear activation functions in a neural network’s hidden layers so that the network learns non-linear decision boundaries. \\
-
-True. We try to use non-linear activation functions in order to introduce non-linearity into the network. 
-% If we only had linear activation functions, then the model would essentially be always one layer deep because of the way that linear functions naturally sum together.
+True. We try to use non-linear activation functions in order to introduce non-linearity into the network. If we only had linear activation functions, then the model would essentially just output a linear function, since no matter how many layers, all the linear functions would naturally sum together, and lead to what is essentially basic logistic regression.
 
 \subsection*{e.}
 
-True or False: Given a neural network, the time complexity of the backward pass step in the backpropagation algorithm can be prohibitively larger compared to the relatively low time complexity of the forward pass step. \\
-
-% True. In general, forward pass is faster than backward pass in the backpropagation algorithm
-False. The time complexity of the backward pass step and the forward pass step are the same. 
-% The derivative of the forward pass can be calculated with the same complexity of the backward pass.
+True. The time complexity for the forward pass is lower than that of the backward pass in the backpropagation algorithm. backpropagation first requires calculating values via forward-propagation itself, and then performing error calculation and gradient descent to update these values.
 
 }
 
@@ -110,58 +101,56 @@ which is exactly what we sought to show.
 
 }
 
+\newpage
 \section*{A.3}
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=120mm]{../hw2-code/results/a4_a.png}
-\end{figure}
 
 {\Large 
 
-This problem will get you familiar with kernel ridge regression using the polynomial and RBF kernels.
-First, let's generate some data. Let $n=30$ and $f_*(x) = 4 \sin(\pi x)\cos(6\pi x^2)$. For $i=1,\dots,n$ let each $x_i$ be drawn uniformly at random from $[0,1]$, and let $y_i = f_*(x_i) + \epsilon_i$ where $\epsilon_i \sim \mathcal{N}(0,1)$.
-
-For any function $f$, the true error and the train error are respectively defined as
-\begin{align*}
-    \mathcal{E}_{\rm true}(f) = \E_{X,Y}[ ( f(X) - Y)^2], \quad \quad  \widehat{\mathcal{E}}_{\rm train}(f) =  \frac{1}{n} \sum_{i=1}^n \left(f(x_i)-y_i\right)^2.
-\end{align*}
-Using kernel ridge regression, construct a predictor
-\[
-  \widehat{\alpha} = \arg\min_\alpha \twonorm{K\alpha - y} + \lambda \alpha^\top K \alpha \ , \quad \quad \widehat{f}(x) = \sum_{i=1}^n \widehat{\alpha}_i k(x_i,x) 
-\]
-where $K\in\R^{n\times n}$ is the kernel matrix such that $K_{i,j} = k(x_i,x_j)$, and $\lambda\geq 0$ is the regularization constant. Include any code you use for your experiments in your submission.
-
 \subsection*{a.}
 
-Using leave-one-out cross validation, find a good $\lambda$ and hyperparameter settings for the following kernels:
-  \begin{itemize}
-    \item $k_{\rm poly}(x,z) = (1+x^\top z)^d$ where $d \in \mathbb{N}$ is a hyperparameter, 
-    \item $k_{\rm rbf}(x,z) = \exp(-\gamma \twonorm{x-z})$ where $\gamma > 0$ is a hyperparameter. Given a dataset $x_1,\dots,x_n \in \R^d$, a heuristic for choosing a range of $\gamma$ in the right ballpark is the inverse of the median of all $\binom{n}{2}$ squared distances $\twonorm{x_i-x_j}$.
-  \end{itemize} 
-Report the values of $d$, $\gamma$, and the $\lambda$ values for both kernels.
+\textbf{poly:} \\
+$d: 18.0$ \\
+$\lambda: 10^{-5}$ \\ 
+\textbf{rbf:} \\
+$\gamma: 30$ \\
+$\lambda: 10^{-1}$
 
 \subsection*{b.}
 
-Let $\widehat{f}_{\rm poly}(x)$ and $\widehat{f}_{\rm rbf}(x)$ be the functions learned using the hyperparameters you found in part a.
-  For a single plot per function $\widehat{f} \in \left\lbrace \widehat{f}_{\rm poly}(x), \widehat{f}_{\rm rbf}(x) \right\rbrace$, plot the original data $\{(x_i,y_i)\}_{i=1}^n$, the true $f(x)$, and $\widehat{f}(x)$ (i.e., define a fine grid on $[0,1]$ to plot the functions).
+\begin{figure}[h]
+  \centering
+  \subfloat[poly true vs predict]{\includegraphics[width=100mm]{../hw3-code/results/a3_bi.png}}
+  \subfloat[rbf true vs predict]{\includegraphics[width=100mm]{../hw3-code/results/a3_bii.png}}
+\end{figure}
+
+\newpage
 
 \subsection*{c.}
 
-We wish to build bootstrap percentile confidence intervals for $\widehat{f}_{\rm poly}(x)$ and $\widehat{f}_{\rm rbf}(x)$ for all $x \in [0,1]$ from part b. See Hastie, Tibshirani, Friedman Ch. 8.2 for a review of the bootstrap procedure.
-  Use the non-parametric bootstrap with $B=300$ bootstrap iterations to find $5\%$ and $95\%$ percentiles at each point $x$ on a fine grid over $[0,1]$.
-  
-  \medskip
-  
-  Specifically, for each bootstrap sample $b \in \{1,\dots,B\}$, draw uniformly at randomly with replacement, $n$ samples from $\{(x_i,y_i)\}_{i=1}^n$, train an $\widehat{f}_b$ using the $b$-th resampled dataset, compute $\widehat{f}_b(x)$ for each $x$ in your fine grid; let the $5\%$ percentile at point $x$ be the largest value $\nu$ such that $\frac{1}{B} \sum_{b=1}^B \1\{ \widehat{f}_b(x) \leq \nu \} \leq .05$, define the $95\%$ percentile analogously. 
-  
-  \medskip
-  
-  Plot the $5$ and $95$ percentile curves on the plots from part b.
+\begin{figure}[h]
+  \centering
+  \subfloat[poly with confidence intervals]{\includegraphics[width=100mm]{../hw3-code/results/a3_ci.png}}
+  \subfloat[rbf with confidence intervals]{\includegraphics[width=100mm]{../hw3-code/results/a3_cii.png}}
+\end{figure}
 
 \subsection*{d.}
-
-Repeat parts a, b, and c with $n=300$, but use $10$-fold CV instead of leave-one-out for part a.
+\begin{figure}[h]
+  \centering
+  \subfloat[poly true vs predict]{\includegraphics[width=100mm]{../hw3-code/results/a3_d.bi.png}}
+  \subfloat[rbf true vs predict]{\includegraphics[width=100mm]{../hw3-code/results/a3_d.bii.png}}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  \subfloat[poly with confidence intervals]{\includegraphics[width=100mm]{../hw3-code/results/a3_d.ci.png}}
+  \subfloat[rbf with confidence intervals]{\includegraphics[width=100mm]{../hw3-code/results/a3_d.cii.png}}
+\end{figure} 
+\newpage
+\textbf{poly:} \\
+$d: 22.0$ \\
+$\lambda: 10^{-7}$ \\ 
+\textbf{rbf:} \\
+$\gamma: 24.0$ \\
+$\lambda: 10^{-4}$
 
 \subsection*{e.}
 
@@ -314,6 +303,97 @@ The parameters $M,k,N$ (in addition to the step size and momentum) are all hyper
 
 \textbf{Tuning:} Return to the original network you were left with at the end of the tutorial \emph{Training a classifier}. Tune the different hyperparameters (number of convolutional filters, filter sizes, dimensionality of the fully-connected layers, stepsize, etc.) and train for a sufficient number of iterations to achieve a \emph{test accuracy} of at least 70\%. Provide the hyperparameter configuration used to achieve this performance.
 
+
+}
+
+\section*{}
+{\Large 
+\newpage
+
+\begin{verbatim}
+  # helpers.py
+# Applicable helpers for HW3
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+import constants as c
+
+def generate_data(n):
+  print("generating data")
+
+  f_star = lambda x: 4 * np.sin(np.pi * x) * np.cos(6 * np.pi * x ** 2)
+
+  X = np.random.uniform(0, 1, (n, ))
+  error = np.random.normal(0, 1, (n, ))
+  Y = f_star(X) + error
+
+  return X, Y, f_star
+
+def ylimit_plot(bot, top):
+  plt.ylim(bot, top)
+
+def plot_multiple(title, file_name, x, y, data_list, label_list, ylimits=None):
+  print("plotting og, true, and fit")
+
+  plt.plot(x, y, "o")
+  
+  for data_set in data_list:
+    plt.plot(c.x_list, data_set)
+
+  if ylimits is not None:
+    ylimit_plot(ylimits[0], ylimits[1])
+
+  plt.title(title)
+  plt.xlabel("x values")
+  plt.ylabel("y values")
+  plt.legend(label_list)
+
+  plt.savefig(c.results_path + file_name + c.png_exten)
+  plt.close()
+
+def plot_acc(dataset, legends, filename, set_type, epochs=12):
+  
+  epoch_list = list(range(1, epochs + 1))
+  
+  for item in dataset:
+    plt.plot(epoch_list, item)
+
+  plt.title(set_type + " accuracy over time")
+  plt.xlabel("epochs")
+  plt.ylabel("accuracy")
+  
+  plt.legend(legends)
+
+  plt.savefig(filename)
+\end{verbatim}
+
+\begin{verbatim}
+# constants.py
+# Applicable constants for HW3
+
+import numpy as np
+import os
+
+home_dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+data_path = home_dir_path + '/data/'
+results_path = home_dir_path + '/results/'
+
+png_exten = '.png'
+
+hp_list = list(np.linspace(1, 30, 30))
+lamb_list = [10 ** -x for x in np.linspace(0, 10, 11)]
+
+pred_labels = ['Data', 'True', 'Predict']
+pct_labels = ['Data', 'True', 'Predict', '5%', '95%']
+x_list = list(np.linspace(0, 1, 100))
+
+a3b_ylimits = [-5, 5]
+num_fold = 10
+B = 300
+m = 1000
+\end{verbatim}
 }
 
 \end{document}
