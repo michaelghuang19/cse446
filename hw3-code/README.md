@@ -20,24 +20,6 @@ Run
 > python kernel.py 
 adjusting for relative path. Labeled result figures will appear in the results folder.
 
-### A4
+### A4, A5, A6
 
-Run 
-> python 
-
-adjusting for relative path. Results will appear in the results folder.
-
-### A5
-
-Run
-> python 
-
-adjusting for relative path. Results will appear in the results folder.
-
-### A6
-
-Run
-> python 
-
-adjusting for relative path. Results will appear in the results folder.
-
+I wrote and ran the code on Google Colab, so these source files are adapted versions of notebooks, and thus might not function properly. The original notebooks can be produced as necessary. All applicable results (text output and figures) are in the results folder.

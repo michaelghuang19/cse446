@@ -7,8 +7,8 @@ import constants as c
 import helpers as h
 
 to_run = {
-  "abc" : False,
-  "de" : True,
+  "abc" : True,
+  "de" : False,
 }
 
 def main():

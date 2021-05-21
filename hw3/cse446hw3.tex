@@ -53,20 +53,14 @@ Jimmy Guo, Neil Kagalwala, Andrew Wang
 \section*{A.1}
 {\Large 
 
-\framebox[1.1\width]{\textbf{answer}}
-
 \subsection*{a.}
 
-Say you trained an SVM classifier with an RBF kernel ($K(u, v) = \exp\left(-\frac{\norm{u-v}^2_2}{2\sigma^2}\right)$). It seems to underfit the training set: should you increase or decrease $\sigma$? \\
-
-If the RBF kernel underfits the training set, we should decrease the bandwidth $\sigma$. Underfitting indicates a smoother fit and lower variance, so we want to decrease $\sigma$ so that we can decrease fit the training points a bit better.
+If the RBF kernel underfits the training set, we should decrease the bandwidth $\sigma$. Underfitting indicates a smoother fit and lower variance, so we want to decrease $\sigma$ so that we fit the training points more tightly.
 % more narrow bumps and fits data more tightly
 
 \subsection*{b.}
 
-True or False: Training deep neural networks requires minimizing a non-convex loss function, and therefore gradient descent might not reach the globally-optimal solution. \\
-
-True. With a non-convex loss function, gradient descent is not guaranteed to go all the way towards the global minimum.
+True. With a non-convex loss function, gradient descent is not guaranteed to go all the way towards the global minimum, and could even stagnate or increase.
 % Could increase?
 
 \subsection*{c.}
@@ -117,9 +111,13 @@ which is exactly what we sought to show.
 }
 
 \section*{A.3}
-{\Large 
 
-\framebox[1.1\width]{\textbf{answer}}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=120mm]{../hw2-code/results/a4_a.png}
+\end{figure}
+
+{\Large 
 
 This problem will get you familiar with kernel ridge regression using the polynomial and RBF kernels.
 First, let's generate some data. Let $n=30$ and $f_*(x) = 4 \sin(\pi x)\cos(6\pi x^2)$. For $i=1,\dots,n$ let each $x_i$ be drawn uniformly at random from $[0,1]$, and let $y_i = f_*(x_i) + \epsilon_i$ where $\epsilon_i \sim \mathcal{N}(0,1)$.
@@ -186,7 +184,10 @@ For this problem, use the $\widehat{f}_{\rm poly}(x)$ and $\widehat{f}_{\rm rbf}
 \section*{A.4}
 {\Large 
 
-\framebox[1.1\width]{\textbf{answer}}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=120mm]{../hw2-code/results/a4_a.png}
+\end{figure}
 
 \subsection*{a.}
 
@@ -232,7 +233,12 @@ Narrow and deeper should be better. Generalizing vs memorizing.
 \section*{A.5}
 {\Large 
 
-\framebox[1.1\width]{\textbf{answer}}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=120mm]{../hw2-code/results/a4_a.png}
+\end{figure}
+
+\framebox[1.1\width]{\textbf{Applicable output can be found in a5.txt, which I did not paste in due to its length}}
 
 So far we have trained very small neural networks from scratch. As mentioned in the previous problem, modern neural networks are much larger and more difficult to train and validate. In practice, it is rare to train such large networks from scratch. This is because it is difficult to obtain both the massive datasets and the computational resources required to train such networks. \\
  
@@ -264,7 +270,12 @@ So far we have trained very small neural networks from scratch. As mentioned in 
 \section*{A.6}
 {\Large 
 
-\framebox[1.1\width]{\textbf{answer}}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=120mm]{../hw2-code/results/a4_a.png}
+\end{figure}
+
+\framebox[1.1\width]{\textbf{Applicable output can be found in a6a.txt / a6b.txt / a6c.txt / a6d.txt, which I did not paste in due to its length}}
 
 \subsection*{a.}
 
