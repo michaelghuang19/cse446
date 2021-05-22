@@ -3,33 +3,46 @@
 # Applicable raw data graphs since Colab was being difficult
 
 import matplotlib.pyplot as plt
+import numpy as np
 
+import data as d
 import helpers as h
 
 graph_a = True
-graph_b = True
-graph_c = True
-graph_d = True
+graph_b = False
+graph_c = False
+graph_d = False
 
 '''
 Arbitrarily section different datasets
 '''
 
-# plot_acc(train_acc_list, legend_list, "a6_a_train.png", "training")
-# plot_acc(valid_acc_list, legend_list, "a6_a_valid.png", "validation")
 
 def graph():
   if graph_a:
     print("graphing a")
     
-    "training"
-    "validation"
+    a_groupings = [[0, 4], [4, 8], [8, 12]]
+    
+    for idx, grouping in enumerate(a_groupings):
+      start = grouping[0]
+      end = grouping[1]
 
-    "training best hyperparameters"
-    "validation best hyperparameters"
+      h.plot_acc(d.a_train[start:end], d.a_labels[start:end],
+                 "a6_a_t{}.png".format(idx), "training")
+      h.plot_acc(d.a_valid[start:end], d.a_labels[start:end],
+                 "a6_a_v{}.png".format(idx), "validation")
+
+    best_idx = 10
+    h.plot_acc([d.a_train[best_idx]], [d.a_labels[best_idx]],
+               "a6_a_tb.png", "training best hyperparameters")
+    h.plot_acc([d.a_valid[best_idx]], [d.a_labels[best_idx]],
+               "a6_a_vb.png", "validation best hyperparameters")
 
   if graph_b:
     print("graphing b")
+
+    
 
   if graph_c:
     print("graphing c")

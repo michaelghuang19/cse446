@@ -52,4 +52,5 @@ def plot_acc(dataset, legends, filename, set_type, epochs=12):
   
   plt.legend(legends)
 
-  plt.savefig(filename)
+  plt.savefig(c.results_path + filename)
+  plt.close()

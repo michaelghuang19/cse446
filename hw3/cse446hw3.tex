@@ -969,25 +969,38 @@ print(b_test_loss)
 
 \textbf{Hyperparameters tested:} \\
 Learning rate = [10E-2, 10E-3, 10E-4] \\
-Batch size = [5, 25, 100, 500]
+Batch size = [5, 25, 100, 500] \\
 
 \begin{figure}[h]
   \centering
-  \subfloat[training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+  \subfloat[training]{\includegraphics[width=90mm]{../hw3-code/results/a6_a_t0.png}}
+  \subfloat[validation]{\includegraphics[width=90mm]{../hw3-code/results/a6_a_v0.png}}
 \end{figure}
-
-\textbf{Best hyperparameters:}
 
 \begin{figure}[h]
   \centering
-  \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+  \subfloat[training]{\includegraphics[width=90mm]{../hw3-code/results/a6_a_t1.png}}
+  \subfloat[validation]{\includegraphics[width=90mm]{../hw3-code/results/a6_a_v1.png}}
 \end{figure}
 
-Train accuracy: \\
-Test accuracy: 
+\begin{figure}[t]
+  \centering
+  \subfloat[training]{\includegraphics[width=90mm]{../hw3-code/results/a6_a_t2.png}}
+  \subfloat[validation]{\includegraphics[width=90mm]{../hw3-code/results/a6_a_v2.png}}
+\end{figure}
+\newpage
 
+\textbf{Best hyperparameters:} \\
+Learning rate = 0.001 \\
+Batch size = 100 \\
+Train accuracy: 43.3525\% \\
+Test accuracy: 40.93\%
+
+\begin{figure}[h]
+  \centering
+  \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/a6_a_tb.png}}
+  \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/a6_a_vb.png}}
+\end{figure}
 
 \subsection*{b.}
 
@@ -998,19 +1011,22 @@ M = [100, 200, 300] \\ \\
 Keeping constant, as we learned previously: \\
 Batch size = 100
 
-\begin{figure}[h]
-  \centering
-  \subfloat[training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-\end{figure}
+% \begin{figure}[h]
+%   \centering
+%   \subfloat[training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+%   \subfloat[validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+% \end{figure}
 
 \textbf{Best hyperparameters:}
+Learning rate = 0.01
+Momentum = 0.90
+M = 300
 
-\begin{figure}[h]
-  \centering
-  \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-\end{figure}
+% \begin{figure}[h]
+%   \centering
+%   \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+%   \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+% \end{figure}
 
 Train accuracy: \\
 Test accuracy: 
@@ -1025,19 +1041,21 @@ Batch size = 100 \\
 M = 100, k = 5, N = 14 as suggested \\
 
 
-\begin{figure}[h]
-  \centering
-  \subfloat[training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-\end{figure}
+% \begin{figure}[h]
+%   \centering
+%   \subfloat[training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+%   \subfloat[validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+% \end{figure}
 
 \textbf{Best hyperparameters:}
+Learning rate = 0.01
+Momentum = 0.90
 
-\begin{figure}[h]
-  \centering
-  \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-\end{figure}
+% \begin{figure}[h]
+%   \centering
+%   \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+%   \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+% \end{figure}
 
 Train accuracy: \\
 Test accuracy: 
@@ -1056,19 +1074,23 @@ All other parameters the same as in the tutorial
 
 
 
-\begin{figure}[h]
-  \centering
-  \subfloat[training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-\end{figure}
+% \begin{figure}[h]
+%   \centering
+%   \subfloat[training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+%   \subfloat[validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+% \end{figure}
 
 \textbf{Best hyperparameters:}
+Momentum = 0.80
+L1 size = 160
+L2 size = 100
+C1 size = 32
 
-\begin{figure}[h]
-  \centering
-  \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-  \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
-\end{figure}
+% \begin{figure}[h]
+%   \centering
+%   \subfloat[best hyperparameters training]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+%   \subfloat[best hyperparameters validation]{\includegraphics[width=100mm]{../hw3-code/results/.png}}
+% \end{figure}
 
 Train accuracy: \\
 Test accuracy: 
