@@ -1677,8 +1677,10 @@ test(model)
                    "a6b/a6_b_v{}.png".format(idx), "validation")
   
       best_idx = 8
-      h.plot_acc([d.b_best_train, d.b_best_valid], ["training " + d.b_labels[best_idx], "valid " +
-                                                    d.b_labels[best_idx]], "a6b/a6_b_best.png", "best hyperparameters", epochs=len(d.b_best_train))
+      h.plot_acc([d.b_best_train, d.b_best_valid],
+        ["training " + d.b_labels[best_idx], "valid " + d.b_labels[best_idx]], 
+        "a6b/a6_b_best.png", "best hyperparameters",
+        epochs=len(d.b_best_train))
   
     if graph_c:
       print("graphing c")
@@ -1695,8 +1697,10 @@ test(model)
                    "a6c/a6_c_v{}.png".format(idx), "validation")
   
       best_idx = 2
-      h.plot_acc([d.c_best_train, d.c_best_valid], ["training " + d.c_labels[best_idx], "valid " +
-                                                    d.c_labels[best_idx]], "a6c/a6_c_best.png", "best hyperparameters", epochs=len(d.c_best_train))
+      h.plot_acc([d.c_best_train, d.c_best_valid],
+        ["training " + d.c_labels[best_idx], "valid " + d.c_labels[best_idx]],
+        "a6c/a6_c_best.png", "best hyperparameters",
+        epochs=len(d.c_best_train))
   
     if graph_d:
       print("graphing d")
@@ -1713,8 +1717,10 @@ test(model)
                    "a6d/a6_d_v{}.png".format(idx), "validation")
   
       best_idx = 7
-      h.plot_acc([d.d_best_train, d.d_best_valid], ["training " + d.d_labels[best_idx], "valid " +
-                                                    d.d_labels[best_idx]], "a6d/a6_d_best.png", "best hyperparameters", epochs=len(d.d_best_train))
+      h.plot_acc([d.d_best_train, d.d_best_valid],
+        ["training " + d.d_labels[best_idx],"valid " + d.d_labels[best_idx]],
+        "a6d/a6_d_best.png", "best hyperparameters",
+        epochs=len(d.d_best_train))
   
   
   graph()
