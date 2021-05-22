@@ -8,10 +8,10 @@ import numpy as np
 import data as d
 import helpers as h
 
-graph_a = False
+graph_a = True
 graph_b = True
-graph_c = False
-graph_d = False
+graph_c = True
+graph_d = True
 
 '''
 Arbitrarily section different datasets
@@ -54,17 +54,44 @@ def graph():
                  "a6b/a6_b_v{}.png".format(idx), "validation")
 
     best_idx = 8
-    h.plot_acc([d.b_train[best_idx]], [d.b_labels[best_idx]],
-               "a6b/a6_b_tb.png", "training best hyperparameters")
-    h.plot_acc([d.b_valid[best_idx]], [d.b_labels[best_idx]],
-               "a6b/a6_b_vb.png", "validation best hyperparameters")
+    h.plot_acc([d.b_best_train, d.b_best_valid], ["training " + d.b_labels[best_idx], "valid " +
+                                                  d.b_labels[best_idx]], "a6b/a6_b_best.png", "best hyperparameters", epochs=len(d.b_best_train))
 
   if graph_c:
     print("graphing c")
 
+    c_groupings = [[0, 3], [3, 6]]
+
+    for idx, grouping in enumerate(c_groupings):
+      start = grouping[0]
+      end = grouping[1]
+
+      h.plot_acc(d.c_train[start:end], d.c_labels[start:end],
+                 "a6c/a6_c_t{}.png".format(idx), "training")
+      h.plot_acc(d.c_valid[start:end], d.c_labels[start:end],
+                 "a6c/a6_c_v{}.png".format(idx), "validation")
+
+    best_idx = 2
+    h.plot_acc([d.c_best_train, d.c_best_valid], ["training " + d.c_labels[best_idx], "valid " +
+                                                  d.c_labels[best_idx]], "a6c/a6_c_best.png", "best hyperparameters", epochs=len(d.c_best_train))
+
   if graph_d:
     print("graphing d")
 
+    d_groupings = [[0, 4], [4, 8], [8, 12], [12, 16]]
+
+    for idx, grouping in enumerate(d_groupings):
+      start = grouping[0]
+      end = grouping[1]
+
+      h.plot_acc(d.d_train[start:end], d.d_labels[start:end],
+                 "a6d/a6_d_t{}.png".format(idx), "training")
+      h.plot_acc(d.d_valid[start:end], d.d_labels[start:end],
+                 "a6d/a6_d_v{}.png".format(idx), "validation")
+
+    best_idx = 7
+    h.plot_acc([d.d_best_train, d.d_best_valid], ["training " + d.d_labels[best_idx], "valid " +
+                                                  d.d_labels[best_idx]], "a6d/a6_d_best.png", "best hyperparameters", epochs=len(d.d_best_train))
 
 
 graph()
