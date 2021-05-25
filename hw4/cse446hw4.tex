@@ -55,37 +55,39 @@
 
 True or False: Given a data matrix $X \in \mathbb{R}^{n \times d}$ where $d\ll n$ and $k = \mathrm{rank}(X)$, if we project our data onto a $k$ dimensional subspace using PCA, our projection will have zero reconstruction error (in other words, we find a perfect representation of our data, with no information loss). \\ \\
 
-
+True? It is possible that if we are given a skinny matrix with $n$ samples $\gg d$ features, we know that the rank $k$ of the matrix can be no larger than its smallest dimension, which in our case will be $d$. This projection of our data using PCA will therefore be pretty useless, since no dimensionality reduction is performed, but it is doable and give us a our original representation of our data sans information loss. 
 
 \subsection*{b.}
 
 True or False: Suppose that a matrix $X\in \mathbb{R}^{n \times n}$ has a singular value decomposition of $USV^{\top}$, where $S$ is a diagonal $n \times n$ matrix. Then, the rows of $V$ are equal to the eigenvectors of $X^{\top}X$. \\ \\
 
-
+False. The columns of $V$ would be equal to the eigenvectors of $X^T X$, instead.
 
 \subsection*{c.}
 
 True or False: Choosing $k$ to minimize the $k$-means objective (see Equation \eqref{eq:kmeans_obj} below) is a good way to find meaningful clusters. \\ \\
 
+False. We aim to minimize the intra-cluster distance between a given centroid and its clustered points, and for this objective, just choosing a good k isn't necessarily a good  way to minimize this distance overall.
 
 
 \subsection*{d.}
 
 True or False: The singular value decomposition of a matrix is unique. \\ \\
 
-
+False. In general, the SVD of a matrix is not unique--if we have repeated singular values, then we can switch around the orders of values in $U$ and $V$.
 
 \subsection*{e.}
 
 True or False: The rank of a square matrix equals the number of its nonzero eigenvalues. \\ \\
 
-
+False. In general, this is not true. The matrix must be symmetric in order for its rank to equal the number of nonzero eigenvalues.
 
 \subsection*{f.}
 
 True or False: Autoencoders, where the encoder and decoder functions are both neural networks with nonlinear activations, can capture more variance of the data in its encoded representation than PCA using the same number of dimensions. \\ \\
 
-
+True. PCA uses linear layers in contrast with the non-linear layers of the autoencoder, which are in turn more equipped to capture more features and more variance of the data in its representation.
+% False. This is not necessarily the case. For example, with a limited number of dimensions, PCA will still try to seek out variance in its output, while the neural networks might tend to be more overfitted or have less developed layers that could lead to less acclimation to the variance in the data. There are considerations between the linear PCA map and the nonlinear activations with autoencoders as well.
 
 }
 
