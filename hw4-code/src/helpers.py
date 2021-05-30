@@ -25,30 +25,22 @@ def load_mnist():
 
   return X_train, X_test
 
+"""
+Helper function for plotting multiple functions
+"""
+def plot_multiple(plt_title, img_title, x_label, y_label, data_list, legend_list):
+  
+  assert (len(data_list) > 0)
 
-def plot_single(data, title):
-  print("plotting objective functions")
+  iterations = list(range(1, len(data_list[0]) + 1))
 
-  iterations = list(range(1, len(data) + 1))
+  for data in data_list:
+    plt.plot(iterations, data)
 
-  plt.plot(iterations, )
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+  plt.legend(legend_list)
 
-  plt.title("objective function over time")
-  plt.xlabel("iterations")
-  plt.ylabel("objective function")
-
-  plt.savefig(title)
-
-
-def plot_loss(data, title):
-  print("plotting loss")
-
-  for item in data:
-    plt.plot(k_set, item)
-
-  plt.title("loss over time")
-  plt.xlabel("iterations")
-  plt.ylabel("loss")
-  plt.legends(["test, training"])
-
-  plt.savefig(title)
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()

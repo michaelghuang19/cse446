@@ -10,3 +10,8 @@ data_path = home_dir_path + '/data/'
 results_path = home_dir_path + '/results/'
 
 png_exten = '.png'
+
+d = 784
+k = 100
+
+tt_list = ["training", "testing"]
