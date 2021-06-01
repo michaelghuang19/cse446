@@ -97,13 +97,29 @@ True. PCA uses linear layers in contrast with the non-linear layers of the autoe
 \begin{enumerate}
   \item Let $\widehat{w}$ be the solution to the regression problem $\min_{w} \twonorm{Xw - y}$. Let $\widehat{w}_{\rm R}$ be the solution to the ridge regression problem $\min_w \twonorm{X w - y} + \lambda \twonorm{w}$. Let $X = U \Sigma V^\top$ be a singular value decomposition of $X$. Using this decomposition, explain why the solution $\widehat{w}_{\rm R}$ to the ridge regression problem ``shrinks'' as compared to the solution $\widehat{w}$ of the standard regression problem.
   
-  The solution $\widehat{w}_{\rm R}$ to the ridge regression problem ``shrinks'' as compared to the solution $\widehat{w}$ of the standard regression problem since the singular values in the solution to the ridge regression problem are smaller, which are in response to the smaller variance that is achieved. (as is the purpose of using ridge regression rather than standard regression).
-  % small singular values due ot lower variance in ridge regression (as is the aim)?
+  The weights in the solution $\widehat{w}_{\rm R}$ to the ridge regression problem ``shrinks'' as compared to the solution $\widehat{w}$ of the standard regression problem since the singular values in the solution to the ridge regression problem are smaller, which are in response to the smaller variance that is achieved. (as is the purpose of using ridge regression over standard regression).
+  % small singular values due to lower variance in ridge regression (as is the aim)?
   % I have no clue
 
   % Yes, using the singular value decomposition of X enables you to prove that the the ridge solution shrinks compared to the standard solution.
 
-  Use algebra, and express $\widehat{w}$ and $\widehat{w}_{\rm R}$ in terms of the SVD of $X$ and compare their L2-norms
+  We can use algebra, and express $\widehat{w}$ and $\widehat{w}_{\rm R}$ in terms of the SVD of $X$ and compare their L2-norms: \\ \\
+  Standard Regression: \\
+  $\min_w \twonorm{X w - y}$ \\
+  $= \min_w (Xw - y)^\top(Xw-y)$ \\
+  $X\widehat{w} = X (X^\top X)^{-1}X^\top y$ \\
+  $= UDV^\top ((UDV^\top)^\top UDV^\top)^{-1}(UDV^\top)^\top y$ \\
+  $= UDV^\top (VDU^\top UDV^\top)^{-1}VDU^\top y$ \\
+  $= UU^\top y$ \\
+
+  Ridge Regression: \\
+  $\min_w \twonorm{X w - y} + \lambda \twonorm{w}$ \\
+  $= \min_w (Xw - y)^\top(Xw-y) + \lambda w^\top w$ \\
+  $X\widehat{w}_{\rm R} = X(X^\top X + \lambda I)^{-1} X^\top y$ \\
+  $= UDV^\top((UDV^\top)^\top UDV^\top + \lambda I)^{-1} (UDV^\top)^\top y$ \\
+  $= UDV^\top(VDU^\top UDV^\top + \lambda I)^{-1} VDU^\top y$ \\
+  $= UD (D^2 + \lambda I)^{-1} DU^\top y$ \\
+
 
   \item Let $U \in \R^{n\times n}$ be a matrix with singular values all equal to one. Show that $UU^\top = U^\top U = I_n$. Further, use this result to show that $U$ preserves Euclidean norms. In other words, $\norm{U x}_2 = \norm{x}_2$ for any $x\in \R^n$. \\
   
