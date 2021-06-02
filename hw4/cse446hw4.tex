@@ -185,7 +185,7 @@ $\sum_{i=1}^d{\lambda_i} = 52.72503549512691$
 
 \subsection*{b.}
 
-Any example $x \in \mathbb{R}^d$ (including those from either the training or test set) can be approximated using just $\mu$ and the first $k$ eigenvalue, eigenvector pairs, for any $k = 1, 2, \ldots, d$. For any $k$, provide a formula for computing this approximation. \\ \\
+% Any example $x \in \mathbb{R}^d$ (including those from either the training or test set) can be approximated using just $\mu$ and the first $k$ eigenvalue, eigenvector pairs, for any $k = 1, 2, \ldots, d$. For any $k$, provide a formula for computing this approximation. \\
 
 In terms of the first $k$ eigenvectors $V_k$, we can use what we have been doing so far, and adjusting for the mean value: \\
 $V_k^\top V_k (x - \mu) + \mu$
@@ -193,15 +193,39 @@ $V_k^\top V_k (x - \mu) + \mu$
 
 \subsection*{c.}
 
-Using this approximation, plot the reconstruction error from $k=1$ to $100$ (the $X$-axis is $k$ and the $Y$-axis is the mean-squared error reconstruction error) on the training set and the test set (using the $\mu$ and the basis learned from the training set). On a separate plot, plot $1-\frac{\sum_{i=1}^{k}{\lambda_i}}{\sum_{i=1}^{d}{\lambda_i}}$ from $k=1$ to $100$.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=130mm]{../hw4-code/results/a3_cobj.png}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=130mm]{../hw4-code/results/a3_cerr.png}
+\end{figure}
+
+\newpage
 
 \subsection*{d.}
 
-Now let us get a sense of what the top PCA directions are capturing. Display the first $10$ eigenvectors as images, and provide a brief interpretation of what you think they capture.
+% Now let us get a sense of what the top PCA directions are capturing. Display the first $10$ eigenvectors as images, and provide a brief interpretation of what you think they capture.
+
+\begin{figure}[!hb]
+  \centering
+  \includegraphics[width=130mm]{../hw4-code/results/a3_d.png}
+\end{figure}
+
+The first 10 eigenvectors are essentially trying to capture the most core visual elements of a number, or the most distinguishing features that a person can generally use to pick out and easily categorize any given digit. Each component essentially captures the most variation in the data, which provides the most information for reconstructing the image.
 
 \subsection*{e.}
 
-Finally, visualize a set of reconstructed digits from the training set for different values of $k$. In particular provide the reconstructions for digits $2, 6, 7$ with values $k = 5, 15, 40, 100$ (just choose an image from each digit arbitrarily). Show the original image side-by-side with its reconstruction. Provide a brief interpretation, in terms of your perceptions of the quality of these reconstructions and the dimensionality you used.
+% Finally, visualize a set of reconstructed digits from the training set for different values of $k$. In particular provide the reconstructions for digits $2, 6, 7$ with values $k = 5, 15, 40, 100$ (just choose an image from each digit arbitrarily). Show the original image side-by-side with its reconstruction. Provide a brief interpretation, in terms of your perceptions of the quality of these reconstructions and the dimensionality you used.
+
+\begin{figure}[!hb]
+  \centering
+  \includegraphics[width=130mm]{../hw4-code/results/a3_e.png}
+\end{figure}
+
+With more of the top eigenvectors, the image interpretation of each digit becomes much clearer. The digit becomes clearer with greater dimensionality, with the top 40 eigenvectors being good enough to tell each digit for sure, and just the first 15 eigenvectors being good enough to interpret for 6 and 7, and guessable for 2.
 
 }
 
@@ -288,7 +312,7 @@ def part_e(X_train, v_list):
       image = image.dot(X_train.T).T
       final_set.append(image[idx])
 
-  fig, axes = plt.subplots(4, len(idx_set))
+  fig, axes = plt.subplots(5, len(idx_set))
 
   for i, ax in enumerate(axes.ravel()):
     ax.imshow(final_set[i].reshape((28, 28)), cmap='gray')

@@ -75,7 +75,7 @@ def part_e(X_train, v_list):
       image = image.dot(X_train.T).T
       final_set.append(image[idx])
 
-  fig, axes = plt.subplots(4, len(idx_set))
+  fig, axes = plt.subplots(5, len(idx_set))
 
   for i, ax in enumerate(axes.ravel()):
     ax.imshow(final_set[i].reshape((28, 28)), cmap='gray')
@@ -92,14 +92,14 @@ def main():
                    e_list[29], e_list[49]]) + "\n")
   output.write(str(sum(e_list)) + "\n")
 
-  train_mse_data, test_mse_data, frac_data = part_c(
-      X_train, X_test)
-  h.plot_multiple("error over k", "a3_cerr", "k", "error", 
-                  [train_mse_data, test_mse_data], c.tt_list)
-  h.plot_multiple("obj over k", "a3_cobj", "k", "obj", 
-                  [frac_data], ["frac"])
+  # train_mse_data, test_mse_data, frac_data = part_c(
+  #     X_train, X_test)
+  # h.plot_multiple("error over k", "a3_cerr", "k", "error", 
+  #                 [train_mse_data, test_mse_data], c.tt_list)
+  # h.plot_multiple("obj over k", "a3_cobj", "k", "obj", 
+  #                 [frac_data], ["frac"])
 
-  part_d(v_list) 
+  # part_d(v_list) 
 
   part_e(X_train, v_list)
 
