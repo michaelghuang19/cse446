@@ -174,15 +174,14 @@ $f(x) = \max_{i = 1, 2, \dots, n} |x_i - (1 + \eta/i)|$
 \section*{A.3}
 {\Large 
 
-Let's do PCA on MNIST dataset and reconstruct the digits in the dimensionality-reduced PCA basis. \\ \\
-
-You will compute your PCA basis using the training dataset only, and evaluate the quality of the basis on the test set, similar to the $k$-means reconstructions of above. Because $n = 50,000$ training examples and $m=10,000$ testing examples are of size $28 \times 28$ so begin by flattening each example to a vector to obtain $X_{\rm train} \in \mathbb{R}^{n \times d}$ and $X_{\rm test} \in \mathbb{R}^{m \times d}$ for $d := 784$. \\ \\
-
-Let $\mu \in \mathbb{R}^{d}$ denote the average of the training examples in $X_{\rm train}$, i.e., $\mu = \frac{1}{n} X_{\rm train}^\top \mathbf{1}^\top$. Now let $\Sigma =  \left(X_{\rm train} - \mathbf{1} \mu^\top\right)^\top (X_{\rm train} - \mathbf{1} \mu^\top)/n$ denote the sample covariance matrix of the training examples. (Please use the first $n$ images in the MNIST's training set as train and the last $m$ images in MNIST's training set as test.) Let $\Sigma = UDU^\top$ denote the eigenvalue decomposition of $\Sigma$.
-
 \subsection*{a.}
 
-If $\lambda_i$ denotes the $i$-th largest eigenvalue of $\Sigma$, what are the eigenvalues $\lambda_1$, $\lambda_2$, $\lambda_{10}$, $\lambda_{30}$, and $\lambda_{50}$? What is the sum of eigenvalues $\sum_{i=1}^d{\lambda_i}$?
+$\lambda_1 = 5.116787728342086$ \\
+$\lambda_2 = 3.741328478864837$ \\
+$\lambda_{10} = 1.2427293764173342$ \\
+$\lambda_{30} = 0.364255720278894$ \\
+$\lambda_{50} = 0.16970842700672767$ \\
+$\sum_{i=1}^d{\lambda_i} = 52.72503549512691$
 
 \subsection*{b.}
 
@@ -203,6 +202,199 @@ Now let us get a sense of what the top PCA directions are capturing. Display the
 \subsection*{e.}
 
 Finally, visualize a set of reconstructed digits from the training set for different values of $k$. In particular provide the reconstructions for digits $2, 6, 7$ with values $k = 5, 15, 40, 100$ (just choose an image from each digit arbitrarily). Show the original image side-by-side with its reconstruction. Provide a brief interpretation, in terms of your perceptions of the quality of these reconstructions and the dimensionality you used.
+
+}
+
+\section*{}
+{\Large 
+
+\newpage
+
+\begin{verbatim}
+# pca.py
+# Applicable helpers for HW4 A3
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+import constants as c
+import helpers as h
+
+from mnist import MNIST
+from scipy import linalg
+
+def part_a(X, mu=None):
+  n, d = X.shape
+
+  if mu is None:
+    mu = np.mean(X, axis=0)
+
+  diff = X - mu
+  sigma = np.matmul(diff.T, diff) / n
+
+  lamb, v = np.linalg.eig(sigma)
+  lamb = lamb.real
+  v = v.real
+
+  return lamb, v
+
+def part_c(X_train, X_test):
+  train_mse_data = []
+  test_mse_data = []
+  frac_data = []
+  
+  e_train, v_train = part_a(X_train)
+
+  for i in range(c.k):
+    recon_train = (v_train[:, :i+1]).dot(v_train[:, :i+1].T)
+    recon_test = recon_train.dot(X_test.T).T
+    recon_train = recon_train.dot(X_train.T).T
+
+    mse_train = np.sum(np.square(recon_train - X_train)) / X_train.shape[0]
+    mse_test = np.sum(np.square(recon_test - X_test)) / X_test.shape[0]
+    
+    train_mse_data.append(mse_train)
+    test_mse_data.append(mse_test)
+
+    frac = 1 - (np.sum(e_train[:i+1]) - np.sum(e_train))
+
+    frac_data.append(frac)
+
+  return train_mse_data, test_mse_data, frac_data
+
+def part_d(v_list):
+  fig, axes = plt.subplots(2, 5)
+
+  axes_list = []
+  for i, item in enumerate(axes):
+    axes_list += list(item)
+
+  for i, ax in enumerate(axes_list):
+    img = v_list[:,i].reshape((28, 28))
+    ax.imshow(img, cmap='gray')
+
+  fig.savefig(c.results_path + "a3_d")
+
+def part_e(X_train, v_list):
+  # for 2, 6, 7
+  idx_set = [5, 13, 15]
+  k_set = [5, 15, 40, 100]
+  final_set = [X_train[idx_set[i], :] for i, _ in enumerate(idx_set)]
+
+  for k in k_set:
+    for idx in idx_set:
+      image = (v_list[:, :k]).dot(v_list[:, :k].T)
+      image = image.dot(X_train.T).T
+      final_set.append(image[idx])
+
+  fig, axes = plt.subplots(4, len(idx_set))
+
+  for i, ax in enumerate(axes.ravel()):
+    ax.imshow(final_set[i].reshape((28, 28)), cmap='gray')
+
+  fig.savefig(c.results_path + "a3_e")
+
+def main():
+  output = open(c.results_path + "a3.txt", "w")
+
+  X_train, X_test = h.load_mnist()
+
+  e_list, v_list = part_a(X_train)
+  output.write(str([e_list[0], e_list[1], e_list[9],
+                   e_list[29], e_list[49]]) + "\n")
+  output.write(str(sum(e_list)) + "\n")
+
+  train_mse_data, test_mse_data, frac_data = part_c(
+      X_train, X_test)
+  h.plot_multiple("error over k", "a3_cerr", "k", "error", 
+                  [train_mse_data, test_mse_data], c.tt_list)
+  h.plot_multiple("obj over k", "a3_cobj", "k", "obj", 
+                  [frac_data], ["frac"])
+
+  part_d(v_list) 
+
+  part_e(X_train, v_list)
+
+  output.close()
+
+
+if __name__ == "__main__":
+  main()
+
+\end{verbatim}
+
+\begin{verbatim}
+# helpers.py
+# Applicable helpers for HW3
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+import constants as c
+
+from mnist import MNIST
+from scipy import linalg
+
+"""
+Helper function for loading in MNIST data set
+"""
+
+def load_mnist():
+  # load data
+  mndata = MNIST(c.data_path)
+
+  X_train, labels_train = map(np.array, mndata.load_training())
+  X_test, labels_test = map(np.array, mndata.load_testing())
+  X_train = X_train/255.0
+  X_test = X_test/255.0
+
+  return X_train, X_test
+
+"""
+Helper function for plotting multiple functions
+"""
+def plot_multiple(plt_title, img_title, x_label, y_label, data_list, legend_list):
+  
+  assert (len(data_list) > 0)
+
+  iterations = list(range(1, len(data_list[0]) + 1))
+
+  for data in data_list:
+    plt.plot(iterations, data)
+
+  plt.title(plt_title)
+  plt.xlabel(x_label)
+  plt.ylabel(y_label)
+  plt.legend(legend_list)
+
+  plt.savefig(c.results_path + img_title + c.png_exten)
+  plt.close()
+
+\end{verbatim}
+
+\begin{verbatim}
+# constants.py
+# Applicable constants for HW4
+
+import numpy as np
+import os
+
+home_dir_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+data_path = home_dir_path + '/data/'
+results_path = home_dir_path + '/results/'
+
+png_exten = '.png'
+
+d = 784
+k = 100
+
+tt_list = ["training", "testing"]
+\end{verbatim}
+
+\newpage
 
 }
 
@@ -288,6 +480,8 @@ Small scale image classification \\ \\
     \item Result: The company wants a system that when someone enters their information can determine how susceptible they are to this disease. The pipeline should take limited amount of personal data from a new user and infer more detailed metrics about the person.
 \end{itemize}
 
+
+
 \subsection*{b.}
 
 Social Media App Facial Recognition Technology \\ \\
@@ -297,6 +491,8 @@ Social Media App Facial Recognition Technology \\ \\
     \item  Result: The company wants an algorithm that can quickly identify the key features of a person’s face to apply a filter. (Do not worry about describing the actual filter application!).
 \end{itemize}
 
+
+
 \subsection*{c.}
 
 Malware Detection \\ \\
@@ -305,6 +501,8 @@ Malware Detection \\ \\
     \item Dataset: A set of malware file metadata from users worldwide describing all attributes of offending files including its contents, publisher, and attributes of the resultant activity.
     \item Result: The company wants an accurate, scalable solution to detect whether incoming files are malicious for users across the globe.
 \end{itemize}
+
+
 
 }
 
