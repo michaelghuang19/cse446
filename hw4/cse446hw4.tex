@@ -46,6 +46,10 @@
 
 \thispagestyle{firstpageheader}
 
+\section*{Collaborators}
+{\Large 
+Jimmy Guo, Neil Kagalwala, Andrew Wang
+}
 \section*{A.1}
 {\Large 
 
@@ -54,6 +58,7 @@
 True or False: Given a data matrix $X \in \mathbb{R}^{n \times d}$ where $d\ll n$ and $k = \mathrm{rank}(X)$, if we project our data onto a $k$ dimensional subspace using PCA, our projection will have zero reconstruction error (in other words, we find a perfect representation of our data, with no information loss). \\ \\
 
 True? It is possible that if we are given a skinny matrix with $n$ samples $\gg d$ features, we know that the rank $k$ of the matrix can be no larger than its smallest dimension, which in our case will be $d$. This projection of our data using PCA will therefore be pretty useless, since no dimensionality reduction is performed, but it is doable and give us a our original representation of our data sans information loss. 
+% full rank
 
 \subsection*{b.}
 
@@ -79,6 +84,7 @@ False. In general, the SVD of a matrix is not unique--if we have repeated singul
 True or False: The rank of a square matrix equals the number of its nonzero eigenvalues. \\ \\
 
 False. In general, this is not true. The matrix must be symmetric in order for its rank to equal the number of nonzero eigenvalues.
+% less than or equal to its rank
 
 \subsection*{f.}
 
@@ -102,6 +108,8 @@ True. PCA uses linear layers in contrast with the non-linear layers of the autoe
   % I have no clue
 
   % Yes, using the singular value decomposition of X enables you to prove that the the ridge solution shrinks compared to the standard solution.
+
+  % extra lambda will make it shrink
 
   We can use algebra, and express $\widehat{w}$ and $\widehat{w}_{\rm R}$ in terms of the SVD of $X$ and compare their L2-norms: \\ \\
   Standard Regression: \\
@@ -478,7 +486,7 @@ Test reconstruction error at $h = 128$ for $\mathcal{F}_2(x)$: 0.001911275976896
 
 % In a few sentences, compare the quality of the reconstructions from these two autoencoders compare with those of PCA. You may want to re-run your code for PCA using the different $h$ values as the number of top-$k$ eigenvalues.
 
-When comparing the quality of the reconstructions from the autoencoders to the PCA, with equal $h$ and $k$ values, there appeared to be a trend where the PCA would have much more recognizable digits quicker than the autencoders, but would generally improve less quickly than the autoencoders. However, the autoencoders often led to various transformations of the images (e.g. the outlines were sharper, darker, softer, etc.) that didn't lead to an exact transformation, while PCA seemed to essentially work towards the exact original image. 
+When comparing the quality of the reconstructions from the autoencoders to the PCA, with equal $h$ and $k$ values, there appeared to be a trend where the PCA would have much more recognizable digits quicker than the autencoders, but would generally improve less quickly than the autoencoders. However, the autoencoders often led to various transformations of the images (e.g. the outlines were sharper, darker, softer, etc.) that didn't lead to an exact transformation, while PCA seemed to essentially work towards the exact original image. Purely linear operations are also considerably faster than neural nets.
 
 \newpage
 
