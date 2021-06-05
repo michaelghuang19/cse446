@@ -115,19 +115,25 @@ True. PCA uses linear layers in contrast with the non-linear layers of the autoe
   Standard Regression: \\
   $\min_w \twonorm{X w - y}$ \\
   $= \min_w (Xw - y)^\top(Xw-y)$ \\
-  $X\widehat{w} = X (X^\top X)^{-1}X^\top y$ \\
-  $= UDV^\top ((UDV^\top)^\top UDV^\top)^{-1}(UDV^\top)^\top y$ \\
-  $= UDV^\top (VDU^\top UDV^\top)^{-1}VDU^\top y$ \\
-  $= UU^\top y$ \\
+  $\widehat{w} = (X^\top X)^{-1}X^\top y$ \\
+  $= ((UDV^\top)^\top UDV^\top)^{-1}(UDV^\top)^\top y$ \\
+  $= (VDU^\top UDV^\top)^{-1}VDU^\top y$ \\
+  $= (VD^2V^\top)^{-1}VDU^\top y$ \\
+  $= VD^{-2}V^\top VDU^\top y$ \\
+  $= VD^{-1}U y$ \\
 
   Ridge Regression: \\
   $\min_w \twonorm{X w - y} + \lambda \twonorm{w}$ \\
   $= \min_w (Xw - y)^\top(Xw-y) + \lambda w^\top w$ \\
-  $X\widehat{w}_{\rm R} = X(X^\top X + \lambda I)^{-1} X^\top y$ \\
-  $= UDV^\top((UDV^\top)^\top UDV^\top + \lambda I)^{-1} (UDV^\top)^\top y$ \\
-  $= UDV^\top(VDU^\top UDV^\top + \lambda I)^{-1} VDU^\top y$ \\
-  $= UD (D^2 + \lambda I)^{-1} DU^\top y$ \\
+  $\widehat{w}_{\rm R} = (X^\top X + \lambda I)^{-1} X^\top y$ \\
+  $= ((UDV^\top)^\top UDV^\top + \lambda I)^{-1} (UDV^\top)^\top y$ \\
+  $= (VDU^\top UDV^\top + \lambda I)^{-1} VDU^\top y$ \\
+  $= (VD^2V^\top + \lambda V V^\top)^{-1} VDU^\top y$ \\
+  $= (V(D^2 + \lambda) V^\top)^{-1} VDU^\top y$ \\
+  $= V(D^2 + \lambda)^{-1} V^\top VDU^\top y$ \\
+  $= V(D^2 + \lambda)^{-1} DU^\top y$ \\
 
+  We note that the largest difference is that in $\widehat{w}$, our $D$-term is $D^{-1}$, while in $\widehat{w}_{\rm R}$, our $D$-term is $(D^2 + \lambda)^{-1}D$. We can compare this by transforming $D^{-1} = D^{-2}D$. The addition of a positive $\lambda$ term essentially shrinks this parameter and the overall $w$-solutions by increasing the factor by which we are dividing the $D$-term (and therefore overall term as well).
 
   \item Let $U \in \R^{n\times n}$ be a matrix with singular values all equal to one. Show that $UU^\top = U^\top U = I_n$. Further, use this result to show that $U$ preserves Euclidean norms. In other words, $\norm{U x}_2 = \norm{x}_2$ for any $x\in \R^n$. \\
   
