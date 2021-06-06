@@ -85,9 +85,9 @@ def run_lloyd(data, k, function):
 
   result_list = []
 
-  iter = 0
+  iteration = 0
   while True:
-    print("iteration " + str(iter))
+    print("iteration " + str(iteration))
 
     old_idx = np.copy(new_idx)
     new_idx = classify(data, centroids)
@@ -95,18 +95,21 @@ def run_lloyd(data, k, function):
     centroids = recenter(data, new_idx, centroids)
 
     # calculating objective/error  
-    error = ((np.square(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1))).sum() / n)
+    error = np.sum(np.square(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
 
     if function == "b":
       result_list.append(error)
+
+    if function == "c":
+      error /= n
 
     # if no more changes, then break
     if np.array_equal(old_idx, new_idx):
       break
 
-    iter +=1
+    iteration +=1
   
-  return centroids, result_list, error, iter
+  return centroids, result_list, error, iteration
 
 def classify(data, centroids):
   print("classifying points to centroids")
@@ -133,9 +136,9 @@ def get_obj(data, centroids):
 
   return np.array(obj)
 
-centroids, obj_list, _, iter = run_lloyd(train_data, k, "b")
+centroids, obj_list, _, iteration = run_lloyd(train_data, k, "b")
 
-print(iter)
+print(iteration)
 print(obj_list)
 
 # plot b
@@ -149,7 +152,7 @@ for item in axes:
   axes_list += list(item)
 
 for i, ax in enumerate(axes_list):
-  ax.imshow(centroids[i][0], cmap='gray_r')
+  ax.imshow(centroids[i][0])
 
 train_error_final = []
 test_error_final = []

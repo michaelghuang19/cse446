@@ -790,19 +790,9 @@ print(b_test_loss)
 \section*{A.5}
 {\Large 
 
-% Given a dataset $x_1, \dots, x_n \in \R^{d}$ and an integer $1 \leq k \leq n$, recall the following $k$-means objective function
-% \begin{align}
-%     \min_{\pi_1, \ldots, \pi_k} \sum_{i=1}^{k} \sum_{j \in \pi_i} \norm{ x_j - \mu_{i} }^2_2 \ , \quad \mu_i = \frac{1}{|\pi_i|} \sum_{j \in \pi_i} x_j \ . \label{eq:kmeans_obj}
-% \end{align}
-% Above, $\{\pi_i\}_{i=1}^{k}$ is a partition of $\{1, 2, \ldots, n\}$. The objective \eqref{eq:kmeans_obj} is NP-hard to find a global minimizer of. Nevertheless Lloyd's algorithm, the commonly-used heuristic which we discussed in lecture, typically works well in practice.
-
 \subsection*{a.}
 
-% Implement Lloyd's algorithm for solving the $k$-means objective \eqref{eq:kmeans_obj}. Do not use any off-the-shelf implementations, such as those found in \texttt{scikit-learn}. Include your code in your submission.
-
 \subsection*{b.}
-
-% Run the algorithm on the \emph{training} dataset of MNIST with $k=10$, plotting the objective function \eqref{eq:kmeans_obj} as a function of the iteration number. Visualize (and include in your report) the cluster centers as a $28\times 28$ image.
 
 \begin{figure}[!hb]
   \centering
@@ -817,8 +807,6 @@ print(b_test_loss)
 \newpage
 
 \subsection*{c.}
-
-% For $k=\{2, 4, 8, 16, 32, 64\}$ run the algorithm on the \emph{training} dataset to obtain centers $\{\mu_{i}\}_{i=1}^k$. If $\left\{\left(x_i,y_i\right)\right\}_{i=1}^n$ and $\left\{\left(x_i',y_i'\right)\right\}_{i=1}^m$ denote the training and test sets, respectively, plot the training error $\frac{1}{n} \sum_{i=1}^n \min_{j=1,\dots,k} \twonorm{ \mu_j - x_i }$ and test error $\frac{1}{m} \sum_{i=1}^m \min_{j=1,\dots,k} \twonorm{ \mu_j - x_i' }$ as a function of $k$ on the same plot.
 
 \begin{figure}[!hb]
   \centering
@@ -915,9 +903,9 @@ def run_lloyd(data, k, function):
 
   result_list = []
 
-  iter = 0
+  iteration = 0
   while True:
-    print("iteration " + str(iter))
+    print("iteration " + str(iteration))
 
     old_idx = np.copy(new_idx)
     new_idx = classify(data, centroids)
@@ -925,18 +913,21 @@ def run_lloyd(data, k, function):
     centroids = recenter(data, new_idx, centroids)
 
     # calculating objective/error  
-    error = ((np.square(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1))).sum() / n)
+    error = np.sum(np.square(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
 
     if function == "b":
       result_list.append(error)
+
+    if function == "c":
+      error /= n
 
     # if no more changes, then break
     if np.array_equal(old_idx, new_idx):
       break
 
-    iter +=1
+    iteration +=1
   
-  return centroids, result_list, error, iter
+  return centroids, result_list, error, iteration
 
 def classify(data, centroids):
   print("classifying points to centroids")
@@ -963,9 +954,9 @@ def get_obj(data, centroids):
 
   return np.array(obj)
 
-centroids, obj_list, _, iter = run_lloyd(train_data, k, "b")
+centroids, obj_list, _, iteration = run_lloyd(train_data, k, "b")
 
-print(iter)
+print(iteration)
 print(obj_list)
 
 # plot b
@@ -1030,14 +1021,7 @@ Small scale image classification \\ \\
 
 \subsection*{b.}
 
-Social Media App Facial Recognition Technology \\ \\
-\begin{itemize}
-    \item Setting: You are tasked with developing a machine learning pipeline that can quickly map someone’s face for the application of filters (i.e., Snapchat, Instagram).
-    \item Dataset: A set of face images compiled from the company’s employees and their families.
-    \item  Result: The company wants an algorithm that can quickly identify the key features of a person’s face to apply a filter. (Do not worry about describing the actual filter application!).
-\end{itemize}
-
-
+To pre-process the data, I would first look into trying to make sure that I can relatively "standardize" images by focusing on a person's face and minimizing the background as much as possible. To do this, I would try to first use the Haar Cascade Classifier, the precursor to using HoG features as mentioned in lecture, and attempt to crop as closely onto the face as possible with all the samples. Although the data could have good variety since families usually contain a good variety of ages and genders, the dataset is still relatively small. Keeping this in mind, I didn't have as much confidence in using HoG feature extraction, I thought something like PCA would be more effective in finding meaningful features, and combining this with some sort of bootstrapping or cross-validation could help as well to verify that the model is working properly and assess if we need more data as well. I also chose a linear function since it is considerably faster than non-linear algorithms.
 
 \subsection*{c.}
 

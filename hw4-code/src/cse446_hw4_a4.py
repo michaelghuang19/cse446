@@ -189,10 +189,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 64
 
@@ -210,10 +210,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 128
 
@@ -231,10 +231,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 """# part (b)"""
 
@@ -274,10 +274,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 64
 
@@ -295,10 +295,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 128
 
@@ -316,10 +316,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 """# part (c)"""
 
@@ -331,6 +331,3 @@ print(a_test_loss)
 
 b_test_loss = test(b_model)
 print(b_test_loss)
-
-"""# part (d)"""
-
