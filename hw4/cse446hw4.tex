@@ -88,15 +88,9 @@ True. PCA uses pnly linear layers in contrast with the non-linear layers of the 
 \subsection*{a.}
 
 \begin{enumerate}
-  \item Let $\widehat{w}$ be the solution to the regression problem $\min_{w} \twonorm{Xw - y}$. Let $\widehat{w}_{\rm R}$ be the solution to the ridge regression problem $\min_w \twonorm{X w - y} + \lambda \twonorm{w}$. Let $X = U \Sigma V^\top$ be a singular value decomposition of $X$. Using this decomposition, explain why the solution $\widehat{w}_{\rm R}$ to the ridge regression problem ``shrinks'' as compared to the solution $\widehat{w}$ of the standard regression problem.
-  
-  The weights in the solution $\widehat{w}_{\rm R}$ to the ridge regression problem ``shrinks'' as compared to the solution $\widehat{w}$ of the standard regression problem since the singular values in the solution to the ridge regression problem are smaller, which are in response to the smaller variance that is achieved. (as is the purpose of using ridge regression over standard regression).
-  % small singular values due to lower variance in ridge regression (as is the aim)?
-  % I have no clue
-
+  \item 
+  % The weights in the solution $\widehat{w}_{\rm R}$ to the ridge regression problem ``shrinks'' as compared to the solution $\widehat{w}$ of the standard regression problem since the singular values in the solution to the ridge regression problem are smaller, which are in response to the smaller variance that is achieved. (as is the purpose of using ridge regression over standard regression).
   % Yes, using the singular value decomposition of X enables you to prove that the the ridge solution shrinks compared to the standard solution.
-
-  % extra lambda will make it shrink
 
   We can use algebra, and express $\widehat{w}$ and $\widehat{w}_{\rm R}$ in terms of the SVD of $X$ and compare their L2-norms: \\ \\
   Standard Regression: \\
@@ -120,9 +114,9 @@ True. PCA uses pnly linear layers in contrast with the non-linear layers of the 
   $= V(D^2 + \lambda)^{-1} V^\top VDU^\top y$ \\
   $= V(D^2 + \lambda)^{-1} DU^\top y$ \\
 
-  We note that the largest difference is that in $\widehat{w}$, our $D$-term is $D^{-1}$, while in $\widehat{w}_{\rm R}$, our $D$-term is $(D^2 + \lambda)^{-1}D$. We can compare this by transforming $D^{-1} = D^{-2}D$. The addition of a positive $\lambda$ term essentially shrinks this parameter and the overall $w$-solutions by increasing the factor by which we are dividing the $D$-term (and therefore overall term as well).
+  We note that the key difference is that in $\widehat{w}$, our $D$-term is $D^{-1}$, while in $\widehat{w}_{\rm R}$, our $D$-term is $(D^2 + \lambda)^{-1}D$. We can compare this by transforming $D^{-1} = D^{-2}D$. The addition of a positive $\lambda$ term essentially shrinks this parameter and the overall $w$-solutions by increasing the factor by which we are dividing the $D$-term (and therefore overall term as well).
 
-  \item Let $U \in \R^{n\times n}$ be a matrix with singular values all equal to one. Show that $UU^\top = U^\top U = I_n$. Further, use this result to show that $U$ preserves Euclidean norms. In other words, $\norm{U x}_2 = \norm{x}_2$ for any $x\in \R^n$. \\
+  \item 
   
   We first use SVD, and show that $UU^\top = I$: \\ 
   $UU^\top = X \Sigma V^\top (X \Sigma V^\top)^\top$ \\
@@ -142,33 +136,9 @@ True. PCA uses pnly linear layers in contrast with the non-linear layers of the 
   $= x^\top U^\top Ux$ \\
   $= x^\top x$ \hfill Since we showed $U^\top U = I$ \\
   $\norm{U x}^2_2 = \norm{x}^2_2$ \hfill By the aforementioned property \\
-  $\norm{U x}_2 = \norm{x}_2$ \hfill Algebra \\
-
-
-\end{enumerate}
-
-\subsection*{b.}
-
-\begin{enumerate}
-  \item 
-  We know that $\norm{x}_1 = \sum_{i=1}^{n} |x_i|$, by definition, which we note is both nondifferentiable and convex. Looking at the absolute value terms, we can express each one as $\text{max} \{ g \cdot x_i \}$ where $g \in {-1, 1}$, so we can essentially say that $\norm{x}_1 = \text{max}\{g^\top \cdot x_i\}$. \\ \\
-  We can thus find the subgradient set, we first must have $g^\top \cdot x = \norm{x}_1$. Using the absolute value idea as we did previously, we know that for $x_i > 0$, we have $g_i = 1$, while for $x_i < 0$, $g_i = -1$. The only point of interest is at $x_i = 0$, where we can select either $-1$ or $1$ to satisfy the optimization. Our overall set of subgradients can therefore be described as \\
-  $\{g \in \norm{g} \leq 1, g^\top \cdot x = \norm{x}_1\}$
-
-  \item $f(x) = \max \left\{f_i(x)\right\}_{i =1}^m$, where $f_i$ are all convex and continuously differentiable functions (i.e., gradients exist everywhere in the domain for $f_i$)
-  
-  We note that to find the subgradient for the maximum of all the convex and continuously differentiable functions. We can therefore choose some index $i$ such that $f_i(x) = f(x)$, which implies that the subgradient $g \in $ subgradients of $f$. This means that we can simply choose a function within $\left\{f_i(x)\right\}_{i =1}^m$, and then choose any subgradient. 
-  % $f(y) \geq f_i(y) \geq f_i(x) + g^\top (y - x) = f(x) + g^\top (y - x)$
-  % Convex hull thing 
+  $\norm{U x}_2 = \norm{x}_2$ \hfill Algebra
 
 \end{enumerate}
-
-\subsection*{c.}
-
-In this subproblem, you will need to use the result of part b above. Consider the function $f(x) = \max_{i = 1, 2, \dots, n} |x_i - (1 + \eta/i)|$ for some constant $\eta$. Let $v$ be any subgradient of $f$ at any point in its domain. What is the best upper bound you can prove on $\norm{v}_{\infty}$? \\
-
-$f(x) = \max_{i = 1, 2, \dots, n} |x_i - (1 + \eta/i)|$
-% Apply this elementwise
 
 }
 
@@ -208,8 +178,6 @@ $V_k^\top V_k (x - \mu) + \mu$
 
 \subsection*{d.}
 
-% Now let us get a sense of what the top PCA directions are capturing. Display the first $10$ eigenvectors as images, and provide a brief interpretation of what you think they capture.
-
 \begin{figure}[!hb]
   \centering
   \includegraphics[width=130mm]{../hw4-code/results/a3_d.png}
@@ -218,8 +186,6 @@ $V_k^\top V_k (x - \mu) + \mu$
 The first 10 eigenvectors are essentially trying to capture the most core visual elements of a number, or the most distinguishing features that a person can generally use to pick out and easily categorize any given digit. Each component essentially captures the most variation in the data, which provides the most information for reconstructing the image.
 
 \subsection*{e.}
-
-% Finally, visualize a set of reconstructed digits from the training set for different values of $k$. In particular provide the reconstructions for digits $2, 6, 7$ with values $k = 5, 15, 40, 100$ (just choose an image from each digit arbitrarily). Show the original image side-by-side with its reconstruction. Provide a brief interpretation, in terms of your perceptions of the quality of these reconstructions and the dimensionality you used.
 
 \begin{figure}[!hb]
   \centering
@@ -297,7 +263,7 @@ def part_d(v_list):
 
   for i, ax in enumerate(axes_list):
     img = v_list[:,i].reshape((28, 28))
-    ax.imshow(img, cmap='gray')
+    ax.imshow(img)
 
   fig.savefig(c.results_path + "a3_d")
 
@@ -316,7 +282,7 @@ def part_e(X_train, v_list):
   fig, axes = plt.subplots(5, len(idx_set))
 
   for i, ax in enumerate(axes.ravel()):
-    ax.imshow(final_set[i].reshape((28, 28)), cmap='gray')
+    ax.imshow(final_set[i].reshape((28, 28)))
 
   fig.savefig(c.results_path + "a3_e")
 
@@ -675,10 +641,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 64
 
@@ -696,10 +662,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 128
 
@@ -717,10 +683,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 """# part (b)"""
 
@@ -760,10 +726,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 64
 
@@ -781,10 +747,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 # plot 128
 
@@ -802,10 +768,10 @@ for i, item in enumerate(axes):
     break
 
 for i, ax in enumerate(real_axes_list):
-  ax.imshow(train_samples[i], cmap='gray')
+  ax.imshow(train_samples[i])
 
 for i, ax in enumerate(new_axes_list):
-  ax.imshow(new_samples[i], cmap='gray')
+  ax.imshow(new_samples[i])
 
 """# part (c)"""
 
@@ -1016,7 +982,7 @@ for item in axes:
   axes_list += list(item)
 
 for i, ax in enumerate(axes_list):
-  ax.imshow(centroids[i][0], cmap='gray_r')
+  ax.imshow(centroids[i][0])
 
 train_error_final = []
 test_error_final = []

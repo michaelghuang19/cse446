@@ -59,7 +59,7 @@ def part_d(v_list):
 
   for i, ax in enumerate(axes_list):
     img = v_list[:,i].reshape((28, 28))
-    ax.imshow(img, cmap='gray')
+    ax.imshow(img)
 
   fig.savefig(c.results_path + "a3_d")
 
@@ -78,7 +78,7 @@ def part_e(X_train, v_list):
   fig, axes = plt.subplots(5, len(idx_set))
 
   for i, ax in enumerate(axes.ravel()):
-    ax.imshow(final_set[i].reshape((28, 28)), cmap='gray')
+    ax.imshow(final_set[i].reshape((28, 28)))
 
   fig.savefig(c.results_path + "a3_e")
 
@@ -99,7 +99,7 @@ def main():
   # h.plot_multiple("obj over k", "a3_cobj", "k", "obj", 
   #                 [frac_data], ["frac"])
 
-  # part_d(v_list) 
+  part_d(v_list) 
 
   part_e(X_train, v_list)
 
