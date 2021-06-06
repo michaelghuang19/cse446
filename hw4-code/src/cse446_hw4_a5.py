@@ -95,13 +95,13 @@ def run_lloyd(data, k, function):
     centroids = recenter(data, new_idx, centroids)
 
     # calculating objective/error  
-    error = np.sum(np.square(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
 
     if function == "b":
+      error = np.square(np.min(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
       result_list.append(error)
 
     if function == "c":
-      error /= n
+      error = np.mean(np.square(np.min(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1))))
 
     # if no more changes, then break
     if np.array_equal(old_idx, new_idx):

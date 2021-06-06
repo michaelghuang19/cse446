@@ -913,13 +913,13 @@ def run_lloyd(data, k, function):
     centroids = recenter(data, new_idx, centroids)
 
     # calculating objective/error  
-    error = np.sum(np.square(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
 
     if function == "b":
+      error = np.square(np.min(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
       result_list.append(error)
 
     if function == "c":
-      error /= n
+      error = np.mean(np.square(np.min(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1))))
 
     # if no more changes, then break
     if np.array_equal(old_idx, new_idx):
@@ -1010,14 +1010,7 @@ Because of the open-ended nature of the question, any thoroughly written respons
 
 \subsection*{a.}
 
-Small scale image classification \\ \\
-\begin{itemize}
-    \item Setting: You are tasked by a research institute to create an algorithm that learns the factors that contribute most to acquiring a specific disease.
-    \item Dataset: A rich dataset of personal demographic information, location information, risk factors, and whether a person has the disease or not.
-    \item Result: The company wants a system that when someone enters their information can determine how susceptible they are to this disease. The pipeline should take limited amount of personal data from a new user and infer more detailed metrics about the person.
-\end{itemize}
-
-
+The dataset is rich in multiple features, with labeled categories, but with something as serious as public health, I think that having a larger variety of data from multiple populations should be a priority so as to try to have more normalized data and weight data points respectively to reflect disparities such as underrepresented populations. I considered this problem in two different aspects: learning the factors that contribute to the disease, and predicting the disease susceptibility itself. With learning the factors, I would imagine that ridge regression might be useful in terms of easily and explicitly seeing which factors are more significant since certain coefficients will be set to zero, which would help emphasize feature selection itself. For the other half of the pipeline, I aimed to leverage deep learning's ability of inference and construct neural networks to maximize prediction accuracy. This comes at the cost of lack of factor interpretability, which is the reason I wanted to have a simpler ridge regression method as well. There are some notable downsides to using neural networks, however: need for a lot of data, long training time, high computational cost, etc. which might not make it worth it if we can't get a lot of data. 
 
 \subsection*{b.}
 
@@ -1025,14 +1018,7 @@ To pre-process the data, I would first look into trying to make sure that I can 
 
 \subsection*{c.}
 
-Malware Detection \\ \\
-\begin{itemize}
-    \item Setting: You are tasked by a major tech company to create a service that ingests malware metadata and provides accurate assessments as to whether a new file is malicious or not.
-    \item Dataset: A set of malware file metadata from users worldwide describing all attributes of offending files including its contents, publisher, and attributes of the resultant activity.
-    \item Result: The company wants an accurate, scalable solution to detect whether incoming files are malicious for users across the globe.
-\end{itemize}
-
-
+The dataset seems to be rich and have good variety, with data from around the world; this data is also generally not too difficult to acquire, such as through in-app automated or user reports that are pretty common for computer security programs. Since the metadata seems to be a mix of categorical and numerical data, I would first convert the categorical data to one-hot encoding so that it is easier to process as a real-valued vector. We could possibly use regularization for factors such as file sizes so as to avoid possible overfitting. With labeled data that will eventually be distributed between binary labels (malware or not), logistic regression makes sense here and is considerably faster and more lightweight than other models like neural networks. With a dataset that is relatively simple and well-structured, a scalable supervised learning solution like logistic regression fits well. 
 
 }
 
