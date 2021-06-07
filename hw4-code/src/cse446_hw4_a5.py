@@ -25,7 +25,6 @@ from torch.utils.data import DataLoader
 
 k = 10
 k_set = [2, 4, 8, 16, 32, 64]
-# k_set = [10]
 
 # Helpers
 
@@ -42,16 +41,16 @@ def plot_single(data, title):
 
   plt.savefig(title)
 
-def plot_loss(data, title):
+def plot_error(data, title):
   print("plotting loss")
 
   for item in data:
     plt.plot(k_set, item)
 
-  plt.title("loss over time")
-  plt.xlabel("iterations")
-  plt.ylabel("loss")
-  plt.legend(["test, training"])
+  plt.title("error over k")
+  plt.xlabel("k")
+  plt.ylabel("error")
+  plt.legend(["training", "test"])
 
   plt.savefig(title)
 
@@ -97,11 +96,14 @@ def run_lloyd(data, k, function):
     # calculating objective/error  
 
     if function == "b":
-      error = np.square(np.min(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
-      result_list.append(error)
+      error = np.sum(np.square(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1)))
 
     if function == "c":
-      error = np.mean(np.square(np.min(np.linalg.norm(data - centroids[new_idx], axis = data.ndim - 1))))
+      square = np.square(np.linalg.norm(
+          data - centroids[new_idx], axis=data.ndim - 1))
+      sum = np.sum(square, axis=1)
+      sum = np.sum(sum, axis=1)
+      error = np.mean(np.min(sum))
 
     # if no more changes, then break
     if np.array_equal(old_idx, new_idx):
@@ -176,4 +178,4 @@ print(train_error_final)
 print(test_iter_counts)
 print(test_error_final)
 
-plot_loss([train_error_final, test_error_final], "a5_b.png")
+plot_error([train_error_final, test_error_final], "a5_b.png")
